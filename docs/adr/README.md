@@ -44,4 +44,6 @@ Registro de Architecture Decision Records do sistema.
 
 - Mantenha um único ADR por decisão duradoura.
 - Se uma nova decisão substituir a anterior, marque o antigo como `superseded`.
+- Se o ADR ainda precisar ser referenciado no histórico, mova-o para `archive/`.
+- Se o ADR não tiver mais uso ativo e a referência histórica puder ficar só no resumo, marque-o como `deprecated` e mantenha o `current-state.md` atualizado.
 - Se a decisão ainda vale, atualize o `current-state.md` em vez de criar outro ADR.

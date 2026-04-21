@@ -30,6 +30,13 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-20
 
+- Mudança: formalizada a regra de quando um ADR vira `superseded`, quando vai para `archive/` e quando é `deprecated`.
+- Motivo: evitar acúmulo desnecessário de ADRs e manter só o histórico realmente útil.
+- Impacto: o ciclo de vida de ADR ficou objetivo e o `current-state.md` ganhou papel de resumo do estado vigente.
+- Arquivos: `docs/adr/README.md`, `docs/modules/auth/adr/README.md`, `docs/adr/template.md`, `docs/modules/auth/adr/template.md`, `docs/adr/current-state.md`, `docs/modules/auth/adr/current-state.md`
+
+### 2026-04-20
+
 - Mudança: criados os templates oficiais de `plan` e `current-state` e aplicados aos documentos globais e do módulo `auth`.
 - Motivo: evitar crescimento desordenado e manter execução e estado vigentes com formato curto e consistente.
 - Impacto: `plan` e `current-state` agora têm estrutura padrão, review criteria e navegação explícita nos índices.

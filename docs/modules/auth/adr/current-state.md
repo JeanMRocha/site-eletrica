@@ -33,6 +33,8 @@ Resumo do estado atual da governança do módulo `auth`.
 - Atualize este documento quando o modelo de auth mudar de forma relevante.
 - Se a mudança for uma decisão nova, crie um ADR.
 - Se a mudança for apenas implementação incremental, atualize `active-plan.md` ou `changelog.md`.
+- Se um ADR do módulo deixar de ser ativo mas continuar útil para histórico, mova-o para `archive/`.
+- Se um ADR perder uso ativo e a referência histórica puder ficar só no resumo do módulo, marque-o como `deprecated`.
 
 ## Review criteria
 

@@ -43,4 +43,6 @@ ADR do módulo `auth`.
 
 - Mantenha um único ADR por decisão duradoura.
 - Se uma nova decisão de auth substituir a anterior, marque a anterior como `superseded`.
+- Se o ADR ainda precisar ser referenciado no histórico do módulo, mova-o para `archive/`.
+- Se o ADR não tiver mais uso ativo e a referência histórica puder ficar só no resumo do módulo, marque-o como `deprecated` e mantenha o `current-state.md` atualizado.
 - Se a decisão ainda vale, atualize `current-state.md` em vez de criar outro ADR.

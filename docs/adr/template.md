@@ -28,6 +28,8 @@ Descreva os impactos práticos da decisão, incluindo custos e benefícios.
 - O que precisa acontecer para revisar esta decisão?
 - Que sinais indicam que a decisão deixou de ser adequada?
 - Quais mudanças futuras podem exigir um novo ADR?
+- Este ADR será substituído, arquivado ou depreciado?
+- O `current-state.md` precisa mudar quando este ADR mudar?
 
 ## Status
 

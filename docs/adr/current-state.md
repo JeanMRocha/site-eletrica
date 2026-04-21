@@ -34,6 +34,8 @@ Resumo do que hoje é verdade sobre a camada de decisão do sistema.
 - Atualize este documento quando o estado vigente mudar.
 - Se a mudança for apenas evolução incremental, use `changelog.md` ou `active-plan.md`.
 - Se a mudança for uma nova decisão, crie ou atualize um ADR.
+- Se um ADR deixar de ser ativo mas continuar útil para histórico, ele deve ser movido para `archive/`.
+- Se um ADR perder uso ativo e a referência histórica puder ficar só no resumo, marque-o como `deprecated`.
 
 ## Review criteria
 
