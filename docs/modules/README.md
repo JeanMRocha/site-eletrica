@@ -23,6 +23,8 @@ Camada de documentação por módulo. Use esta pasta para concentrar regras, con
 - `tests.md`: estratégia de testes e gates do módulo
 - `active-plan.md`: execução atual do módulo
 - `changelog.md`: histórico de mudanças do módulo
+- `plan-template.md`: modelo oficial de plan do módulo
+- `current-state-template.md`: modelo oficial de current-state do módulo
 - `adr/README.md`: regras de decisão do módulo
 - `adr/template.md`: modelo oficial de ADR do módulo
 - `adr/0001-title.md`: primeira decisão relevante do módulo

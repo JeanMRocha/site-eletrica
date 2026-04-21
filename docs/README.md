@@ -16,6 +16,8 @@
 - [`changelog.md`](changelog.md): histórico cronológico das mudanças relevantes.
 - [`active-plan.md`](active-plan.md): plano em execução no momento.
 - [`roadmap.md`](roadmap.md): visão geral do que ainda falta fazer ou ampliar.
+- [`plan-template.md`](plan-template.md): modelo oficial de plan.
+- [`current-state-template.md`](current-state-template.md): modelo oficial de current-state.
 - [`header-template.md`](header-template.md): padrão de cabeçalho reutilizável para documentos de `docs/`.
 - [`modules/README.md`](modules/README.md): convenção para documentação por módulo.
 - [`adr/README.md`](adr/README.md): convenção para ADRs globais.

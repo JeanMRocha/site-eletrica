@@ -11,6 +11,13 @@ Registro de mudanças do módulo de autenticação.
 
 ### 2026-04-20
 
+- Mudança: criados os templates oficiais de `plan` e `current-state` do módulo `auth` e aplicados aos documentos ativos.
+- Motivo: manter o módulo com governança curta, consistente e fácil de revisar.
+- Impacto: o módulo passou a ter modelo padronizado para execução corrente e estado vigente.
+- Arquivos: `docs/modules/auth/plan-template.md`, `docs/modules/auth/current-state-template.md`, `docs/modules/auth/active-plan.md`, `docs/modules/auth/adr/current-state.md`, `docs/modules/auth/README.md`
+
+### 2026-04-20
+
 - Mudança: criado o template oficial de ADR do módulo `auth` e aplicado aos ADRs existentes.
 - Motivo: manter as decisões do módulo curtas, revisáveis e padronizadas.
 - Impacto: o módulo ganhou um formato único para decisões de arquitetura, com contexto, decisão, alternativas, consequências e critérios de revisão.

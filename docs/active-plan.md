@@ -5,71 +5,45 @@
 > Last updated: 2026-04-20
 > Owner: repository
 
+Use este documento para registrar trabalho em andamento no nível global do repositório.
+
 Documento para registrar o que está sendo feito agora.
-
-## Objetivo atual
-
-- Implantar a política oficial de ADR com ciclo de vida, archive, current-state e template fixo.
-
-## Estrutura sugerida
-
-- Contexto: o problema ou iniciativa em andamento
-- Escopo: o que está incluído nesta execução
-- Fora de escopo: o que não será tratado agora
-- Próximos passos: sequência curta e objetiva
-- Bloqueios: dependências, dúvidas ou riscos
-- Validação: como o resultado será conferido
-- Última atualização: data da revisão mais recente
-
-## Modelo de preenchimento
-
-```md
-# Plano em Execução
 
 ## Contexto
 
-...
+- Implantar a política oficial de ADR com ciclo de vida, archive, current-state e template fixo.
 
-## Escopo
+## Scope
 
-- ...
+- Manter a política de ADR consistente.
+- Preparar a documentação para leitura por escopo.
 
-## Fora de escopo
+## Out of scope
 
-- ...
+- Implementação da API.
+- UI do produto.
+- Integração com infraestrutura.
 
-## Próximos passos
+## Next steps
 
-1. ...
-2. ...
-3. ...
+1. Consolidar o padrão de `plan` e `current-state`.
+2. Atualizar referências globais e por módulo.
+3. Validar a coerência do índice de documentação.
 
-## Bloqueios
+## Blockers
 
-- ...
+- Definição de novos módulos ainda pendentes.
 
-## Validação
+## Validation
 
-- ...
+- Confirmar que os templates existem e que os documentos ativos seguem o padrão.
 
-## Última atualização
+## Review criteria
 
-- AAAA-MM-DD
-```
-
-## Exemplo
-
-- Contexto: padronizar a documentação do repositório para facilitar o trabalho do agente.
-- Escopo: criar arquivos separados para histórico, plano em execução e roadmap.
-- Fora de escopo: implementação da API, UI ou infraestrutura.
-- Próximos passos: revisar o modelo, preencher os documentos e registrar as próximas entregas.
-- Bloqueios: definição de prioridade das próximas iniciativas.
-- Validação: confirmar que os arquivos existem, estão legíveis e seguem o padrão combinado.
+- Quando este plano deixa de fazer sentido?
+- O que precisa acontecer para atualizar o escopo?
+- Que mudança exige um novo plano?
 
 ## Status
 
 - Implantação da política de ADR e template em andamento.
-
-## Última atualização
-
-- 2026-04-20

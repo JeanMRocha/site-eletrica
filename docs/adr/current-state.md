@@ -5,9 +5,11 @@
 > Last updated: 2026-04-20
 > Owner: repository
 
+Use este documento para registrar o estado vigente da camada de decisão global.
+
 Resumo do que hoje é verdade sobre a camada de decisão do sistema.
 
-## Estado vigente
+## Current state
 
 - A documentação global define arquitetura, princípios, regras e stack.
 - A documentação por módulo concentra regras, contratos, segurança, testes, planos e histórico local.
@@ -16,8 +18,24 @@ Resumo do que hoje é verdade sobre a camada de decisão do sistema.
 - O módulo `auth` é tratado como crítico e aplica gates mais rígidos.
 - Mudanças locais devem ler somente o contexto necessário.
 
-## Regra de atualização
+## Invariants
+
+- A leitura por escopo deve permanecer limitada ao necessário.
+- Decisões duradouras devem ficar em ADR.
+- Mudanças incrementais devem ficar em changelog ou plan.
+
+## Operational notes
+
+- Use `current-state` como resumo vigente, não como histórico.
+- Mantenha o arquivo curto o suficiente para leitura rápida.
+
+## Update rule
 
 - Atualize este documento quando o estado vigente mudar.
 - Se a mudança for apenas evolução incremental, use `changelog.md` ou `active-plan.md`.
 - Se a mudança for uma nova decisão, crie ou atualize um ADR.
+
+## Review criteria
+
+- Quando este resumo ficou defasado?
+- Que mudança estrutural exige revisão?

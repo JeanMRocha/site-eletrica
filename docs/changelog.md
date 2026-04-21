@@ -30,6 +30,13 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-20
 
+- Mudança: criados os templates oficiais de `plan` e `current-state` e aplicados aos documentos globais e do módulo `auth`.
+- Motivo: evitar crescimento desordenado e manter execução e estado vigentes com formato curto e consistente.
+- Impacto: `plan` e `current-state` agora têm estrutura padrão, review criteria e navegação explícita nos índices.
+- Arquivos: `docs/plan-template.md`, `docs/current-state-template.md`, `docs/modules/auth/plan-template.md`, `docs/modules/auth/current-state-template.md`, `docs/active-plan.md`, `docs/adr/current-state.md`, `docs/modules/auth/active-plan.md`, `docs/modules/auth/adr/current-state.md`, `docs/README.md`, `docs/modules/README.md`, `docs/modules/auth/README.md`
+
+### 2026-04-20
+
 - Mudança: criado e aplicado o template oficial de ADR com `review criteria` e ciclo de vida padronizado.
 - Motivo: evitar ADRs prolixos e manter decisões úteis, rastreáveis e fáceis de revisar.
 - Impacto: os ADRs globais e do módulo `auth` passaram a seguir o mesmo formato, com estado, revisão e consequência explícitos.
