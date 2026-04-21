@@ -25,6 +25,8 @@ Camada de documentação por módulo. Use esta pasta para concentrar regras, con
 - `changelog.md`: histórico de mudanças do módulo
 - `adr/README.md`: regras de decisão do módulo
 - `adr/0001-title.md`: primeira decisão relevante do módulo
+- `adr/current-state.md`: resumo do estado vigente do módulo
+- `adr/archive/`: decisões antigas do módulo
 
 ## Exemplo de uso
 

@@ -13,13 +13,34 @@ Registro de Architecture Decision Records do sistema.
 - Use ADR para registrar trade-offs, alternativas consideradas e motivo da escolha.
 - Não use ADR para tarefas triviais, ajustes de texto ou mudanças sem impacto arquitetural.
 
+## Ciclo de vida
+
+- `proposed`: decisão ainda em discussão.
+- `accepted`: decisão válida e em uso.
+- `superseded`: decisão substituída por outra mais recente.
+- `deprecated`: decisão arquivada sem uso ativo, mas mantida para histórico.
+
+## Critério para criar ADR
+
+- Crie ADR quando a mudança alterar arquitetura, contrato público, segurança, persistência ou um padrão duradouro.
+- Crie ADR quando houver trade-off real entre alternativas.
+- Não crie ADR para bugfix local, ajuste visual, refatoração pequena ou expansão sem decisão nova.
+
 ## Estrutura
 
 - `0001-title.md`: primeira decisão relevante
 - `0002-title.md`: próxima decisão relevante
+- `current-state.md`: resumo do que hoje é verdade no sistema
+- `archive/`: decisões antigas, superseded ou deprecated
 - `README.md`: regras gerais de uso
 
 ## Leitura
 
 - Leia os ADRs globais quando a mudança afetar arquitetura do sistema.
 - Leia os ADRs do módulo quando a decisão for restrita ao módulo.
+
+## Regra de uso prático
+
+- Mantenha um único ADR por decisão duradoura.
+- Se uma nova decisão substituir a anterior, marque o antigo como `superseded`.
+- Se a decisão ainda vale, atualize o `current-state.md` em vez de criar outro ADR.

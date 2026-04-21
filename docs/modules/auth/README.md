@@ -25,6 +25,8 @@ Módulo responsável por autenticação, autorização e controle de sessão.
 - [`changelog.md`](changelog.md): histórico de mudanças do módulo
 - [`adr/README.md`](adr/README.md): regras de decisão do módulo
 - [`adr/0001-auth-governance.md`](adr/0001-auth-governance.md): decisão inicial do módulo
+- [`adr/current-state.md`](adr/current-state.md): estado vigente do módulo
+- [`adr/archive/README.md`](adr/archive/README.md): arquivo morto do módulo
 
 ## Leitura mínima para alteração
 

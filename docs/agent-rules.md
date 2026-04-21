@@ -37,6 +37,7 @@ Este arquivo complementa `AGENTS.md` e `.agent` com regras práticas de idioma e
 - Leia apenas a documentação global mínima e a documentação do módulo afetado quando a alteração for local.
 - Leia `docs/adr/README.md` quando a alteração tiver decisão arquitetural relevante.
 - Leia `docs/modules/<modulo>/adr/README.md` quando a alteração tiver decisão específica do módulo.
+- Leia `current-state.md` antes de criar um novo ADR para entender o que já está vigente.
 - Se a alteração tocar um módulo específico, execute primeiro os testes desse módulo.
 - Se a alteração tocar auth, trate o módulo como crítico e aplique gates mais rígidos.
 - Antes do commit ou PR, execute a suíte completa do repositório.

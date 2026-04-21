@@ -19,6 +19,8 @@
 - [`header-template.md`](header-template.md): padrão de cabeçalho reutilizável para documentos de `docs/`.
 - [`modules/README.md`](modules/README.md): convenção para documentação por módulo.
 - [`adr/README.md`](adr/README.md): convenção para ADRs globais.
+- [`adr/current-state.md`](adr/current-state.md): resumo do estado vigente das decisões globais.
+- [`adr/archive/README.md`](adr/archive/README.md): regras de arquivamento de ADRs globais.
 
 ## Ordem sugerida de uso
 
@@ -38,3 +40,4 @@
 - Se a mudança já foi concluída, registre em `changelog.md`.
 - Se a mudança for de um módulo, consulte a pasta `docs/modules/<nome>/`.
 - Se a mudança exigir uma decisão arquitetural, registre em `docs/adr/` ou no `adr/` do módulo.
+- Se a decisão antiga deixar de valer, marque o ADR como `superseded` e mova-o para `archive/` quando apropriado.

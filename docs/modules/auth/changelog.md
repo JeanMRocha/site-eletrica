@@ -11,6 +11,13 @@ Registro de mudanças do módulo de autenticação.
 
 ### 2026-04-20
 
+- Mudança: formalizada a política local de ciclo de vida de ADR para o módulo `auth`.
+- Motivo: evitar duplicação de decisões e manter apenas o estado vigente e o histórico útil.
+- Impacto: o módulo ganhou `current-state` e `archive` para separar decisão ativa de histórico.
+- Arquivos: `docs/modules/auth/adr/README.md`, `docs/modules/auth/adr/current-state.md`, `docs/modules/auth/adr/archive/README.md`
+
+### 2026-04-20
+
 - Mudança: criado o esqueleto de decisão do módulo `auth` com ADRs iniciais.
 - Motivo: registrar governança local para autenticação, sessão e segurança.
 - Impacto: o módulo ganhou trilha de decisão própria para futuras implementações.

@@ -9,7 +9,7 @@ Documento para registrar o que está sendo feito agora.
 
 ## Objetivo atual
 
-- Implantar a governança de documentação por escopo, com ADRs globais e por módulo.
+- Implantar a política oficial de ADR com ciclo de vida, archive e current-state.
 
 ## Estrutura sugerida
 
@@ -68,7 +68,7 @@ Documento para registrar o que está sendo feito agora.
 
 ## Status
 
-- Implantação da governança de documentação em andamento.
+- Implantação da política de ADR em andamento.
 
 ## Última atualização
 

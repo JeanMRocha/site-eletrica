@@ -30,6 +30,13 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-20
 
+- Mudança: formalizada a política de ciclo de vida de ADR com `current-state`, `archive` e critérios objetivos de criação.
+- Motivo: evitar crescimento desnecessário de ADRs e manter decisões realmente úteis e rastreáveis.
+- Impacto: decisões antigas passam a ter caminho de arquivamento e o estado vigente ganha resumo próprio.
+- Arquivos: `docs/adr/README.md`, `docs/adr/current-state.md`, `docs/adr/archive/README.md`, `docs/modules/README.md`, `docs/modules/auth/adr/README.md`, `docs/modules/auth/adr/current-state.md`, `docs/modules/auth/adr/archive/README.md`, `docs/README.md`, `docs/agent-rules.md`, `docs/header-template.md`
+
+### 2026-04-20
+
 - Mudança: implantada a governança de documentação por escopo, com ADRs globais e por módulo, além da política de testes por escopo.
 - Motivo: permitir que o agente leia apenas o contexto necessário e manter decisões arquiteturais rastreáveis.
 - Impacto: a documentação agora separa leitura global, leitura por módulo, decisões arquiteturais e testes por escopo.
