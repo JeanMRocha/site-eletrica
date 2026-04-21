@@ -22,3 +22,7 @@ Regra de testes:
 
 Objetivo:
 Garantir que todo trabalho neste repositório seja conduzido com planejamento prévio, execução controlada e respeito à arquitetura documentada.
+
+Atalho de governança:
+
+- Use `docs/governance.md` como o primeiro ponto de leitura para decidir o que consultar, atualizar ou arquivar.

@@ -25,3 +25,7 @@ Non-negotiable project rules:
 - Treat `vinext` as the web experience layer, not the source of truth.
 - Follow SOLID, clean boundaries, and testable design.
 - Prefer tests before implementation when introducing new behavior.
+
+Governance shortcut:
+
+- Use `docs/governance.md` as the first navigation point for documentation, planning, ADR, and archive decisions.
