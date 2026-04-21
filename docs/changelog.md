@@ -30,6 +30,13 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-20
 
+- Mudança: enxugado `docs/modules/README.md` para reduzir repetição com a governança e deixar o índice de módulos mais direto.
+- Motivo: diminuir ruído, manter uma autoridade principal única para navegação e tornar a leitura por módulo mais objetiva.
+- Impacto: a pasta de módulos ficou com um índice mais curto e mais fácil de manter sem duplicar a política central.
+- Arquivos: `docs/modules/README.md`
+
+### 2026-04-20
+
 - Mudança: enxugada a duplicação entre `docs/modules/auth/README.md` e `docs/modules/auth/reading-paths.md`, deixando o `reading-paths` como referência principal de leitura por escopo no módulo.
 - Motivo: reduzir repetição, diminuir risco de drift e tornar a hierarquia documental mais profissional.
 - Impacto: o `README` de auth passou a ser um ponto de entrada mais curto, sem repetir a lista mínima de leitura do módulo.

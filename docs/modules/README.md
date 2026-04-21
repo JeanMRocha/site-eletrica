@@ -9,12 +9,9 @@ Camada de documentação por módulo. Use esta pasta para concentrar regras, con
 
 ## Regra de leitura por escopo
 
-- `docs/governance.md` is the source of truth for documentation navigation.
-- Leia `docs/governance.md` antes de entrar na documentação de um módulo.
-- Se a mudança for global, leia os documentos da raiz de `docs/`.
-- Se a mudança tocar um módulo específico, leia os documentos daquele módulo.
-- Se a mudança tocar um contrato compartilhado, leia também `docs/shared/` quando ele existir.
-- Se a mudança não tocar um módulo, não carregue a documentação dele por padrão.
+- `docs/governance.md` é a autoridade principal para navegação por documentação.
+- `docs/modules/<modulo>/reading-paths.md` é o guia mínimo quando a mudança ficar restrita a um módulo.
+- Leia os documentos do módulo afetado, sem carregar módulos não relacionados por padrão.
 
 ## Estrutura sugerida por módulo
 
@@ -38,10 +35,8 @@ Camada de documentação por módulo. Use esta pasta para concentrar regras, con
 - `adr/current-state.md`: snapshot da camada de decisão do módulo
 - `adr/archive/`: decisões antigas do módulo
 
-## Exemplo de uso
+## Uso prático
 
 - Use `docs/reading-paths.md` para escolher o conjunto mínimo de documentos por perfil.
 - Use `docs/modules/<modulo>/reading-paths.md` quando a tarefa estiver restrita a um módulo específico.
-- Alteração em autenticação: leia `docs/modules/auth/*`
-- Alteração em incidentes: leia `docs/modules/incidents/*` quando existir
-- Alteração em UI geral: leia os documentos globais e o módulo afetado
+- Para qualquer alteração em um módulo, leia primeiro o `README.md` do próprio módulo e depois os arquivos indicados pelo reading path.
