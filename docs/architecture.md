@@ -11,9 +11,10 @@ Build a web application that stores electrical studies, models installations, ru
 
 ## High-level design
 
-- Web layer: `vinext`
+- Web layer: `Vite + React` for the MVP
 - API layer: `Go`
-- Persistence: `PostgreSQL`
+- Persistence MVP: `SQLite`
+- Persistence target: `PostgreSQL`
 - Runtime: Docker
 - Authentication: dedicated `auth` module
 - Domain modules: `projects`, `standards`, `calculations`, `conformidade`, `routing`, `estimations`, `reports`, `knowledge`, `core`, and future engineering areas
@@ -26,6 +27,7 @@ Build a web application that stores electrical studies, models installations, ru
 - Collect user input for modeling, calculations, compliance review, and route estimation
 - Keep presentation logic separate from engineering rules
 - Never be the source of truth for calculations or costs
+- Render the first visual MVP in the dedicated front-end app so the product can evolve without coupling the UI to the API runtime
 
 ### Go API
 
@@ -51,6 +53,7 @@ Build a web application that stores electrical studies, models installations, ru
 - Store user accounts, studies, model snapshots, calculation runs, conformity verdicts, domain catalogs, standards versions, route alternatives, estimates, report snapshots, and audit history
 - Preserve enough history to reproduce important technical results
 - Keep read models and write models simple enough to evolve
+- Use a local SQLite file for the MVP and migrate to PostgreSQL when the product is ready for multi-user deployment
 
 ## Operational intent
 
@@ -62,7 +65,7 @@ Build a web application that stores electrical studies, models installations, ru
 ## Communication model
 
 - The browser talks to the API through versioned endpoints.
-- The API talks to PostgreSQL through repository or data-access abstractions.
+- The API talks to the local SQLite store through repository or data-access abstractions in the MVP.
 - Domain rules stay inside services or calculation engines, not in controllers.
 - The conformity engine receives structured model output and returns status, severity, rule ids, and correction guidance.
 

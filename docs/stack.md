@@ -7,16 +7,18 @@
 
 ## Chosen stack
 
-- Web: `vinext`
+- Web MVP: `Vite + React`
 - API: `Go`
-- Database: `PostgreSQL`
+- Database MVP: `SQLite` local
+- Database target: `PostgreSQL`
 - Runtime: Docker
 
 ## Why this stack
 
-- `vinext` gives a modern browser interface for technical forms and result review
+- `Vite + React` gives a modern browser interface for technical forms and result review
 - `Go` keeps the backend deterministic, fast, and easy to reason about
-- `PostgreSQL` is reliable for projects, calculation history, and traceable results
+- `SQLite` is enough for local MVP persistence and fast iteration
+- `PostgreSQL` remains the target for the durable multi-user deployment
 - Docker preserves portability across environments
 
 ## Component ownership policy

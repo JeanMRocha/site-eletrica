@@ -34,7 +34,7 @@ Antes de criar um módulo novo, leia nesta ordem:
 
 ### 2. Validar aderência à stack
 
-- Valide se a solução respeita `Go` na API, `vinext` como camada de experiência e `PostgreSQL` como persistência.
+- Valide se a solução respeita `Go` na API, `Vite + React` como camada de experiência e `PostgreSQL` como persistência.
 - Confirme se a solução mantém portabilidade e evita dependência de provedor.
 - Confirme se o módulo pode ser implementado com componentes pequenos, explícitos e testáveis.
 

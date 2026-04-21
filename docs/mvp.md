@@ -78,13 +78,13 @@ Escopo mínimo para transformar o problema do produto em um sistema útil, sem e
 ## Arquitetura ideal para este caso
 
 - API em `Go` como fonte de verdade.
-- UI em `vinext` apenas como camada de experiência.
-- Persistência em `PostgreSQL`.
+- UI em `Vite + React` para o MVP.
+- Persistência em `SQLite` local para o MVP.
 - Regras de dimensionamento em serviços de domínio no backend.
 - Catalogo de normas, fontes e versoes das regras no backend.
 - Camada de conformidade separada do motor de cálculo.
 - Sugestão de rotas, estimativas, relatórios e explicações como serviços de domínio, não na UI.
-- Frontend apenas coleta dados e apresenta resultados.
+- O frontend inicial apenas coleta dados e apresenta resultados, em um app separado da API.
 
 ## Prioridade de construção
 

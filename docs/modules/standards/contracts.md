@@ -12,8 +12,12 @@
 - Aplicabilidade
 - Observações técnicas
 - Status de vigência
+- Tipo de origem
+- Peso de hierarquia
+- Nome oficial da fonte
 
 ## Regras de contrato
 
 - O contrato precisa permitir selecionar a base técnica usada em cada estudo.
 - O contrato precisa suportar a evolução da regra sem quebrar o histórico.
+- O contrato precisa permitir comparar duas regras e saber qual prevalece.

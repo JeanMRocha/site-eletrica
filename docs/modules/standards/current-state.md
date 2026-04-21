@@ -7,12 +7,15 @@
 
 ## Current state
 
-- O módulo ainda está em definição documental.
+- O módulo já tem uma primeira implementação funcional na API.
+- Existe um catálogo inicial em memória com leitura por lista e por código.
+- Existe uma matriz de precedência e um resolvedor simples de conflito.
 - A base normativa precisa ser explícita para cada estudo salvo.
 
 ## Update rule
 
 - Atualize este arquivo quando a base de normas ou o critério técnico versionado mudar.
+- Atualize também quando o catálogo migrar de memória para persistência local.
 
 ## Review criteria
 

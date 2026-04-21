@@ -60,11 +60,8 @@ Visão de produto para orientar leitura, módulos e decisões de documentação.
 - Hidden technical decisions with no traceability.
 - Black-box automation that cannot be reviewed by an engineer.
 - Turning compliance into the owner of the whole product. Compliance validates the model; it does not replace the modeling engine.
-
-## Open questions
-
-- The project mention of `ABNT NBR 5413` should be confirmed as a first-class lighting/illuminance subdomain, not the core electrical dimensioning standard.
-- For the main electrical installation model, should the active base be `NBR 5410` and related standards, with lighting handled as a separate module or rule set?
+- `standards` is the canonical home for every normative source and technical criterion the product needs.
+- `conformidade` consumes the normalized catalog from `standards` and returns the verdict for a modeled installation.
 
 ## Documentation rule
 

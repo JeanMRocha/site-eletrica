@@ -35,3 +35,8 @@ Modulo responsavel por validar o modelo eletrico contra fontes normativas, legai
 
 - Leia este modulo quando a tarefa envolver validacao, severidade, regra aplicada ou revisao humana.
 - Se a mudanca envolver modelagem ou calculo, leia tambem o modulo responsavel por essa parte.
+
+## Maturidade
+
+- A primeira implementacao expõe um endpoint de avaliacao e consome o catalogo de normas.
+- O modulo ainda pode evoluir para regras mais especificas por tipo de circuito, ambiente e concessionaria.

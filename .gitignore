@@ -1,2 +1,9 @@
 .env
 *.local
+.env
+*.db
+data/
+web/node_modules/
+web/dist/
+web/.vite/
+web/tsconfig.tsbuildinfo

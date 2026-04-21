@@ -14,6 +14,8 @@ Resumo vigente do sistema como um todo.
 - `auth` continua sendo tratado como módulo crítico.
 - `projects`, `ambientes`, `cargas`, `circuitos`, `condutores`, `protecao`, `standards`, `calculations`, `conformidade`, `routing`, `estimations`, `reports`, `knowledge` e `core` são os módulos centrais do novo produto.
 - O núcleo do sistema é o modelo elétrico da instalação; a conformidade valida o modelo, mas não manda no projeto inteiro.
+- A primeira camada visual do MVP já roda em `Vite + React`.
+- A persistência local inicial usa SQLite em arquivo.
 - Mudanças locais devem ler somente o contexto necessário.
 - O estado vigente do sistema deve ser resumido aqui, não espalhado em ADRs.
 

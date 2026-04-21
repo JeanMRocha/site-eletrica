@@ -6,6 +6,9 @@ import (
 	"os"
 
 	"github.com/JeanMRocha/site-eletrica/internal/auth"
+	"github.com/JeanMRocha/site-eletrica/internal/conformidade"
+	"github.com/JeanMRocha/site-eletrica/internal/standards"
+	"github.com/JeanMRocha/site-eletrica/internal/studies"
 )
 
 func main() {
@@ -20,11 +23,29 @@ func main() {
 			PasswordHash: auth.HashPassword(getenv("AUTH_DEMO_PASSWORD", "change-me-now")),
 		},
 	})
+	standardsService := standards.NewInMemoryService(standards.DefaultCatalog())
+	conformidadeService := conformidade.NewService(standardsService)
+	studiesStore, err := studies.NewSQLiteStore(getenv("DATABASE_PATH", "./data/eletrica.db"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func() {
+		if err := studiesStore.Close(); err != nil {
+			log.Printf("close study store: %v", err)
+		}
+	}()
+	studiesService := studies.NewService(studiesStore, conformidadeService)
 
 	handler := auth.NewHandler(service)
+	standardsHandler := standards.NewHandler(standardsService)
+	conformidadeHandler := conformidade.NewHandler(conformidadeService)
+	studiesHandler := studies.NewHandler(studiesService)
 
 	root := http.NewServeMux()
 	root.Handle("/v1/auth/", handler.Routes())
+	root.Handle("/v1/standards/", standardsHandler.Routes())
+	root.Handle("/v1/conformidade/", conformidadeHandler.Routes())
+	root.Handle("/v1/studies/", studiesHandler.Routes())
 	root.HandleFunc("/healthz", func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		_, _ = w.Write([]byte("ok"))

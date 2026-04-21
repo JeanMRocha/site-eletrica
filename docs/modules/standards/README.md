@@ -13,6 +13,8 @@ Módulo responsável pelo catálogo de normas, critérios técnicos e versão da
 - Versionamento de regras aplicáveis
 - Seleção da norma usada em cada estudo
 - Rastreabilidade da base normativa
+- Hierarquia legal e técnica por precedência
+- Regras computáveis e resolução de conflito
 
 ## Documentos do módulo
 
@@ -20,6 +22,7 @@ Módulo responsável pelo catálogo de normas, critérios técnicos e versão da
 - [`contracts.md`](contracts.md): contratos e formatos esperados
 - [`security.md`](security.md): controles de segurança e riscos
 - [`tests.md`](tests.md): testes e gates do módulo
+- [`hierarchy.md`](hierarchy.md): ordem de precedência e matriz de decisão
 - [`reading-paths.md`](reading-paths.md): leitura mínima por tipo de mudança
 - [`onboarding.md`](onboarding.md): guia de entrada para quem está conhecendo o módulo
 - [`current-state.md`](current-state.md): estado vigente do módulo
@@ -34,5 +37,6 @@ Módulo responsável pelo catálogo de normas, critérios técnicos e versão da
 ## Maturidade do módulo
 
 - O escopo está definido em nível de produto.
-- A implementação ainda será iniciada.
+- A primeira implementação já expõe catálogo em memoria e leitura por codigo na API.
+- A primeira implementação também expõe hierarquia e resolução de precedência.
 - O módulo deve servir de base para qualquer cálculo que dependa de norma ou critério técnico.

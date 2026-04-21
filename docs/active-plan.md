@@ -17,6 +17,7 @@ Use este documento para registrar trabalho em andamento no nível global do repo
 
 - A documentação global já define o novo produto: aplicação web para estudos elétricos, modelagem, dimensionamento, conformidade, estimativas e relatórios.
 - A prioridade agora é sair da base documental e começar a implementação funcional por módulos.
+- A primeira base visual em `Vite + React` e de persistência local já foi iniciada no MVP.
 - A fase 1 está detalhada em `docs/phase-1-plan.md`.
 - O módulo `auth` continua sendo o primeiro incremento funcional.
 - Os próximos módulos de domínio passam a ser `projects`, `ambientes`, `cargas`, `circuitos`, `condutores`, `protecao`, `standards`, `calculations`, `conformidade` e `reports`.
@@ -42,7 +43,7 @@ Use este documento para registrar trabalho em andamento no nível global do repo
 5. Ligar o catálogo de `standards`.
 6. Ligar o fluxo de `calculations`.
 7. Conectar `conformidade` e `reports`.
-8. Montar a interface web.
+8. Expandir a interface web e a persistência local.
 
 ## Blockers
 

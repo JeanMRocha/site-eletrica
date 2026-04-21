@@ -1,11 +1,11 @@
 # Eletrica
 
-Aplicação web para cálculos e dimensionamentos elétricos com banco de dados e autenticação.
+Aplicação web para cálculos e dimensionamentos elétricos com interface Vite + React, banco de dados local e autenticação.
 
 ## Status
 
 - Fase atual: definição da base do produto e da arquitetura
-- Stack alvo: `vinext` na web, API em `Go`, banco `PostgreSQL`
+- Stack atual do MVP: interface `Vite + React`, API em `Go`, banco local `SQLite`
 - Execução: Docker
 - O módulo `auth` permanece necessário.
 - Novos módulos de domínio serão adicionados para projetos, cálculos e apoio à revisão técnica.
@@ -17,6 +17,7 @@ Aplicação web para cálculos e dimensionamentos elétricos com banco de dados 
 - [`docs/stack.md`](docs/stack.md)
 - [`docs/mvp.md`](docs/mvp.md)
 - [`docs/phase-1-plan.md`](docs/phase-1-plan.md)
+- [`web/`](web/)
 - [`docs/modules/README.md`](docs/modules/README.md)
 - [`AGENTS.md`](AGENTS.md)
 - [`.agent`](.agent)
