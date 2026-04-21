@@ -2,7 +2,7 @@
 
 > Status: stable
 > Type: stack
-> Last updated: 2026-04-20
+> Last updated: 2026-04-21
 > Owner: platform
 
 ## Chosen stack
@@ -14,6 +14,7 @@
 - Control plane deployment: Coolify
 - Remote node: Oracle Free Tier
 - Local virtualization: Proxmox
+- Primary remote control: SSH
 
 ## Why this stack
 
@@ -23,6 +24,7 @@
 - Docker preserves portability across providers
 - Coolify matches the current operational workflow
 - Proxmox fits a lab and support role well
+- SSH is the simplest portable control path across providers and hosts
 
 ## Component ownership policy
 
@@ -53,3 +55,4 @@
 - Each deployable service must have its own Dockerfile or clear build instructions
 - Dev, staging, and production configs must be separated
 - Infrastructure assumptions must be documented, not hidden in code
+- SSH credentials for nodes must be managed as deployment-specific secrets

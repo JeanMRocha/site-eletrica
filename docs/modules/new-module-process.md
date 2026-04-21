@@ -37,6 +37,7 @@ Antes de criar um módulo novo, leia nesta ordem:
 - Valide se a solução respeita `Go` na API, `vinext` como camada de experiência e `PostgreSQL` como persistência.
 - Confirme se a solução mantém portabilidade e evita dependência de provedor.
 - Confirme se o módulo pode ser implementado com componentes pequenos, explícitos e testáveis.
+- Quando o módulo tocar operação remota, trate SSH como canal padrão de controle e mantenha provider APIs como adapters opcionais.
 
 ### 3. Criar a documentação primeiro
 
@@ -55,6 +56,8 @@ Crie o conjunto mínimo de documentação antes da implementação:
 - `onboarding.md`
 - `adr/README.md`
 - `adr/current-state.md`
+
+Se o módulo precisar de controle remoto, inclua também a descrição do canal padrão e dos adapters alternativos esperados.
 
 ### 4. Adicionar decisões apenas quando necessário
 

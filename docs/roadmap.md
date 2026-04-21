@@ -30,6 +30,8 @@ Mapa de longo prazo com o que ainda não foi feito e o que precisa de ampliaçã
 - Fluxos de remediação segura
 - Logs e rastreabilidade
 - Health checks e verificação de integridade
+- Canal SSH padrão para manutenção e troubleshooting
+- Adaptadores de controle alternativos quando o SSH não for suficiente
 
 ### Web e experiência
 

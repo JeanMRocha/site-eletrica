@@ -25,6 +25,7 @@ Plano de implementação da primeira fase do produto, focado no mínimo necessá
 #### Status
 
 - Primeira implementação funcional iniciada em Go com serviço em memória, handlers HTTP e testes básicos.
+- A base de `nodes` foi iniciada com conector SSH e probe de inventário mínimo.
 
 #### Tarefas
 
@@ -40,6 +41,8 @@ Plano de implementação da primeira fase do produto, focado no mínimo necessá
 - Estado de saúde básico.
 - Heartbeats e coleta inicial de métricas.
 - Relação entre a VPS principal, a VPS Oracle e a VPS local.
+- Canal SSH padrão para controle inicial e troubleshooting.
+- Estrutura para adapters alternativos de controle quando necessário.
 
 #### Tarefas
 
@@ -47,6 +50,8 @@ Plano de implementação da primeira fase do produto, focado no mínimo necessá
 - Criar o modelo de dados para nós e papéis.
 - Desenhar o contrato de heartbeat.
 - Persistir estado básico de saúde e última comunicação.
+- Definir credenciais e configuração SSH da primeira VPS.
+- Criar teste de conexão SSH e coleta mínima de inventário.
 - Criar testes para ausência de heartbeat e nó indisponível.
 
 ### `incidents`
@@ -118,6 +123,12 @@ Plano de implementação da primeira fase do produto, focado no mínimo necessá
 - Criar inventário e persistência.
 - Implementar heartbeat e health básico.
 - Expor o estado dos nós para consumo da API e da UI.
+- Adicionar o primeiro conector SSH como canal padrão.
+
+#### Status
+
+- Conector SSH inicial criado em Go com probe de inventário mínimo e testes unitários.
+- O inventário operacional da VPS principal já está modelado e exposto pela API.
 
 ### 3. `incidents`
 
@@ -137,6 +148,7 @@ Plano de implementação da primeira fase do produto, focado no mínimo necessá
 - É possível ver as máquinas monitoradas e seus estados básicos.
 - É possível registrar e acompanhar incidentes.
 - É possível visualizar o estado consolidado em um painel central.
+- É possível conectar a VPS principal por SSH com credenciais controladas.
 - As regras críticas continuam na API e não na UI.
 - Cada módulo da fase 1 tem docs mínimos, testes e critérios claros antes de ampliar o escopo.
 

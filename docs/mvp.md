@@ -47,6 +47,13 @@ Escopo mínimo para transformar o problema do produto em um sistema útil, sem e
 - Exibir alertas e incidentes.
 - Exibir histórico e ações recentes.
 
+### 6. Controle SSH básico
+
+- Definir SSH como canal padrão de controle para a primeira VPS.
+- Guardar host, porta, usuário e chave no ambiente seguro.
+- Validar conexão e coleta mínima de inventário via SSH.
+- Manter adaptadores alternativos como extensão futura, não como dependência inicial.
+
 ## Opcional no começo
 
 - Remediação automática avançada.
@@ -64,6 +71,8 @@ Escopo mínimo para transformar o problema do produto em um sistema útil, sem e
 - Agentes Docker rodando nas máquinas monitoradas.
 - VPS Oracle como ponto externo de monitoramento.
 - VPS local como suporte, laboratório e contingência.
+- SSH como canal padrão de controle para manutenção e troubleshooting.
+- Adaptadores futuros para provider API ou outros mecanismos quando houver necessidade real.
 
 ## Prioridade de construção
 
@@ -71,8 +80,9 @@ Escopo mínimo para transformar o problema do produto em um sistema útil, sem e
 2. Monitoramento básico
 3. Incidentes e histórico
 4. Painel central
-5. Ações controladas
-6. Melhorias de desempenho e suporte
+5. Controle SSH básico
+6. Ações controladas
+7. Melhorias de desempenho e suporte
 
 ## Critério de sucesso
 
@@ -81,8 +91,10 @@ Escopo mínimo para transformar o problema do produto em um sistema útil, sem e
 - Eu consigo entender o que aconteceu e quando.
 - Eu consigo agir de forma controlada e auditável.
 - Eu consigo manter a solução portátil entre provedores.
+- Eu consigo conectar e operar a VPS principal por SSH com controle explícito.
 
 ## Regra prática
 
 - Se algo não ajuda a reduzir risco, aumentar visibilidade ou controlar operação, ele não entra no MVP.
 - Se uma automação puder causar mais dano do que benefício no começo, ela fica para depois.
+- Se uma integração alternativa não melhorar controle, visibilidade ou portabilidade, ela fica como adapter futuro.

@@ -7,18 +7,13 @@ import (
 	"errors"
 	"fmt"
 	"strings"
-	"sync"
 	"time"
 )
 
 type Service struct {
-	mu           sync.RWMutex
-	users        map[string]UserRecord
-	sessions     map[string]*sessionRecord
-	accessIndex  map[string]string
-	refreshIndex map[string]string
-	now          func() time.Time
-	sessionTTL   time.Duration
+	store      Store
+	now        func() time.Time
+	sessionTTL time.Duration
 }
 
 type sessionRecord struct {
@@ -27,26 +22,15 @@ type sessionRecord struct {
 }
 
 func NewInMemoryService(users []UserRecord) *Service {
-	userIndex := make(map[string]UserRecord, len(users))
-	for _, user := range users {
-		userIndex[normalizeEmail(user.User.Email)] = user
-	}
-
 	return &Service{
-		users:        userIndex,
-		sessions:     make(map[string]*sessionRecord),
-		accessIndex:  make(map[string]string),
-		refreshIndex: make(map[string]string),
-		now:          time.Now,
-		sessionTTL:   time.Hour,
+		store:      NewInMemoryStore(users),
+		now:        time.Now,
+		sessionTTL: time.Hour,
 	}
 }
 
 func (s *Service) Login(_ context.Context, credentials Credentials) (LoginResponse, error) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
-	record, ok := s.users[normalizeEmail(credentials.Email)]
+	record, ok := s.store.FindUserByEmail(credentials.Email)
 	if !ok || !VerifyPassword(record.PasswordHash, credentials.Password) {
 		return LoginResponse{}, ErrInvalidCredentials
 	}
@@ -71,9 +55,7 @@ func (s *Service) Login(_ context.Context, credentials Credentials) (LoginRespon
 		TokenType:    "Bearer",
 	}
 
-	s.sessions[sessionID] = &sessionRecord{Session: session, Token: tokens}
-	s.accessIndex[accessToken] = sessionID
-	s.refreshIndex[refreshToken] = sessionID
+	s.store.CreateSession(&sessionRecord{Session: session, Token: tokens})
 
 	return LoginResponse{
 		Session: session,
@@ -83,17 +65,9 @@ func (s *Service) Login(_ context.Context, credentials Credentials) (LoginRespon
 }
 
 func (s *Service) Refresh(_ context.Context, refreshToken string) (RefreshResponse, error) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
-	sessionID, ok := s.refreshIndex[refreshToken]
+	record, ok := s.store.SessionByRefreshToken(refreshToken)
 	if !ok {
 		return RefreshResponse{}, ErrTokenInvalid
-	}
-
-	record, ok := s.sessions[sessionID]
-	if !ok {
-		return RefreshResponse{}, ErrSessionNotFound
 	}
 
 	if record.Session.Status == SessionStatusRevoked {
@@ -104,18 +78,18 @@ func (s *Service) Refresh(_ context.Context, refreshToken string) (RefreshRespon
 		return RefreshResponse{}, ErrSessionExpired
 	}
 
-	delete(s.accessIndex, record.Token.AccessToken)
-	delete(s.refreshIndex, record.Token.RefreshToken)
-
 	record.Session.ExpiresAt = s.now().Add(s.sessionTTL)
-	record.Token = TokenPair{
+	tokens := TokenPair{
 		AccessToken:  randomID("acc"),
 		RefreshToken: randomID("rft"),
 		TokenType:    "Bearer",
 	}
 
-	s.accessIndex[record.Token.AccessToken] = sessionID
-	s.refreshIndex[record.Token.RefreshToken] = sessionID
+	if !s.store.UpdateSessionTokens(record.Session.ID, tokens) {
+		return RefreshResponse{}, ErrSessionNotFound
+	}
+
+	record.Token = tokens
 
 	return RefreshResponse{
 		Session: record.Session,
@@ -132,17 +106,9 @@ func (s *Service) Revoke(_ context.Context, sessionID string) (RevocationRespons
 }
 
 func (s *Service) Session(_ context.Context, accessToken string) (Session, error) {
-	s.mu.RLock()
-	defer s.mu.RUnlock()
-
-	sessionID, ok := s.accessIndex[accessToken]
+	record, ok := s.store.SessionByAccessToken(accessToken)
 	if !ok {
 		return Session{}, ErrTokenInvalid
-	}
-
-	record, ok := s.sessions[sessionID]
-	if !ok {
-		return Session{}, ErrSessionNotFound
 	}
 
 	if record.Session.Status == SessionStatusRevoked {
@@ -157,10 +123,7 @@ func (s *Service) Session(_ context.Context, accessToken string) (Session, error
 }
 
 func (s *Service) revoke(sessionID string) (RevocationResponse, error) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
-	record, ok := s.sessions[sessionID]
+	record, ok := s.store.SessionByID(sessionID)
 	if !ok {
 		return RevocationResponse{}, ErrSessionNotFound
 	}

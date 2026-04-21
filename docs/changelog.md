@@ -30,6 +30,41 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-21
 
+- Mudança: o módulo `nodes` passou a ler a VPS principal do `.env` e a expor um probe operacional configurado por ambiente.
+- Motivo: permitir a primeira tentativa real de conexão com a VPS principal usando a configuração local de SSH.
+- Impacto: o inventário do node principal e a rota de probe agora seguem a configuração do ambiente sem exigir payload manual.
+- Arquivos: `cmd/api/main.go`, `internal/nodes/*`, `.env.example`, `docs/modules/nodes/current-state.md`, `docs/modules/nodes/active-plan.md`, `docs/modules/nodes/contracts.md`
+
+### 2026-04-21
+
+- Mudança: transformado o snapshot da VPS principal em inventário operacional no módulo `nodes`, com leitura exposta pela API.
+- Motivo: sair do registro documental e tornar o node principal consultável no sistema.
+- Impacto: o módulo `nodes` passou a ter um inventário vivo da VPS principal, ligado ao entrypoint da API e pronto para evoluir para probe manual e heartbeat.
+- Arquivos: `internal/nodes/*`, `cmd/api/main.go`, `docs/modules/nodes/*`, `docs/active-plan.md`, `docs/phase-1-plan.md`
+
+### 2026-04-21
+
+- Mudança: documentado o snapshot operacional da VPS principal com hostname, IP, plano, recursos, renovação e usuário SSH atual.
+- Motivo: registrar o inventário real da primeira VPS para orientar o módulo `nodes` e a operação inicial.
+- Impacto: a documentação passou a refletir o estado atual da máquina principal e o ponto de atenção de segurança do acesso SSH em `root`.
+- Arquivos: `docs/product-overview.md`, `docs/architecture.md`, `docs/modules/nodes/current-state.md`, `docs/modules/nodes/contracts.md`
+
+### 2026-04-21
+
+- Mudança: criada a base do módulo `nodes` com conector SSH, probe de inventário mínimo e documentação inicial do módulo.
+- Motivo: iniciar o canal padrão de controle remoto da primeira VPS e deixar o módulo pronto para evoluir em inventário e heartbeat.
+- Impacto: o repositório passou a ter a primeira espinha dorsal de controle remoto para a VPS principal, separada da camada de telemetria futura.
+- Arquivos: `internal/nodes/*`, `docs/modules/nodes/*`, `docs/active-plan.md`, `docs/phase-1-plan.md`
+
+### 2026-04-21
+
+- Mudança: formalizado SSH como canal padrão de controle remoto, com provider APIs e outros mecanismos tratados como adapters opcionais.
+- Motivo: garantir controle portátil e auditável sobre as VPS sem prender o sistema a um provedor específico.
+- Impacto: a documentação de arquitetura, produto, stack, MVP, fase 1 e inicialização do projeto passou a refletir SSH como padrão.
+- Arquivos: `README.md`, `.env.example`, `.env`, `docs/adr/0003-ssh-primary-control-channel.md`, `docs/adr/README.md`, `docs/architecture.md`, `docs/product-overview.md`, `docs/stack.md`, `docs/mvp.md`, `docs/phase-1-plan.md`, `docs/roadmap.md`, `docs/modules/new-module-process.md`, `docs/modules/module-template.md`
+
+### 2026-04-21
+
 - Mudança: iniciada a primeira implementação funcional do projeto com a espinha dorsal do módulo `auth` em Go, serviço em memória, handlers HTTP e testes.
 - Motivo: sair da fase de documentação e começar a execução real da fase 1.
 - Impacto: o repositório passou a conter código executável e testes para o primeiro módulo da plataforma.

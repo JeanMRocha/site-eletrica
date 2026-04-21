@@ -8,6 +8,7 @@ Projeto em fase de planejamento para monitorar, diagnosticar e automatizar a sa�
 - Stack alvo: `vinext` na web, API em `Go`, banco `PostgreSQL`
 - Execução: Docker + Coolify
 - Infra de apoio: Oracle Free Tier e ambiente local em Proxmox
+- Controle remoto padrão: SSH, com outros adaptadores apenas quando necessário
 
 ## Documentos principais
 
@@ -16,4 +17,3 @@ Projeto em fase de planejamento para monitorar, diagnosticar e automatizar a sa�
 - [`docs/development-principles.md`](docs/development-principles.md)
 - [`AGENTS.md`](AGENTS.md)
 - [`.agent`](.agent)
-

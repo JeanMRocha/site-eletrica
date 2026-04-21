@@ -2,7 +2,7 @@
 
 > Status: stable
 > Type: template
-> Last updated: 2026-04-20
+> Last updated: 2026-04-21
 > Owner: repository
 
 Template base para iniciar um módulo novo com a documentação mínima já alinhada ao processo do repositório.
@@ -93,6 +93,7 @@ Template base para iniciar um módulo novo com a documentação mínima já alin
 - Códigos de status e erros esperados
 - Regras de versionamento e compatibilidade
 - Exemplos reais de payload quando aplicável
+- Se houver controle remoto, documente o canal padrão e os adapters alternativos esperados
 
 ## Seções recomendadas do `security.md`
 
@@ -100,6 +101,7 @@ Template base para iniciar um módulo novo com a documentação mínima já alin
 - Riscos a considerar
 - Exigências de revisão
 - Regras de auditoria e abuso
+- Para controle remoto, detalhe autenticação, rotação de credenciais e trilha de auditoria do canal padrão
 
 ## Seções recomendadas do `tests.md`
 
@@ -123,6 +125,7 @@ Template base para iniciar um módulo novo com a documentação mínima já alin
 - Estado vivo versus snapshot
 - O que olhar primeiro
 - Regra prática
+- Se o módulo usa controle remoto, explique quando SSH é padrão e quando outro adapter pode ser usado
 
 ## Seções recomendadas do `adr/README.md`
 

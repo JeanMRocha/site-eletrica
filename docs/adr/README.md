@@ -2,7 +2,7 @@
 
 > Status: stable
 > Type: index
-> Last updated: 2026-04-20
+> Last updated: 2026-04-21
 > Owner: repository
 
 Registro de Architecture Decision Records do sistema.
@@ -30,6 +30,7 @@ Registro de Architecture Decision Records do sistema.
 
 - `0001-title.md`: primeira decisão relevante
 - `0002-title.md`: próxima decisão relevante
+- `0003-ssh-primary-control-channel.md`: decisão sobre SSH como canal padrão de controle
 - `template.md`: modelo oficial de ADR
 - `current-state.md`: resumo do que hoje é verdade no sistema
 - `archive/`: decisões antigas, superseded ou deprecated
