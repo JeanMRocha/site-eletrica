@@ -30,6 +30,13 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-20
 
+- Mudança: enxugada a seção de regra de ouro de `docs/governance.md` para remover a última repetição já coberta pelos reading paths.
+- Motivo: deixar a autoridade central mais concisa e menos operacional.
+- Impacto: a governança ficou mais limpa e mais claramente separada dos guias de leitura por perfil.
+- Arquivos: `docs/governance.md`
+
+### 2026-04-20
+
 - Mudança: simplificados `AGENTS.md` e `.agent` para funcionarem como pontos de entrada curtos, sem repetir a governança central.
 - Motivo: reduzir duplicação entre arquivos raiz e `docs/governance.md`, deixando a leitura inicial do agente mais limpa.
 - Impacto: os pontos de entrada ficaram mais enxutos e mais fáceis de manter como ponte para a governança.

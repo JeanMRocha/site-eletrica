@@ -45,4 +45,3 @@
 - If the change does not create a new decision, prefer `plan`, `current-state`, or `changelog`.
 - If the change creates a durable decision, use ADR.
 - If the current file no longer reflects the live scope, move the useful content to the relevant archive.
-- If the task fits a known profile, use the matching reading path before opening unrelated documentation.
