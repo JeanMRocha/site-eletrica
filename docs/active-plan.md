@@ -1,5 +1,10 @@
 # Plano em Execução
 
+> Status: active
+> Type: plan
+> Last updated: 2026-04-20
+> Owner: repository
+
 Documento para registrar o que está sendo feito agora.
 
 ## Objetivo atual

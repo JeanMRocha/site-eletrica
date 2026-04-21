@@ -1,5 +1,10 @@
 # Planejamento Geral
 
+> Status: active
+> Type: roadmap
+> Last updated: 2026-04-20
+> Owner: repository
+
 Mapa de longo prazo com o que ainda não foi feito e o que precisa de ampliação.
 
 ## Como usar

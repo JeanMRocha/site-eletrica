@@ -1,5 +1,10 @@
 # Stack
 
+> Status: stable
+> Type: stack
+> Last updated: 2026-04-20
+> Owner: platform
+
 ## Chosen stack
 
 - Web: `vinext`
@@ -48,4 +53,3 @@
 - Each deployable service must have its own Dockerfile or clear build instructions
 - Dev, staging, and production configs must be separated
 - Infrastructure assumptions must be documented, not hidden in code
-

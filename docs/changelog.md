@@ -1,5 +1,10 @@
 # Histórico de Mudanças
 
+> Status: active
+> Type: history
+> Last updated: 2026-04-20
+> Owner: repository
+
 Registro cronológico das mudanças relevantes no repositório.
 
 ## Formato sugerido

@@ -1,5 +1,10 @@
 # Regras do Agente
 
+> Status: active
+> Type: rules
+> Last updated: 2026-04-20
+> Owner: repository
+
 Este arquivo complementa `AGENTS.md` e `.agent` com regras práticas de idioma e consistência para a base.
 
 ## Idioma da interface

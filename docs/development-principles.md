@@ -1,5 +1,10 @@
 # Development Principles
 
+> Status: stable
+> Type: principles
+> Last updated: 2026-04-20
+> Owner: platform
+
 ## Working style
 
 - Plan first
@@ -67,4 +72,3 @@
 - Document decisions, not just features
 - Record tradeoffs and rejected options
 - Keep architecture docs updated when the stack changes
-

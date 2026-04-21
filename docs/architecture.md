@@ -1,5 +1,10 @@
 # Architecture
 
+> Status: stable
+> Type: architecture
+> Last updated: 2026-04-20
+> Owner: platform
+
 ## Goal
 
 Build a portable infrastructure control plane to monitor, alert, diagnose, and apply safe remediation actions across multiple machines.
@@ -63,4 +68,3 @@ Build a portable infrastructure control plane to monitor, alert, diagnose, and a
 - Everything deployable should be container-friendly
 - No hard dependency on a specific hosting provider
 - Use environment variables and secrets management for deployment-specific data
-

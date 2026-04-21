@@ -1,5 +1,10 @@
 # Documentação
 
+> Status: stable
+> Type: index
+> Last updated: 2026-04-20
+> Owner: repository
+
 Índice rápido para entender o papel de cada documento em `docs/`.
 
 ## Visão geral
@@ -11,6 +16,7 @@
 - [`changelog.md`](changelog.md): histórico cronológico das mudanças relevantes.
 - [`active-plan.md`](active-plan.md): plano em execução no momento.
 - [`roadmap.md`](roadmap.md): visão geral do que ainda falta fazer ou ampliar.
+- [`header-template.md`](header-template.md): padrão de cabeçalho reutilizável para documentos de `docs/`.
 
 ## Ordem sugerida de uso
 
