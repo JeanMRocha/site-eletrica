@@ -9,6 +9,7 @@ Camada de documentação por módulo. Use esta pasta para concentrar regras, con
 
 ## Regra de leitura por escopo
 
+- Leia `docs/governance.md` antes de entrar na documentação de um módulo.
 - Se a mudança for global, leia os documentos da raiz de `docs/`.
 - Se a mudança tocar um módulo específico, leia os documentos daquele módulo.
 - Se a mudança tocar um contrato compartilhado, leia também `docs/shared/` quando ele existir.

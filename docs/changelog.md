@@ -30,6 +30,13 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-20
 
+- Mudança: criado o índice mestre de governança em `docs/governance.md` e conectado ao fluxo principal de leitura.
+- Motivo: centralizar regras de leitura, escrita e ciclo de vida da documentação em um único ponto de entrada.
+- Impacto: o agente passa a ter um caminho curto para decidir o que ler e onde registrar cada tipo de mudança.
+- Arquivos: `docs/governance.md`, `docs/README.md`, `docs/modules/README.md`
+
+### 2026-04-20
+
 - Mudança: formalizada a regra de quando abrir um novo `plan` versus quando apenas atualizar `plan`, `current-state` e `changelog`.
 - Motivo: evitar fragmentação desnecessária de planos e preservar a continuidade do mesmo trabalho.
 - Impacto: o agente agora diferencia trabalho novo de evolução incremental do mesmo escopo.
