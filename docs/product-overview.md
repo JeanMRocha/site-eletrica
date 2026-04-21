@@ -12,6 +12,13 @@ Visão de produto para orientar leitura, módulos e decisões de documentação.
 - A control plane for monitoring, diagnosing, and safely remediating infrastructure.
 - A product that favors portability, provider independence, and container-first deployment.
 
+## Contexto operacional atual
+
+- A VPS principal hospeda os sistemas em produção e roda atualmente em um provedor externo, com Coolify e padrão Docker.
+- Uma VPS Oracle Free Tier serve como ponto independente de monitoramento da VPS principal.
+- Uma VPS local serve como laboratório, suporte e apoio para armazenamento ou desempenho quando necessário.
+- O objetivo imediato é centralizar a visão, a segurança e a saúde desses ambientes em um painel administrativo único.
+
 ## Primary flows
 
 - Observe node health and telemetry.
@@ -19,6 +26,7 @@ Visão de produto para orientar leitura, módulos e decisões de documentação.
 - Review audit trails and historical events.
 - Trigger controlled remediation actions.
 - Manage authentication and authorization for operators.
+- Surface the current state of the main VPS, monitoring VPS, and local support VPS in one place.
 
 ## Main areas
 

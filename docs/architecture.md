@@ -52,9 +52,17 @@ Build a portable infrastructure control plane to monitor, alert, diagnose, and a
 
 ## Node topology
 
-- Main VPS: primary workload and main agent
+- Main VPS on the current hosting provider: primary workload and main agent
 - Oracle Free Tier: remote monitoring, backup, and independent reachability checks
-- Local Proxmox: support services, test environments, and contingency workloads
+- Local VPS/Proxmox support environment: support services, test environments, storage, and contingency workloads
+
+## Operational intent
+
+- Centralize health, security, and performance visibility across the three environments.
+- Keep the main production workloads portable so the hosting provider can change in the future.
+- Use the monitoring VPS as an external point of trust, not as the source of business truth.
+- Use the local environment to absorb support workloads or improve performance when needed.
+- Keep remediations controlled and auditable from the API.
 
 ## Communication model
 

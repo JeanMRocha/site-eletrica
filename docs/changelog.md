@@ -30,6 +30,13 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-20
 
+- Mudança: incorporado o contexto operacional real do projeto em `docs/product-overview.md` e `docs/architecture.md`, incluindo a VPS principal, a VPS Oracle de monitoramento e a VPS local de suporte.
+- Motivo: refletir o cenário real em que o painel administrativo vai operar antes de começar a implementação.
+- Impacto: a documentação de produto e arquitetura passou a descrever o ambiente real que o sistema vai centralizar e proteger.
+- Arquivos: `docs/product-overview.md`, `docs/architecture.md`
+
+### 2026-04-20
+
 - Mudança: criado `docs/modules/module-template.md` para servir como base copiável na primeira versão de qualquer módulo novo e ligado ao processo de evolução de módulos.
 - Motivo: acelerar a criação de módulos sem perder o padrão documental já estabelecido.
 - Impacto: novos módulos passam a ter um molde inicial claro e um fluxo explícito antes da implementação.
