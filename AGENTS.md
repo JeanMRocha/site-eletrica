@@ -29,3 +29,16 @@ Non-negotiable project rules:
 Governance shortcut:
 
 - Use `docs/governance.md` as the first navigation point for documentation, planning, ADR, and archive decisions.
+
+Quick governance matrix:
+
+| Change type | Read first | Write/update |
+| --- | --- | --- |
+| Structural | `docs/architecture.md`, `docs/adr/README.md` | `docs/adr/` |
+| Execution | `docs/active-plan.md`, `docs/plan-lifecycle.md` | `docs/active-plan.md` |
+| Current state | `docs/adr/current-state.md`, `docs/current-state-lifecycle.md` | `docs/adr/current-state.md` |
+| Decision | `docs/adr/template.md` | `docs/adr/` |
+| Incremental | `docs/changelog.md` | `docs/changelog.md` |
+| Module-local | `docs/modules/<modulo>/README.md` | module docs |
+
+- If the current file no longer reflects the live scope, move the useful content to the relevant archive.
