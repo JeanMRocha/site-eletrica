@@ -30,6 +30,13 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-20
 
+- Mudança: transformado `docs/governance.md` em uma matriz operacional curta para leitura, escrita e arquivamento.
+- Motivo: reduzir navegação desnecessária e deixar o ponto de entrada de governança mais útil no dia a dia.
+- Impacto: o agente agora encontra um mapa direto por tipo de mudança antes de abrir os documentos específicos.
+- Arquivos: `docs/governance.md`, `docs/README.md`, `docs/modules/README.md`
+
+### 2026-04-20
+
 - Mudança: criado o índice mestre de governança em `docs/governance.md` e conectado ao fluxo principal de leitura.
 - Motivo: centralizar regras de leitura, escrita e ciclo de vida da documentação em um único ponto de entrada.
 - Impacto: o agente passa a ter um caminho curto para decidir o que ler e onde registrar cada tipo de mudança.
