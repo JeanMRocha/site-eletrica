@@ -5,15 +5,14 @@
 > Last updated: 2026-04-20
 > Owner: repository
 
-Before making any change in this repository, an agent must:
+Start here:
 
 1. Read `.agent`.
-2. Read the architecture and stack documentation in `docs/`.
-3. Read `docs/adr/README.md` when the change involves an architectural decision.
-4. Read `docs/modules/<modulo>/README.md` and the related module docs when the change is local to a module.
-5. Produce or update an explicit plan before editing files.
-6. Respect the planning phase if the user is still defining scope or architecture.
-7. Avoid implementing code while the project is in documentation or decision mode unless the user explicitly asks for it.
+2. Read `docs/governance.md`.
+3. Read the minimal docs required by the change.
+4. Create or update an explicit plan before editing files.
+5. Respect the planning phase if the user is still defining scope or architecture.
+6. Avoid implementing code while the project is in documentation or decision mode unless the user explicitly asks for it.
 
 Non-negotiable project rules:
 
@@ -26,19 +25,4 @@ Non-negotiable project rules:
 - Follow SOLID, clean boundaries, and testable design.
 - Prefer tests before implementation when introducing new behavior.
 
-Governance shortcut:
-
-- Use `docs/governance.md` as the first navigation point for documentation, planning, ADR, and archive decisions.
-
-Quick governance matrix:
-
-| Change type | Read first | Write/update |
-| --- | --- | --- |
-| Structural | `docs/architecture.md`, `docs/adr/README.md` | `docs/adr/` |
-| Execution | `docs/active-plan.md`, `docs/plan-lifecycle.md` | `docs/active-plan.md` |
-| Current state | `docs/adr/current-state.md`, `docs/current-state-lifecycle.md` | `docs/adr/current-state.md` |
-| Decision | `docs/adr/template.md` | `docs/adr/` |
-| Incremental | `docs/changelog.md` | `docs/changelog.md` |
-| Module-local | `docs/modules/<modulo>/README.md` | module docs |
-
-- If the current file no longer reflects the live scope, move the useful content to the relevant archive.
+If this file conflicts with `docs/governance.md`, governance wins.

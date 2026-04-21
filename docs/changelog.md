@@ -30,6 +30,13 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-20
 
+- Mudança: simplificados `AGENTS.md` e `.agent` para funcionarem como pontos de entrada curtos, sem repetir a governança central.
+- Motivo: reduzir duplicação entre arquivos raiz e `docs/governance.md`, deixando a leitura inicial do agente mais limpa.
+- Impacto: os pontos de entrada ficaram mais enxutos e mais fáceis de manter como ponte para a governança.
+- Arquivos: `AGENTS.md`, `.agent`
+
+### 2026-04-20
+
 - Mudança: simplificado `docs/README.md` para funcionar só como índice de entrada, sem repetir a política central de navegação.
 - Motivo: reduzir duplicação com `docs/governance.md` e deixar o arquivo raiz mais leve.
 - Impacto: o ponto de entrada de `docs/` ficou mais curto e mais fácil de manter sem competir com a governança.

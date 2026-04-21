@@ -3,36 +3,19 @@
 > Last updated: 2026-04-20
 > Owner: repository
 
-Regra do projeto:
+Start here:
 
-1. Antes de qualquer alteração de arquivo, criar e seguir um plano explícito.
-2. Ler `AGENTS.md` e a documentação em `docs/` antes de propor ou executar mudanças.
-3. Ler `docs/adr/README.md` quando a mudança envolver uma decisão arquitetural.
-4. Ler `docs/modules/<modulo>/README.md` e as regras do módulo quando a alteração for local.
-5. Não executar mudanças diretas sem antes registrar a sequência de passos.
-6. Se uma tarefa não estiver clara o suficiente para planejamento, interromper e pedir esclarecimento.
-7. Manter as alterações pequenas, rastreáveis e alinhadas ao plano aprovado.
-8. Sempre validar o resultado após as mudanças.
+1. Read `AGENTS.md`.
+2. Read `docs/governance.md`.
+3. Follow the minimal reading path for the change.
+4. Create or update an explicit plan before editing files.
 
-Regra de testes:
+Core rules:
 
-1. Criar ou atualizar os testes antes da implementação quando houver comportamento novo.
-2. Rodar os testes do módulo afetado durante o desenvolvimento.
-3. Rodar a suíte completa antes de commit ou PR.
+- Do not edit files while the scope is still being defined.
+- Keep changes small, traceable, and aligned to the approved plan.
+- Create or update tests before implementing new behavior.
+- Run module tests during development and the full suite before commit or PR.
+- Validate the result after changes.
 
-Objetivo:
-Garantir que todo trabalho neste repositório seja conduzido com planejamento prévio, execução controlada e respeito à arquitetura documentada.
-
-Atalho de governança:
-
-- Use `docs/governance.md` como o primeiro ponto de leitura para decidir o que consultar, atualizar ou arquivar.
-
-Matriz mínima:
-
-| Change type | Read first | Write/update |
-| --- | --- | --- |
-| Structural | `docs/governance.md` | `docs/adr/` |
-| Execution | `docs/governance.md` | `docs/active-plan.md` |
-| Current state | `docs/governance.md` | `docs/adr/current-state.md` |
-| Incremental | `docs/governance.md` | `docs/changelog.md` |
-| Module-local | `docs/governance.md` | module docs |
+If this file conflicts with `docs/governance.md`, governance wins.
