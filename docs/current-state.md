@@ -9,10 +9,11 @@ Resumo vigente do sistema como um todo.
 
 ## Current state
 
-- A documentação global define uma aplicação web para cálculos e dimensionamentos elétricos.
+- A documentação global define uma aplicação web para estudos elétricos, modelagem, dimensionamento, conformidade, estimativas e relatórios.
 - A documentação por módulo concentra regras, contratos, segurança, testes, planos, estado e histórico local.
 - `auth` continua sendo tratado como módulo crítico.
-- `projects` e `calculations` são os próximos módulos centrais do novo produto.
+- `projects`, `ambientes`, `cargas`, `circuitos`, `condutores`, `protecao`, `standards`, `calculations`, `conformidade`, `routing`, `estimations`, `reports`, `knowledge` e `core` são os módulos centrais do novo produto.
+- O núcleo do sistema é o modelo elétrico da instalação; a conformidade valida o modelo, mas não manda no projeto inteiro.
 - Mudanças locais devem ler somente o contexto necessário.
 - O estado vigente do sistema deve ser resumido aqui, não espalhado em ADRs.
 

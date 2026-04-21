@@ -5,7 +5,7 @@
 > Last updated: 2026-04-21
 > Owner: repository
 
-Camada de documentação por módulo. Use esta pasta para concentrar regras, contratos, testes e histórico de cada área funcional.
+Camada de documentação por módulo. Use esta pasta para concentrar regras, contratos, testes e histórico de cada area funcional.
 
 ## Regra de leitura por escopo
 
@@ -31,8 +31,31 @@ Camada de documentação por módulo. Use esta pasta para concentrar regras, con
 ## Módulos atuais
 
 - `auth`: autenticação, autorização e sessão
-- `projects`: cadastro e organização de estudos elétricos
-- `calculations`: dimensionamento e regras técnicas
+- `projects`: cadastro e organização de estudos eletricos
+- `standards`: catalogo de normas, fontes e critérios tecnicos
+- `calculations`: dimensionamento e regras tecnicas
+- `conformidade`: validacao normativa, legal e tecnica do modelo eletrico
+- `routing`: sugestao de caminhos e alternativas de instalacao
+- `estimations`: materiais, mao de obra, equipamentos, tempo e custos
+- `reports`: memoria tecnica, relatorios e saida consolidada
+- `knowledge`: glossario, ajuda e explicacoes tecnicas
+- `core`: contratos compartilhados, formulas, unidades, versionamento e auditoria
+
+## Modulos em modelagem
+
+- `ambientes`: ambientes, areas e contexto de uso
+- `cargas`: cargas, demanda e classificacao
+- `circuitos`: segmentacao e agrupamento de circuitos
+- `condutores`: seccao, metodo de instalacao e queda de tensao
+- `protecao`: disjuntores, DR, DPS e compatibilidades basicas
+
+## Papel dos blocos principais
+
+- `standards` guarda a fonte catalogada e versionada.
+- `calculations` produz o resultado tecnico do modelo.
+- `conformidade` recebe o resultado calculado e decide se atende, nao atende, exige revisao ou esta incompleto.
+- `knowledge` explica o dominio e reduz ambiguidade de uso.
+- `core` sustenta os contratos e primitivas compartilhadas entre modulos.
 
 ## Uso prático
 

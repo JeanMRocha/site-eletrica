@@ -15,16 +15,16 @@ Use este documento para registrar trabalho em andamento no nível global do repo
 
 ## Contexto
 
-- A documentação global já define o novo produto: aplicação web para cálculos e dimensionamentos elétricos.
+- A documentação global já define o novo produto: aplicação web para estudos elétricos, modelagem, dimensionamento, conformidade, estimativas e relatórios.
 - A prioridade agora é sair da base documental e começar a implementação funcional por módulos.
 - A fase 1 está detalhada em `docs/phase-1-plan.md`.
 - O módulo `auth` continua sendo o primeiro incremento funcional.
-- Os próximos módulos de domínio são `projects` e `calculations`.
+- Os próximos módulos de domínio passam a ser `projects`, `ambientes`, `cargas`, `circuitos`, `condutores`, `protecao`, `standards`, `calculations`, `conformidade` e `reports`.
 
 ## Scope
 
 - Acompanhar a implementação da fase 1 definida em `docs/phase-1-plan.md`.
-- Manter visível o progresso de `auth`, `projects`, `calculations` e `web`.
+- Manter visível o progresso de `auth`, `projects`, `ambientes`, `cargas`, `circuitos`, `condutores`, `protecao`, `standards`, `calculations`, `conformidade`, `reports` e `web`.
 - Atualizar a execução à medida que os docs do módulo forem sendo preenchidos e a implementação avançar.
 - Garantir que as regras de domínio fiquem no backend e não na UI.
 
@@ -37,8 +37,12 @@ Use este documento para registrar trabalho em andamento no nível global do repo
 
 1. Começar por `auth`.
 2. Evoluir `projects`.
-3. Ligar o fluxo de `calculations`.
-4. Montar a interface web.
+3. Modelar `ambientes` e `cargas`.
+4. Ligar `circuitos`, `condutores` e `protecao`.
+5. Ligar o catálogo de `standards`.
+6. Ligar o fluxo de `calculations`.
+7. Conectar `conformidade` e `reports`.
+8. Montar a interface web.
 
 ## Blockers
 
@@ -48,7 +52,7 @@ Use este documento para registrar trabalho em andamento no nível global do repo
 
 - Confirmar que a fase 1 segue o MVP e a arquitetura documentada.
 - Confirmar que cada módulo nasce com documentação mínima antes da implementação.
-- Confirmar que `auth`, `projects`, `calculations` e `web` avançam na ordem definida pela fase 1.
+- Confirmar que `auth`, `projects`, `ambientes`, `cargas`, `circuitos`, `condutores`, `protecao`, `standards`, `calculations`, `conformidade`, `reports` e `web` avançam na ordem definida pela fase 1.
 
 ## Review criteria
 
@@ -58,4 +62,4 @@ Use este documento para registrar trabalho em andamento no nível global do repo
 
 ## Status
 
-- Fase 1 do produto em execução, com `auth` como primeiro incremento funcional e `projects` e `calculations` como próximos módulos de domínio.
+- Fase 1 do produto em execução, com `auth` como primeiro incremento funcional e o modelo eletrico como base para os proximos modulos de dominio.

@@ -2,7 +2,7 @@
 
 > Status: stable
 > Type: index
-> Last updated: 2026-04-20
+> Last updated: 2026-04-21
 > Owner: repository
 
 Índice rápido para encontrar os principais pontos de entrada da documentação.
