@@ -27,6 +27,14 @@ func (s *Service) CreateStudy(ctx context.Context, input CreateStudyInput) (Stud
 	return s.store.CreateStudy(ctx, input)
 }
 
+func (s *Service) UpdateStudy(ctx context.Context, id string, input UpdateStudyInput) (Study, error) {
+	return s.store.UpdateStudy(ctx, id, input)
+}
+
+func (s *Service) DeleteStudy(ctx context.Context, id string) error {
+	return s.store.DeleteStudy(ctx, id)
+}
+
 func (s *Service) GetStudy(ctx context.Context, id string) (StudyDetail, error) {
 	study, err := s.store.GetStudy(ctx, id)
 	if err != nil {

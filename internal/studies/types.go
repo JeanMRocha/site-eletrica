@@ -7,22 +7,25 @@ import (
 )
 
 type Study struct {
-	ID          string    `json:"id"`
-	Name        string    `json:"name"`
-	ClientName  string    `json:"client_name"`
-	Location    string    `json:"location"`
-	ProjectType string    `json:"project_type"`
-	Voltage     string    `json:"voltage"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
+	ID        string    `json:"id"`
+	Name      string    `json:"name"`
+	City      string    `json:"city"`
+	State     string    `json:"state"`
+	Location  string    `json:"location"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 type CreateStudyInput struct {
-	Name        string `json:"name"`
-	ClientName  string `json:"client_name"`
-	Location    string `json:"location"`
-	ProjectType string `json:"project_type"`
-	Voltage     string `json:"voltage"`
+	Name  string `json:"name"`
+	City  string `json:"city"`
+	State string `json:"state"`
+}
+
+type UpdateStudyInput struct {
+	Name  string `json:"name"`
+	City  string `json:"city"`
+	State string `json:"state"`
 }
 
 type AssessmentRecord struct {

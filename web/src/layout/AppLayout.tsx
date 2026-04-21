@@ -9,7 +9,6 @@ type AppLayoutProps = {
   activeTab: TabKey;
   tabs: TabDefinition[];
   profileOpen: boolean;
-  activeProjectName: string;
   draft: Session;
   onToggleProfile: () => void;
   onOpenTab: (tab: TabKey) => void;
@@ -24,7 +23,6 @@ export function AppLayout({
   activeTab,
   tabs,
   profileOpen,
-  activeProjectName,
   draft,
   onToggleProfile,
   onOpenTab,
@@ -37,32 +35,28 @@ export function AppLayout({
     <>
       <header className="topbar">
         <div className="brand">
-          <strong>Site Elétrica</strong>
-          <span>Consolidação geral, normas e dimensionamento</span>
+          <strong>Zé Faisca</strong>
         </div>
 
-        <nav className="tabbar" aria-label="Abas principais">
+        <nav className="tabbar" aria-label="Menu principal">
           {tabs.map((tab) => (
             <button
               key={tab.key}
               className={`tab-chip ${activeTab === tab.key ? 'active' : ''}`}
               onClick={() => onOpenTab(tab.key)}
+              title={tab.label}
               type="button"
             >
-              <strong>{tab.label}</strong>
-              <span>{tab.hint}</span>
+              <strong aria-hidden="true">{tab.icon}</strong>
+              <span>{tab.label}</span>
             </button>
           ))}
         </nav>
 
         <div className="user-zone">
-          <button className="user-chip" onClick={onToggleProfile} type="button">
+          <button className="user-chip" onClick={onToggleProfile} title={session.name} type="button">
             <span className="avatar">
               {session.image ? <img src={session.image} alt={session.name} /> : initialsFromName(session.name)}
-            </span>
-            <span className="user-meta">
-              <strong>{session.name}</strong>
-              <small>{activeProjectName}</small>
             </span>
           </button>
 

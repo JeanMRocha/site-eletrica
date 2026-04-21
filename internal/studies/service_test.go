@@ -15,11 +15,9 @@ func TestStudyLifecycleWithAssessment(t *testing.T) {
 	service := NewService(store, conformidade.NewService(standards.NewInMemoryService(standards.DefaultCatalog())))
 
 	study, err := service.CreateStudy(context.Background(), CreateStudyInput{
-		Name:        "Residência piloto",
-		ClientName:  "Cliente teste",
-		Location:    "Campinas/SP",
-		ProjectType: "residencial",
-		Voltage:     "127/220 V",
+		Name:  "Cliente teste",
+		City:  "Campinas",
+		State: "SP",
 	})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -57,6 +55,43 @@ func TestStudyLifecycleWithAssessment(t *testing.T) {
 
 	if len(detail.Assessments) != 1 {
 		t.Fatalf("expected 1 assessment, got %d", len(detail.Assessments))
+	}
+}
+
+func TestStudyCrud(t *testing.T) {
+	store := newTestStore(t)
+	defer func() { _ = store.Close() }()
+
+	service := NewService(store, conformidade.NewService(standards.NewInMemoryService(standards.DefaultCatalog())))
+
+	study, err := service.CreateStudy(context.Background(), CreateStudyInput{
+		Name:  "Cliente Alfa",
+		City:  "Sorocaba",
+		State: "SP",
+	})
+	if err != nil {
+		t.Fatalf("create: %v", err)
+	}
+
+	updated, err := service.UpdateStudy(context.Background(), study.ID, UpdateStudyInput{
+		Name:  "Cliente Beta",
+		City:  "Campinas",
+		State: "SP",
+	})
+	if err != nil {
+		t.Fatalf("update: %v", err)
+	}
+
+	if updated.Name != "Cliente Beta" || updated.City != "Campinas" || updated.State != "SP" {
+		t.Fatalf("unexpected updated study: %+v", updated)
+	}
+
+	if err := service.DeleteStudy(context.Background(), study.ID); err != nil {
+		t.Fatalf("delete: %v", err)
+	}
+
+	if _, err := service.GetStudy(context.Background(), study.ID); err == nil {
+		t.Fatal("expected not found after delete")
 	}
 }
 

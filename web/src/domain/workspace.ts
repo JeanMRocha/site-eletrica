@@ -3,6 +3,13 @@ export type Session = {
   image: string;
 };
 
+export type DrawingItem = {
+  id: string;
+  title: string;
+  scale: string;
+  notes: string;
+};
+
 export type EnvironmentItem = {
   id: string;
   name: string;
@@ -27,26 +34,62 @@ export type CircuitItem = {
   conductor: string;
 };
 
-export type Workspace = {
+export type ProjectWorkspace = {
+  drawings: DrawingItem[];
   environments: EnvironmentItem[];
   loads: LoadItem[];
   circuits: CircuitItem[];
 };
 
+export type Workspace = {
+  projects: Record<string, ProjectWorkspace>;
+};
+
 export type ProjectForm = {
   name: string;
-  client_name: string;
-  location: string;
-  project_type: string;
-  voltage: string;
+  city: string;
+  state: string;
 };
 
 export const defaultSession: Session = { name: '', image: '' };
-export const defaultWorkspace: Workspace = { environments: [], loads: [], circuits: [] };
-export const defaultProjectForm: ProjectForm = {
-  name: 'Projeto piloto',
-  client_name: 'Cliente teste',
-  location: 'Campinas/SP',
-  project_type: 'residencial',
-  voltage: '127/220 V',
+
+export const defaultProjectWorkspace: ProjectWorkspace = {
+  drawings: [],
+  environments: [],
+  loads: [],
+  circuits: [],
 };
+
+export const defaultWorkspace: Workspace = { projects: {} };
+
+export const defaultProjectForm: ProjectForm = {
+  name: '',
+  city: '',
+  state: '',
+};
+
+export function getProjectWorkspace(workspace: Workspace, projectId: string) {
+  return workspace.projects[projectId] ?? defaultProjectWorkspace;
+}
+
+export function setProjectWorkspace(workspace: Workspace, projectId: string, projectWorkspace: ProjectWorkspace): Workspace {
+  return {
+    ...workspace,
+    projects: {
+      ...workspace.projects,
+      [projectId]: projectWorkspace,
+    },
+  };
+}
+
+export function normalizeWorkspace(input: Workspace | null | undefined): Workspace {
+  if (!input || typeof input !== 'object') {
+    return defaultWorkspace;
+  }
+
+  const projects = typeof input.projects === 'object' && input.projects ? input.projects : {};
+
+  return {
+    projects,
+  };
+}

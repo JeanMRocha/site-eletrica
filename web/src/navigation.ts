@@ -1,17 +1,32 @@
-export type TabKey = 'home' | 'project' | 'standards' | 'modeling' | 'calculation' | 'conformity' | 'reports';
+export type TabKey = 'home' | 'project' | 'standards' | 'reports';
+
+export type ProjectSectionKey = 'client' | 'drawing' | 'area' | 'modeling' | 'calculation' | 'conformity';
 
 export type TabDefinition = {
   key: TabKey;
   label: string;
+  icon: string;
+};
+
+export type ProjectSectionDefinition = {
+  key: ProjectSectionKey;
+  label: string;
+  icon: string;
   hint: string;
 };
 
 export const tabs: TabDefinition[] = [
-  { key: 'home', label: 'Home', hint: 'consolidação geral' },
-  { key: 'project', label: 'Projetos', hint: 'lista consolidada' },
-  { key: 'standards', label: 'Normas', hint: 'hierarquia e versões' },
-  { key: 'modeling', label: 'Modelagem', hint: 'ambientes e cargas' },
-  { key: 'calculation', label: 'Cálculo', hint: 'dimensionamento' },
-  { key: 'conformity', label: 'Conformidade', hint: 'veredito técnico' },
-  { key: 'reports', label: 'Relatórios', hint: 'saídas consolidadas' },
+  { key: 'home', label: 'Início', icon: '⌂' },
+  { key: 'project', label: 'Cliente', icon: '◉' },
+  { key: 'standards', label: 'Normas', icon: '≋' },
+  { key: 'reports', label: 'Relatórios', icon: '▤' },
+];
+
+export const projectSections: ProjectSectionDefinition[] = [
+  { key: 'client', label: 'Cliente', icon: '◉', hint: 'Selecionar e abrir o projeto.' },
+  { key: 'drawing', label: 'Desenho', icon: '✎', hint: 'Base visual do projeto.' },
+  { key: 'area', label: 'Área', icon: '▦', hint: 'Ambientes, áreas e distâncias.' },
+  { key: 'modeling', label: 'Modelagem', icon: '◫', hint: 'Cargas, circuitos e estrutura.' },
+  { key: 'calculation', label: 'Cálculo', icon: '∑', hint: 'Dimensionamento e verificação.' },
+  { key: 'conformity', label: 'Conformidade', icon: '☑', hint: 'Veredito e regras aplicadas.' },
 ];

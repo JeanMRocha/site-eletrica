@@ -23,11 +23,6 @@
   letter-spacing: 0.12em;
 }
 
-.brand span {
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
 .tabbar,
 .stepbar {
   display: flex;
@@ -47,26 +42,12 @@
 .user-chip {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 8px 12px 8px 8px;
+  gap: 0;
+  padding: 8px;
   border-radius: 999px;
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.03);
   color: var(--text);
-}
-
-.user-meta {
-  display: grid;
-  text-align: left;
-}
-
-.user-meta strong {
-  font-size: 0.92rem;
-}
-
-.user-meta small {
-  color: var(--muted);
-  font-size: 0.75rem;
 }
 
 .avatar {

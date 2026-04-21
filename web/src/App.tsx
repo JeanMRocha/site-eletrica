@@ -1,20 +1,18 @@
 import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
-import { assessProject, createProject, getProject, listHierarchy, listProjects, listStandards } from './api';
-import type { AssessmentInput, AssessmentRecord, HierarchyLevel, Project, ProjectDetail, Standard } from './types';
-import { defaultProjectForm, defaultSession, defaultWorkspace, type ProjectForm, type Session, type Workspace } from './domain/workspace';
+import { assessProject, createProject, deleteProject, getProject, listProjects, updateProject, type AssessmentInput, type AssessmentRecord, type Project, type ProjectDetail } from './domain/projects';
+import { listHierarchy, listStandards, type HierarchyLevel, type Standard } from './domain/standards';
+import { defaultProjectForm, defaultProjectWorkspace, defaultSession, getProjectWorkspace, normalizeWorkspace, setProjectWorkspace, type ProjectForm, type ProjectWorkspace as ProjectWorkspaceState, type Session, type Workspace } from './domain/workspace';
+import { listIbgeCities, listIbgeStates, type IbgeCity, type IbgeState } from './domain/ibge';
 import { sortStandards } from './lib/presentation';
 import { AppLayout } from './layout/AppLayout';
-import { tabs, type TabKey } from './navigation';
+import { tabs, type ProjectSectionKey, type TabKey } from './navigation';
 import { AuthScreen } from './features/auth/AuthScreen';
-import { CalculationTab } from './features/calculation/CalculationFeature';
-import { ConformityTab } from './features/conformity/ConformityFeature';
 import { HomeDashboard } from './features/home/HomeFeature';
-import { ModelingTab } from './features/modeling/ModelingFeature';
-import { ProjectTab } from './features/project/ProjectFeature';
+import { ProjectWorkspace as ProjectWorkspaceView } from './features/project/ProjectWorkspace';
 import { ReportsTab } from './features/reports/ReportsFeature';
 import { StandardsTab } from './features/standards/StandardsFeature';
-import './features/home/home.css';
+import { base62Id } from './lib/id';
 
 const sessionKey = 'eletrica.session';
 const workspaceKey = 'eletrica.workspace';
@@ -45,7 +43,7 @@ function loadSession() {
 }
 
 function loadWorkspace() {
-  return safeParse<Workspace>(window.localStorage.getItem(workspaceKey), defaultWorkspace);
+  return normalizeWorkspace(safeParse<Workspace | null>(window.localStorage.getItem(workspaceKey), null));
 }
 
 function saveJson(key: string, value: unknown) {
@@ -57,10 +55,16 @@ export function App() {
   const [sessionDraft, setSessionDraft] = useState<Session>(() => session ?? defaultSession);
   const [profileOpen, setProfileOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<TabKey>('home');
+  const [activeProjectSection, setActiveProjectSection] = useState<ProjectSectionKey>('client');
   const [workspace, setWorkspace] = useState<Workspace>(() => loadWorkspace());
   const [projects, setProjects] = useState<Project[]>([]);
+  const [editingProjectId, setEditingProjectId] = useState('');
   const [standards, setStandards] = useState<Standard[]>([]);
   const [hierarchy, setHierarchy] = useState<HierarchyLevel[]>([]);
+  const [ibgeStates, setIbgeStates] = useState<IbgeState[]>([]);
+  const [ibgeCities, setIbgeCities] = useState<IbgeCity[]>([]);
+  const [loadingIbge, setLoadingIbge] = useState(false);
+  const [geoError, setGeoError] = useState('');
   const [selectedProjectId, setSelectedProjectId] = useState('');
   const [detail, setDetail] = useState<ProjectDetail | null>(null);
   const [loading, setLoading] = useState(false);
@@ -72,6 +76,83 @@ export function App() {
 
   useEffect(() => saveJson(sessionKey, session), [session]);
   useEffect(() => saveJson(workspaceKey, workspace), [workspace]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadStates() {
+      try {
+        setLoadingIbge(true);
+        setGeoError('');
+        const states = await listIbgeStates();
+        if (!cancelled) {
+          setIbgeStates(states);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setGeoError(err instanceof Error ? err.message : 'Falha ao carregar estados do IBGE');
+        }
+      } finally {
+        if (!cancelled) {
+          setLoadingIbge(false);
+        }
+      }
+    }
+
+    void loadStates();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    const state = projectForm.state.trim();
+
+    async function loadCities() {
+      if (!state) {
+        setIbgeCities([]);
+        return;
+      }
+
+      try {
+        setLoadingIbge(true);
+        setGeoError('');
+        const cities = await listIbgeCities(state);
+        if (!cancelled) {
+          setIbgeCities(cities);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setGeoError(err instanceof Error ? err.message : 'Falha ao carregar cidades do IBGE');
+          setIbgeCities([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoadingIbge(false);
+        }
+      }
+    }
+
+    void loadCities();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [projectForm.state]);
+
+  function openTab(tab: TabKey) {
+    setActiveTab(tab);
+    if (tab === 'project') {
+      setActiveProjectSection('client');
+    }
+  }
+
+  function openProjectSection(section: ProjectSectionKey) {
+    setActiveTab('project');
+    setActiveProjectSection(section);
+  }
 
   useEffect(() => {
     if (!session) {
@@ -98,9 +179,17 @@ export function App() {
         const nextSelected = selectedProjectId || projectList[0]?.id || '';
         if (nextSelected) {
           setSelectedProjectId(nextSelected);
-          setDetail(await getProject(nextSelected));
+          const nextDetail = await getProject(nextSelected);
+          setDetail(nextDetail);
+          setEditingProjectId(nextSelected);
+          setProjectForm({
+            name: nextDetail.study.name,
+            city: nextDetail.study.city,
+            state: nextDetail.study.state,
+          });
         } else {
           setDetail(null);
+          setEditingProjectId('');
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Falha ao carregar dados');
@@ -139,13 +228,26 @@ export function App() {
     setStandards([]);
     setDetail(null);
     setSelectedProjectId('');
+    setEditingProjectId('');
+    setProjectForm(defaultProjectForm);
+    setIbgeCities([]);
   }
 
-  function activateProject(id: string) {
+  async function activateProject(id: string) {
     setSelectedProjectId(id);
-    void getProject(id)
-      .then(setDetail)
-      .catch((err) => setError(err instanceof Error ? err.message : 'Falha ao abrir projeto'));
+    setEditingProjectId(id);
+    try {
+      const nextDetail = await getProject(id);
+      setDetail(nextDetail);
+      setProjectForm({
+        name: nextDetail.study.name,
+        city: nextDetail.study.city,
+        state: nextDetail.study.state,
+      });
+      setActiveProjectSection('client');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Falha ao abrir projeto');
+    }
   }
 
   async function onCreateProject(event: FormEvent<HTMLFormElement>) {
@@ -153,15 +255,84 @@ export function App() {
     setSavingProject(true);
     setError('');
     try {
-      const project = await createProject(projectForm);
+      const input = {
+        name: projectForm.name.trim(),
+        city: projectForm.city.trim(),
+        state: projectForm.state.trim().toUpperCase(),
+      };
+      const project = editingProjectId
+        ? await updateProject(editingProjectId, input)
+        : await createProject(input);
       setProjects(await listProjects());
-      activateProject(project.id);
-      setActiveTab('project');
+      await activateProject(project.id);
+      openProjectSection('client');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Falha ao criar projeto');
+      setError(err instanceof Error ? err.message : editingProjectId ? 'Falha ao atualizar cliente' : 'Falha ao criar cliente');
     } finally {
       setSavingProject(false);
     }
+  }
+
+  async function onDeleteProject() {
+    if (!editingProjectId) return;
+    setSavingProject(true);
+    setError('');
+    try {
+      await deleteProject(editingProjectId);
+      setProjects(await listProjects());
+      setWorkspace((current) => {
+        const nextProjects = { ...current.projects };
+        delete nextProjects[editingProjectId];
+        return { projects: nextProjects };
+      });
+      setEditingProjectId('');
+      setProjectForm(defaultProjectForm);
+      setSelectedProjectId('');
+      setDetail(null);
+      setActiveProjectSection('client');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Falha ao excluir cliente');
+    } finally {
+      setSavingProject(false);
+    }
+  }
+
+  function startNewProject() {
+    setEditingProjectId('');
+    setSelectedProjectId('');
+    setDetail(null);
+    setProjectForm(defaultProjectForm);
+    setActiveProjectSection('client');
+  }
+
+  function updateSelectedProjectWorkspace(updater: (current: ProjectWorkspaceState) => ProjectWorkspaceState) {
+    if (!selectedProjectId) return;
+    setWorkspace((current) => {
+      const nextProjectWorkspace = updater(getProjectWorkspace(current, selectedProjectId));
+      return setProjectWorkspace(current, selectedProjectId, nextProjectWorkspace);
+    });
+  }
+
+  function addDrawing(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const title = String(data.get('drawing_title') ?? '').trim();
+    if (!title || !selectedProjectId) return;
+
+    updateSelectedProjectWorkspace((current) => ({
+      ...current,
+      drawings: [
+        {
+          id: base62Id(),
+          title,
+          scale: String(data.get('drawing_scale') ?? '').trim(),
+          notes: String(data.get('drawing_notes') ?? '').trim(),
+        },
+        ...current.drawings,
+      ],
+    }));
+
+    event.currentTarget.reset();
   }
 
   async function onAssessProject(event: FormEvent<HTMLFormElement>) {
@@ -174,7 +345,7 @@ export function App() {
       const nextDetail = await getProject(selectedProjectId);
       setDetail(nextDetail);
       setProjects(await listProjects());
-      setActiveTab('conformity');
+      openProjectSection('conformity');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Falha ao executar cálculo');
     } finally {
@@ -184,15 +355,16 @@ export function App() {
 
   function addEnvironment(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!selectedProjectId) return;
     const data = new FormData(event.currentTarget);
     const name = String(data.get('env_name') ?? '').trim();
     if (!name) return;
 
-    setWorkspace((current) => ({
+    updateSelectedProjectWorkspace((current) => ({
       ...current,
       environments: [
         {
-          id: `env_${Math.random().toString(36).slice(2, 10)}`,
+          id: base62Id(),
           name,
           area: String(data.get('env_area') ?? '').trim(),
           usage: String(data.get('env_usage') ?? '').trim(),
@@ -206,15 +378,16 @@ export function App() {
 
   function addLoad(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!selectedProjectId) return;
     const data = new FormData(event.currentTarget);
     const name = String(data.get('load_name') ?? '').trim();
     if (!name) return;
 
-    setWorkspace((current) => ({
+    updateSelectedProjectWorkspace((current) => ({
       ...current,
       loads: [
         {
-          id: `load_${Math.random().toString(36).slice(2, 10)}`,
+          id: base62Id(),
           name,
           category: String(data.get('load_category') ?? '').trim(),
           power: String(data.get('load_power') ?? '').trim(),
@@ -228,15 +401,16 @@ export function App() {
 
   function addCircuit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!selectedProjectId) return;
     const data = new FormData(event.currentTarget);
     const name = String(data.get('circuit_name') ?? '').trim();
     if (!name) return;
 
-    setWorkspace((current) => ({
+    updateSelectedProjectWorkspace((current) => ({
       ...current,
       circuits: [
         {
-          id: `ckt_${Math.random().toString(36).slice(2, 10)}`,
+          id: base62Id(),
           name,
           environment: String(data.get('circuit_environment') ?? '').trim(),
           breaker: String(data.get('circuit_breaker') ?? '').trim(),
@@ -253,6 +427,7 @@ export function App() {
   }
 
   const latestAssessment: AssessmentRecord | null = detail?.assessments?.[0] ?? null;
+  const selectedProjectWorkspace = selectedProjectId ? getProjectWorkspace(workspace, selectedProjectId) : defaultProjectWorkspace;
 
   return (
       <AppLayout
@@ -260,9 +435,8 @@ export function App() {
         activeTab={activeTab}
         tabs={tabs}
         profileOpen={profileOpen}
-        activeProjectName={detail?.study.name ?? 'nenhum projeto ativo'}
         onToggleProfile={() => setProfileOpen((current) => !current)}
-        onOpenTab={setActiveTab}
+        onOpenTab={openTab}
         draft={sessionDraft}
         onDraftChange={setSessionDraft}
         onSaveProfile={() =>
@@ -274,11 +448,6 @@ export function App() {
         onLogout={logout}
       >
         <section className="hero-strip home-feature">
-          <div>
-            <p className="eyebrow">Home</p>
-            <h1>Consolidação geral do projeto</h1>
-            <p>As abas abaixo mostram síntese, hierarquia normativa, modelagem e veredito, sem menus de cadastro como tela principal.</p>
-          </div>
           <div className="hero-metrics">
             <div className="metric">
               <strong>{projects.length}</strong>
@@ -301,25 +470,45 @@ export function App() {
         {activeTab === 'home' ? (
           <HomeDashboard
             projects={projects}
-            standards={standards}
             hierarchy={hierarchy}
             latestAssessment={latestAssessment}
             selectedProjectId={selectedProjectId}
             onSelectProject={activateProject}
-            onOpenTab={setActiveTab}
+            onOpenProjectSection={openProjectSection}
+            onOpenTab={openTab}
           />
         ) : null}
 
         {activeTab === 'project' ? (
-          <ProjectTab
+          <ProjectWorkspaceView
             projects={projects}
             selectedProjectId={selectedProjectId}
             detail={detail}
             form={projectForm}
-            saving={savingProject}
+            savingProject={savingProject}
+            projectWorkspace={selectedProjectWorkspace}
+            assessmentForm={assessmentForm}
+            standards={sortStandards(standards)}
+            latestAssessment={latestAssessment}
+            savingAssessment={savingAssessment}
+            editingProjectId={editingProjectId}
+            ibgeStates={ibgeStates}
+            ibgeCities={ibgeCities}
+            loadingIbge={loadingIbge}
+            geoError={geoError}
+            activeSection={activeProjectSection}
             onSelectProject={activateProject}
             onChangeForm={setProjectForm}
-            onSubmit={onCreateProject}
+            onSubmitProject={onCreateProject}
+            onDeleteProject={onDeleteProject}
+            onStartNewProject={startNewProject}
+            onAddDrawing={addDrawing}
+            onAddEnvironment={addEnvironment}
+            onAddLoad={addLoad}
+            onAddCircuit={addCircuit}
+            onChangeAssessment={setAssessmentForm}
+            onSubmitAssessment={onAssessProject}
+            onSelectSection={setActiveProjectSection}
           />
         ) : null}
 
@@ -334,28 +523,10 @@ export function App() {
                 standard_code: standard.code,
                 standard_version: standard.version,
               }));
-              setActiveTab('calculation');
+              openProjectSection('calculation');
             }}
           />
         ) : null}
-
-        {activeTab === 'modeling' ? (
-          <ModelingTab workspace={workspace} onAddEnvironment={addEnvironment} onAddLoad={addLoad} onAddCircuit={addCircuit} />
-        ) : null}
-
-        {activeTab === 'calculation' ? (
-          <CalculationTab
-            assessmentForm={assessmentForm}
-            standards={sortStandards(standards)}
-            detail={detail}
-            latestAssessment={latestAssessment}
-            saving={savingAssessment}
-            onChangeAssessment={setAssessmentForm}
-            onSubmit={onAssessProject}
-          />
-        ) : null}
-
-        {activeTab === 'conformity' ? <ConformityTab latestAssessment={latestAssessment} /> : null}
 
         {activeTab === 'reports' ? <ReportsTab projects={projects} standards={standards} latestAssessment={latestAssessment} /> : null}
     </AppLayout>

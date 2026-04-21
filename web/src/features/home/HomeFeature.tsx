@@ -1,48 +1,45 @@
-import type { AssessmentRecord, HierarchyLevel, Project, Standard } from '../../types';
-import { formatDate, sortHierarchy, sortStandards, statusClass, statusLabel } from '../../lib/presentation';
-import type { TabKey } from '../../navigation';
+import type { AssessmentRecord, HierarchyLevel, Project } from '../../types';
+import { sortHierarchy, statusClass, statusLabel } from '../../lib/presentation';
+import type { ProjectSectionKey, TabKey } from '../../navigation';
 import './home.css';
 
 type HomeDashboardProps = {
   projects: Project[];
-  standards: Standard[];
   hierarchy: HierarchyLevel[];
   latestAssessment: AssessmentRecord | null;
   selectedProjectId: string;
   onSelectProject: (id: string) => void;
+  onOpenProjectSection: (section: ProjectSectionKey) => void;
   onOpenTab: (tab: TabKey) => void;
 };
 
 export function HomeDashboard({
   projects,
-  standards,
   hierarchy,
   latestAssessment,
   selectedProjectId,
   onSelectProject,
+  onOpenProjectSection,
   onOpenTab,
 }: HomeDashboardProps) {
   const orderedHierarchy = sortHierarchy(hierarchy);
-  const orderedStandards = sortStandards(standards);
   const latestProjects = projects.slice(0, 3);
 
   return (
     <section className="dashboard-grid home-feature">
       <article className="panel">
         <div className="panel-head">
-          <div>
-            <p className="eyebrow">Resumo</p>
-            <h2>Últimos projetos</h2>
+          <div className="panel-icon" aria-hidden="true">
+            ◉
           </div>
-          <button className="ghost" type="button" onClick={() => onOpenTab('project')}>
-            Abrir lista
+          <button className="ghost icon-only" type="button" onClick={() => onOpenProjectSection('client')} title="Cliente">
+            ◉
           </button>
         </div>
         <div className="list">
           {latestProjects.length === 0 ? (
             <div className="item">
-              <strong>Nenhum projeto ainda.</strong>
-              <p className="muted">Crie o primeiro para iniciar a consolidação.</p>
+              <strong>—</strong>
             </div>
           ) : (
             latestProjects.map((project) => (
@@ -51,22 +48,19 @@ export function HomeDashboard({
                 className={`item selectable ${project.id === selectedProjectId ? 'selected' : ''}`}
                 onClick={() => {
                   onSelectProject(project.id);
-                  onOpenTab('project');
+                  onOpenProjectSection('client');
                 }}
                 type="button"
+                title={project.name}
               >
                 <div className="row">
                   <div>
                     <strong>{project.name}</strong>
                     <p className="muted">
-                      {project.client_name} · {project.location}
+                      {project.city} / {project.state}
                     </p>
                   </div>
-                  <span className="badge neutral">{project.project_type}</span>
-                </div>
-                <div className="meta">
-                  <span>{project.voltage}</span>
-                  <span>{formatDate(project.created_at)}</span>
+                  <span className="badge neutral">Cliente</span>
                 </div>
               </button>
             ))
@@ -76,12 +70,11 @@ export function HomeDashboard({
 
       <article className="panel">
         <div className="panel-head">
-          <div>
-            <p className="eyebrow">Normas</p>
-            <h2>Conferência rápida</h2>
+          <div className="panel-icon" aria-hidden="true">
+            ≋
           </div>
-          <button className="ghost" type="button" onClick={() => onOpenTab('standards')}>
-            Ver catálogo
+          <button className="ghost icon-only" type="button" onClick={() => onOpenTab('standards')} title="Normas">
+            ≋
           </button>
         </div>
         <div className="stack">
@@ -91,9 +84,6 @@ export function HomeDashboard({
                 <strong>{level.id}</strong>
                 <span>{level.weight}</span>
               </div>
-              <p className="muted">
-                {orderedStandards.filter((standard) => standard.hierarchy_weight === level.weight).length} norma(s) nesta camada
-              </p>
             </div>
           ))}
         </div>
@@ -101,12 +91,11 @@ export function HomeDashboard({
 
       <article className="panel">
         <div className="panel-head">
-          <div>
-            <p className="eyebrow">Conformidade</p>
-            <h2>Último veredito</h2>
+          <div className="panel-icon" aria-hidden="true">
+            ☑
           </div>
-          <button className="ghost" type="button" onClick={() => onOpenTab('conformity')}>
-            Conferir
+          <button className="ghost icon-only" type="button" onClick={() => onOpenProjectSection('conformity')} title="Conformidade">
+            ☑
           </button>
         </div>
         {latestAssessment ? (
@@ -114,10 +103,6 @@ export function HomeDashboard({
             <span className={`badge ${statusClass(latestAssessment.verdict.status)}`}>
               {statusLabel(latestAssessment.verdict.status)}
             </span>
-            <strong>{latestAssessment.verdict.standard_name}</strong>
-            <p className="muted">
-              {latestAssessment.verdict.standard_code} · {latestAssessment.verdict.standard_version}
-            </p>
             <div className="meta">
               <span>Regras: {latestAssessment.verdict.rules_applied.length}</span>
               <span>Severidade: {latestAssessment.verdict.severity}</span>
@@ -125,8 +110,7 @@ export function HomeDashboard({
           </div>
         ) : (
           <div className="item">
-            <strong>Sem veredito ainda.</strong>
-            <p className="muted">Execute um cálculo para gerar o resumo.</p>
+            <strong>—</strong>
           </div>
         )}
       </article>

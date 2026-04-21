@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/JeanMRocha/site-eletrica/internal/conformidade"
+	"github.com/JeanMRocha/site-eletrica/internal/shared/id"
 	_ "modernc.org/sqlite"
 )
 
@@ -50,10 +51,9 @@ func (s *Store) migrate() error {
 		`CREATE TABLE IF NOT EXISTS studies (
 			id TEXT PRIMARY KEY,
 			name TEXT NOT NULL,
-			client_name TEXT NOT NULL,
-			location TEXT NOT NULL,
-			project_type TEXT NOT NULL,
-			voltage TEXT NOT NULL,
+			city TEXT NOT NULL DEFAULT '',
+			state TEXT NOT NULL DEFAULT '',
+			location TEXT NOT NULL DEFAULT '',
 			created_at TEXT NOT NULL,
 			updated_at TEXT NOT NULL
 		);`,
@@ -77,12 +77,23 @@ func (s *Store) migrate() error {
 		}
 	}
 
+	if err := s.ensureStudyColumn("city", "TEXT NOT NULL DEFAULT ''"); err != nil {
+		return err
+	}
+	if err := s.ensureStudyColumn("state", "TEXT NOT NULL DEFAULT ''"); err != nil {
+		return err
+	}
+
+	if err := s.backfillStudyLocations(); err != nil {
+		return err
+	}
+
 	return nil
 }
 
 func (s *Store) ListStudies(ctx context.Context) ([]Study, error) {
 	rows, err := s.db.QueryContext(ctx, `
-		SELECT id, name, client_name, location, project_type, voltage, created_at, updated_at
+		SELECT id, name, city, state, location, created_at, updated_at
 		FROM studies
 		ORDER BY created_at DESC
 	`)
@@ -110,20 +121,19 @@ func (s *Store) CreateStudy(ctx context.Context, input CreateStudyInput) (Study,
 
 	now := time.Now().UTC()
 	study := Study{
-		ID:          randomID("stu"),
-		Name:        strings.TrimSpace(input.Name),
-		ClientName:  strings.TrimSpace(input.ClientName),
-		Location:    strings.TrimSpace(input.Location),
-		ProjectType: strings.TrimSpace(input.ProjectType),
-		Voltage:     strings.TrimSpace(input.Voltage),
-		CreatedAt:   now,
-		UpdatedAt:   now,
+		ID:        id.Base62(8),
+		Name:      strings.TrimSpace(input.Name),
+		City:      strings.TrimSpace(input.City),
+		State:     strings.ToUpper(strings.TrimSpace(input.State)),
+		Location:  buildLocation(input.City, input.State),
+		CreatedAt: now,
+		UpdatedAt: now,
 	}
 
 	_, err := s.db.ExecContext(ctx, `
-		INSERT INTO studies (id, name, client_name, location, project_type, voltage, created_at, updated_at)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-	`, study.ID, study.Name, study.ClientName, study.Location, study.ProjectType, study.Voltage, study.CreatedAt.Format(time.RFC3339Nano), study.UpdatedAt.Format(time.RFC3339Nano))
+		INSERT INTO studies (id, name, city, state, location, created_at, updated_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?)
+	`, study.ID, study.Name, study.City, study.State, study.Location, study.CreatedAt.Format(time.RFC3339Nano), study.UpdatedAt.Format(time.RFC3339Nano))
 	if err != nil {
 		return Study{}, err
 	}
@@ -131,9 +141,58 @@ func (s *Store) CreateStudy(ctx context.Context, input CreateStudyInput) (Study,
 	return study, nil
 }
 
+func (s *Store) UpdateStudy(ctx context.Context, id string, input UpdateStudyInput) (Study, error) {
+	if err := validateStudyInput(CreateStudyInput(input)); err != nil {
+		return Study{}, err
+	}
+
+	current, err := s.GetStudy(ctx, id)
+	if err != nil {
+		return Study{}, err
+	}
+
+	updated := Study{
+		ID:        current.ID,
+		Name:      strings.TrimSpace(input.Name),
+		City:      strings.TrimSpace(input.City),
+		State:     strings.ToUpper(strings.TrimSpace(input.State)),
+		Location:  buildLocation(input.City, input.State),
+		CreatedAt: current.CreatedAt,
+		UpdatedAt: time.Now().UTC(),
+	}
+
+	_, err = s.db.ExecContext(ctx, `
+		UPDATE studies
+		SET name = ?, city = ?, state = ?, location = ?, updated_at = ?
+		WHERE id = ?
+	`, updated.Name, updated.City, updated.State, updated.Location, updated.UpdatedAt.Format(time.RFC3339Nano), id)
+	if err != nil {
+		return Study{}, err
+	}
+
+	return updated, nil
+}
+
+func (s *Store) DeleteStudy(ctx context.Context, id string) error {
+	result, err := s.db.ExecContext(ctx, `DELETE FROM studies WHERE id = ?`, id)
+	if err != nil {
+		return err
+	}
+
+	affected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if affected == 0 {
+		return ErrStudyNotFound
+	}
+
+	return nil
+}
+
 func (s *Store) GetStudy(ctx context.Context, id string) (Study, error) {
 	row := s.db.QueryRowContext(ctx, `
-		SELECT id, name, client_name, location, project_type, voltage, created_at, updated_at
+		SELECT id, name, city, state, location, created_at, updated_at
 		FROM studies
 		WHERE id = ?
 	`, id)
@@ -191,7 +250,7 @@ func (s *Store) SaveAssessment(ctx context.Context, record AssessmentRecord) (As
 	}
 
 	if record.ID == "" {
-		record.ID = randomID("ass")
+		record.ID = id.Base62(8)
 	}
 	if record.CreatedAt.IsZero() {
 		record.CreatedAt = time.Now().UTC()
@@ -209,7 +268,7 @@ func (s *Store) SaveAssessment(ctx context.Context, record AssessmentRecord) (As
 }
 
 func validateStudyInput(input CreateStudyInput) error {
-	if strings.TrimSpace(input.Name) == "" || strings.TrimSpace(input.ClientName) == "" || strings.TrimSpace(input.Location) == "" {
+	if strings.TrimSpace(input.Name) == "" || strings.TrimSpace(input.City) == "" || strings.TrimSpace(input.State) == "" {
 		return ErrInvalidStudyInput
 	}
 
@@ -218,27 +277,27 @@ func validateStudyInput(input CreateStudyInput) error {
 
 func scanStudy(rows *sql.Rows) (Study, error) {
 	var (
-		id, name, clientName, location, projectType, voltage, createdAt, updatedAt string
+		id, name, city, state, location, createdAt, updatedAt string
 	)
-	if err := rows.Scan(&id, &name, &clientName, &location, &projectType, &voltage, &createdAt, &updatedAt); err != nil {
+	if err := rows.Scan(&id, &name, &city, &state, &location, &createdAt, &updatedAt); err != nil {
 		return Study{}, err
 	}
 
-	return buildStudy(id, name, clientName, location, projectType, voltage, createdAt, updatedAt)
+	return buildStudy(id, name, city, state, location, createdAt, updatedAt)
 }
 
 func scanStudyRow(row *sql.Row) (Study, error) {
 	var (
-		id, name, clientName, location, projectType, voltage, createdAt, updatedAt string
+		id, name, city, state, location, createdAt, updatedAt string
 	)
-	if err := row.Scan(&id, &name, &clientName, &location, &projectType, &voltage, &createdAt, &updatedAt); err != nil {
+	if err := row.Scan(&id, &name, &city, &state, &location, &createdAt, &updatedAt); err != nil {
 		return Study{}, err
 	}
 
-	return buildStudy(id, name, clientName, location, projectType, voltage, createdAt, updatedAt)
+	return buildStudy(id, name, city, state, location, createdAt, updatedAt)
 }
 
-func buildStudy(id, name, clientName, location, projectType, voltage, createdAt, updatedAt string) (Study, error) {
+func buildStudy(id, name, city, state, location, createdAt, updatedAt string) (Study, error) {
 	created, err := time.Parse(time.RFC3339Nano, createdAt)
 	if err != nil {
 		return Study{}, err
@@ -248,16 +307,112 @@ func buildStudy(id, name, clientName, location, projectType, voltage, createdAt,
 		return Study{}, err
 	}
 
+	city = strings.TrimSpace(city)
+	state = strings.ToUpper(strings.TrimSpace(state))
+	if city == "" && state == "" {
+		parsedCity, parsedState := splitLocation(location)
+		city = parsedCity
+		state = parsedState
+	}
+
+	if location == "" {
+		location = buildLocation(city, state)
+	}
+
 	return Study{
-		ID:          id,
-		Name:        name,
-		ClientName:  clientName,
-		Location:    location,
-		ProjectType: projectType,
-		Voltage:     voltage,
-		CreatedAt:   created,
-		UpdatedAt:   updated,
+		ID:        id,
+		Name:      name,
+		City:      city,
+		State:     state,
+		Location:  location,
+		CreatedAt: created,
+		UpdatedAt: updated,
 	}, nil
+}
+
+func buildLocation(city, state string) string {
+	city = strings.TrimSpace(city)
+	state = strings.ToUpper(strings.TrimSpace(state))
+	if city == "" && state == "" {
+		return ""
+	}
+	if city == "" {
+		return state
+	}
+	if state == "" {
+		return city
+	}
+	return fmt.Sprintf("%s/%s", city, state)
+}
+
+func splitLocation(location string) (string, string) {
+	location = strings.TrimSpace(location)
+	if location == "" {
+		return "", ""
+	}
+
+	if city, state, ok := strings.Cut(location, "/"); ok {
+		return strings.TrimSpace(city), strings.ToUpper(strings.TrimSpace(state))
+	}
+	if city, state, ok := strings.Cut(location, " - "); ok {
+		return strings.TrimSpace(city), strings.ToUpper(strings.TrimSpace(state))
+	}
+
+	return location, ""
+}
+
+func (s *Store) ensureStudyColumn(name, definition string) error {
+	rows, err := s.db.Query(`PRAGMA table_info(studies)`)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var (
+			cid, notNull, pk int
+			columnName, columnType string
+			defaultValue sql.NullString
+		)
+		if err := rows.Scan(&cid, &columnName, &columnType, &notNull, &defaultValue, &pk); err != nil {
+			return err
+		}
+		if columnName == name {
+			return nil
+		}
+	}
+
+	_, err = s.db.Exec(fmt.Sprintf(`ALTER TABLE studies ADD COLUMN %s %s`, name, definition))
+	return err
+}
+
+func (s *Store) backfillStudyLocations() error {
+	rows, err := s.db.Query(`SELECT id, city, state, location FROM studies`)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var id, city, state, location string
+		if err := rows.Scan(&id, &city, &state, &location); err != nil {
+			return err
+		}
+		if strings.TrimSpace(city) != "" && strings.TrimSpace(state) != "" {
+			continue
+		}
+
+		parsedCity, parsedState := splitLocation(location)
+		if parsedCity == "" && parsedState == "" {
+			continue
+		}
+
+		if _, err := s.db.Exec(`UPDATE studies SET city = COALESCE(NULLIF(city, ''), ?), state = COALESCE(NULLIF(state, ''), ?), location = COALESCE(NULLIF(location, ''), ?) WHERE id = ?`, parsedCity, parsedState, buildLocation(parsedCity, parsedState), id); err != nil {
+			return err
+		}
+	}
+
+	return rows.Err()
 }
 
 func decodeAssessment(id, studyID, inputJSON, verdictJSON, createdAt string) (AssessmentRecord, error) {
@@ -283,9 +438,4 @@ func decodeAssessment(id, studyID, inputJSON, verdictJSON, createdAt string) (As
 		Verdict:   verdict,
 		CreatedAt: created,
 	}, nil
-}
-
-func randomID(prefix string) string {
-	now := time.Now().UTC().UnixNano()
-	return fmt.Sprintf("%s_%d", prefix, now)
 }

@@ -22,6 +22,9 @@ func (h *Handler) Routes() http.Handler {
 	mux.HandleFunc("GET /v1/studies", h.handleListStudies)
 	mux.HandleFunc("POST /v1/studies", h.handleCreateStudy)
 	mux.HandleFunc("GET /v1/studies/{id}", h.handleGetStudy)
+	mux.HandleFunc("PUT /v1/studies/{id}", h.handleUpdateStudy)
+	mux.HandleFunc("PATCH /v1/studies/{id}", h.handleUpdateStudy)
+	mux.HandleFunc("DELETE /v1/studies/{id}", h.handleDeleteStudy)
 	mux.HandleFunc("POST /v1/studies/{id}/assessments", h.handleAssessStudy)
 	return mux
 }
@@ -50,6 +53,43 @@ func (h *Handler) handleCreateStudy(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeJSON(w, http.StatusCreated, map[string]Study{"study": study})
+}
+
+func (h *Handler) handleUpdateStudy(w http.ResponseWriter, r *http.Request) {
+	id := strings.TrimSpace(r.PathValue("id"))
+	if id == "" {
+		writeError(w, http.StatusBadRequest, "invalid_id", "Study id is required.")
+		return
+	}
+
+	var req UpdateStudyInput
+	if err := decodeJSON(r, &req); err != nil {
+		writeError(w, http.StatusBadRequest, "invalid_payload", "Invalid JSON payload.")
+		return
+	}
+
+	study, err := h.service.UpdateStudy(r.Context(), id, req)
+	if err != nil {
+		writeStudyError(w, err)
+		return
+	}
+
+	writeJSON(w, http.StatusOK, map[string]Study{"study": study})
+}
+
+func (h *Handler) handleDeleteStudy(w http.ResponseWriter, r *http.Request) {
+	id := strings.TrimSpace(r.PathValue("id"))
+	if id == "" {
+		writeError(w, http.StatusBadRequest, "invalid_id", "Study id is required.")
+		return
+	}
+
+	if err := h.service.DeleteStudy(r.Context(), id); err != nil {
+		writeStudyError(w, err)
+		return
+	}
+
+	writeJSON(w, http.StatusOK, map[string]string{"deleted": id})
 }
 
 func (h *Handler) handleGetStudy(w http.ResponseWriter, r *http.Request) {

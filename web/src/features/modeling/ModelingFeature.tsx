@@ -1,15 +1,15 @@
 import type { FormEvent } from 'react';
-import type { CircuitItem, EnvironmentItem, LoadItem, Workspace } from '../../domain/workspace';
+import type { CircuitItem, EnvironmentItem, LoadItem, ProjectWorkspace as ProjectWorkspaceData } from '../../domain/workspace';
 import './modeling.css';
 
 type ModelingTabProps = {
-  workspace: Workspace;
+  projectWorkspace: ProjectWorkspaceData;
   onAddEnvironment: (event: FormEvent<HTMLFormElement>) => void;
   onAddLoad: (event: FormEvent<HTMLFormElement>) => void;
   onAddCircuit: (event: FormEvent<HTMLFormElement>) => void;
 };
 
-export function ModelingTab({ workspace, onAddEnvironment, onAddLoad, onAddCircuit }: ModelingTabProps) {
+export function ModelingTab({ projectWorkspace, onAddEnvironment, onAddLoad, onAddCircuit }: ModelingTabProps) {
   return (
     <section className="dashboard-grid modeling-feature">
       <article className="panel">
@@ -20,13 +20,13 @@ export function ModelingTab({ workspace, onAddEnvironment, onAddLoad, onAddCircu
           </div>
         </div>
         <div className="card-grid">
-          {workspace.environments.length === 0 ? (
+          {projectWorkspace.environments.length === 0 ? (
             <div className="item">
               <strong>Sem ambientes.</strong>
               <p className="muted">Adicione áreas e distâncias para montar o modelo.</p>
             </div>
           ) : (
-            workspace.environments.map((environment) => <EnvironmentCard key={environment.id} environment={environment} />)
+            projectWorkspace.environments.map((environment) => <EnvironmentCard key={environment.id} environment={environment} />)
           )}
         </div>
       </article>
@@ -41,16 +41,16 @@ export function ModelingTab({ workspace, onAddEnvironment, onAddLoad, onAddCircu
         <div className="summary-strip">
           <div className="mini-card">
             <span>Cargas</span>
-            <strong>{workspace.loads.length}</strong>
+            <strong>{projectWorkspace.loads.length}</strong>
           </div>
           <div className="mini-card">
             <span>Circuitos</span>
-            <strong>{workspace.circuits.length}</strong>
+            <strong>{projectWorkspace.circuits.length}</strong>
           </div>
         </div>
         <div className="stack">
-          {workspace.loads.slice(0, 2).map((load) => <LoadCard key={load.id} load={load} />)}
-          {workspace.circuits.slice(0, 2).map((circuit) => <CircuitCard key={circuit.id} circuit={circuit} />)}
+          {projectWorkspace.loads.slice(0, 2).map((load) => <LoadCard key={load.id} load={load} />)}
+          {projectWorkspace.circuits.slice(0, 2).map((circuit) => <CircuitCard key={circuit.id} circuit={circuit} />)}
         </div>
       </article>
 
