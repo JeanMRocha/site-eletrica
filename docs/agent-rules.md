@@ -10,14 +10,20 @@ Este arquivo complementa `AGENTS.md` e `.agent` com regras práticas de idioma e
 ## Idioma da interface
 
 - Toda interface de usuário deve estar em `pt-BR`.
-- Isso inclui textos de telas, botões, rótulos, mensagens, títulos, toasts, modais, validações e erros exibidos ao operador.
+- Isso inclui textos de telas, botões, rótulos, mensagens, títulos, toasts, modais, validações, erros exibidos ao operador e conteúdo operacional voltado a pessoas usuárias.
 - Quando houver texto para o usuário final, prefira uma redação natural em português do Brasil.
 
-## Idioma do código
+## Idioma técnico
 
 - Todo código deve usar inglês internacional.
 - Isso inclui nomes de variáveis, funções, classes, componentes, arquivos técnicos, constantes, testes, branches e mensagens de commit.
 - Comentários no código também devem ser em inglês, curtos e apenas quando acrescentarem contexto real.
+
+## Idioma da documentação
+
+- Documentos de produto, operação e navegação devem ficar em `pt-BR` por padrão.
+- Documentos técnicos que definem contrato, arquitetura, ADR, testes e detalhes de implementação podem usar inglês técnico consistente.
+- Se um documento misturar os dois idiomas, a separação deve ser intencional e explícita.
 
 ## Separação de responsabilidades
 
@@ -31,6 +37,7 @@ Este arquivo complementa `AGENTS.md` e `.agent` com regras práticas de idioma e
 - Use nomes descritivos e padronizados.
 - Evite abreviações locais ou siglas sem necessidade.
 - Quando houver dúvida, mantenha o domínio técnico em inglês e o conteúdo da experiência do usuário em `pt-BR`.
+- Mantenha a documentação consistente com a categoria do documento: produto/operação em `pt-BR`, técnica em inglês técnico ou linguagem mista deliberada.
 
 ## Escopo de leitura e testes
 

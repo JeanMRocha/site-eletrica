@@ -5,7 +5,7 @@
 > Last updated: 2026-04-20
 > Owner: repository
 
-Índice mestre para decidir rapidamente o que ler, onde escrever e quando arquivar.
+Índice mestre e autoridade principal para decidir rapidamente o que ler, onde escrever e quando arquivar.
 
 ## Matrix
 
@@ -27,6 +27,12 @@
 - [`docs/product-overview.md`](product-overview.md)
 - [`docs/agent-rules.md`](agent-rules.md)
 - [`docs/development-principles.md`](development-principles.md)
+
+## Authority
+
+- This document is the source of truth for documentation navigation and scope-based reading.
+- `docs/reading-paths.md` and module `reading-paths.md` files are derived guides.
+- If a derived guide conflicts with this file, `docs/governance.md` wins.
 
 ## Lifecycle summary
 

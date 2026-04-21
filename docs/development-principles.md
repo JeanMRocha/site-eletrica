@@ -75,3 +75,5 @@
 - Document decisions, not just features
 - Record tradeoffs and rejected options
 - Keep architecture docs updated when the stack changes
+- Keep product and operational docs in `pt-BR`
+- Keep technical contracts, ADRs, and implementation details in consistent technical English unless a mixed-language format is intentional and documented

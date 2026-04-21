@@ -1,6 +1,6 @@
 # Auth Module
 
-> Status: draft
+> Status: stable
 > Type: module
 > Last updated: 2026-04-20
 > Owner: security
@@ -39,16 +39,18 @@ Módulo responsável por autenticação, autorização e controle de sessão.
 
 ## Leitura mínima para alteração
 
+- `docs/governance.md`
+- `docs/modules/auth/reading-paths.md`
+- `docs/modules/auth/current-state.md`
 - `docs/architecture.md`
 - `docs/product-overview.md`
-- `docs/modules/auth/current-state.md`
 - `docs/development-principles.md`
 - `docs/agent-rules.md`
 - `docs/modules/README.md`
-- `docs/modules/auth/reading-paths.md`
 - Este diretório do módulo
 
 ## Regra prática
 
 - Se a mudança não tocar auth, não leia estes arquivos por padrão.
 - Se a mudança tocar auth, trate este módulo como crítico e aplique gates mais rígidos.
+- Se houver conflito entre este índice e `docs/governance.md`, a governança vence.

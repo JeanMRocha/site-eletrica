@@ -5,7 +5,7 @@
 > Last updated: 2026-04-20
 > Owner: repository
 
-Guia prático para decidir quais documentos ler por perfil, sem carregar a documentação inteira por padrão.
+Guia prático derivado de `docs/governance.md` para decidir quais documentos ler por perfil, sem carregar a documentação inteira por padrão.
 
 ## Regra geral
 
@@ -13,6 +13,7 @@ Guia prático para decidir quais documentos ler por perfil, sem carregar a docum
 - Depois leia apenas os documentos do perfil ou do módulo afetado.
 - Não carregue módulos ou ADRs fora do escopo da mudança.
 - Se a mudança tocar `auth`, use o caminho de `auth` abaixo.
+- Se houver conflito com `docs/governance.md`, a governança vence.
 
 ## Mapa rápido
 

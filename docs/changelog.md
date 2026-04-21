@@ -30,6 +30,13 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-20
 
+- Mudança: centralizada a autoridade de navegação em `docs/governance.md`, formalizada a política de idioma em `docs/agent-rules.md` e `docs/development-principles.md`, e alinhado o índice de `auth` para `stable`.
+- Motivo: reduzir duplicação, deixar a leitura por escopo mais clara e tornar a linguagem da documentação mais profissional e previsível.
+- Impacto: a navegação por docs passou a ter uma fonte principal explícita, a política de idioma ficou formalizada e o índice de `auth` passou a refletir melhor seu uso real.
+- Arquivos: `docs/governance.md`, `docs/reading-paths.md`, `docs/modules/README.md`, `docs/modules/auth/README.md`, `docs/modules/auth/reading-paths.md`, `docs/agent-rules.md`, `docs/development-principles.md`
+
+### 2026-04-20
+
 - Mudança: criado `docs/modules/auth/reading-paths.md` com caminhos mínimos de leitura por tipo de trabalho em auth.
 - Motivo: reduzir leitura desnecessária dentro do módulo mais sensível do sistema e deixar o fluxo de navegação mais objetivo.
 - Impacto: alterações em auth passam a ter um subconjunto explícito de docs para ler antes de abrir documentação não relacionada.

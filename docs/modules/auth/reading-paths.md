@@ -5,7 +5,7 @@
 > Last updated: 2026-04-20
 > Owner: security
 
-Guia mínimo para ler apenas o que é necessário quando a mudança toca `auth`.
+Guia mínimo derivado de `docs/governance.md` para ler apenas o que é necessário quando a mudança toca `auth`.
 
 ## Regra geral
 
@@ -13,6 +13,7 @@ Guia mínimo para ler apenas o que é necessário quando a mudança toca `auth`.
 - Depois leia este guia para escolher o subconjunto mínimo do módulo.
 - Não abra ADRs, runbooks ou planos do módulo sem necessidade de escopo.
 - Se a mudança criar comportamento novo, leia os testes antes de implementar.
+- Se houver conflito com `docs/governance.md`, a governança vence.
 
 ## Mapa rápido
 
