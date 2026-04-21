@@ -27,6 +27,7 @@
 - [`docs/product-overview.md`](product-overview.md)
 - [`docs/agent-rules.md`](agent-rules.md)
 - [`docs/development-principles.md`](development-principles.md)
+- [`docs/modules/new-module-process.md`](modules/new-module-process.md) when starting or expanding a module
 
 ## Authority
 
@@ -45,3 +46,4 @@
 - If the change does not create a new decision, prefer `plan`, `current-state`, or `changelog`.
 - If the change creates a durable decision, use ADR.
 - If the current file no longer reflects the live scope, move the useful content to the relevant archive.
+- If you are starting a new module, follow `docs/modules/new-module-process.md` before implementation.

@@ -21,6 +21,7 @@ Camada de documentação por módulo. Use esta pasta para concentrar regras, con
 - `security.md`: riscos, controles e exigências de segurança
 - `tests.md`: estratégia de testes e gates do módulo
 - `runbook.md`: procedimentos operacionais do módulo
+- `onboarding.md`: guia de entrada do módulo quando ele precisar de mais contexto
 - `active-plan.md`: execução atual do módulo
 - `current-state.md`: estado vigente do módulo
 - `changelog.md`: histórico de mudanças do módulo
@@ -40,3 +41,4 @@ Camada de documentação por módulo. Use esta pasta para concentrar regras, con
 - Use `docs/reading-paths.md` para escolher o conjunto mínimo de documentos por perfil.
 - Use `docs/modules/<modulo>/reading-paths.md` quando a tarefa estiver restrita a um módulo específico.
 - Para qualquer alteração em um módulo, leia primeiro o `README.md` do próprio módulo e depois os arquivos indicados pelo reading path.
+- Use `docs/modules/new-module-process.md` quando estiver criando ou ampliando um módulo novo com base em escopo e stack.

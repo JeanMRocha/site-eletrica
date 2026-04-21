@@ -30,6 +30,20 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-20
 
+- Mudança: ajustado `docs/modules/README.md` para incluir `onboarding.md` como parte esperada da estrutura de módulos em crescimento.
+- Motivo: deixar explícito que novos módulos devem ter uma entrada de onboarding quando precisarem de mais contexto de uso.
+- Impacto: o índice de módulos passou a reconhecer onboarding como peça normal da evolução documental.
+- Arquivos: `docs/modules/README.md`
+
+### 2026-04-20
+
+- Mudança: criado `docs/modules/new-module-process.md` e ligado aos índices centrais para formalizar a evolução de módulos novos a partir de escopo e stack.
+- Motivo: garantir que novos módulos comecem pela documentação antes da implementação e sigam a arquitetura já escolhida.
+- Impacto: a criação e expansão de módulos passou a ter um fluxo explícito, baseado em produto, stack e governança.
+- Arquivos: `docs/modules/new-module-process.md`, `docs/governance.md`, `docs/README.md`, `docs/modules/README.md`
+
+### 2026-04-20
+
 - Mudança: criado `docs/modules/auth/onboarding.md`, enriquecidos os contratos com exemplos reais e códigos de resposta, e explicitada a diferença entre estado vivo e snapshot histórico do `auth`.
 - Motivo: fechar o pacote de onboarding do módulo e torná-lo mais útil para quem está começando ou integrando com a API.
 - Impacto: o módulo `auth` passou a ter uma porta de entrada mais clara, contratos mais concretos e distinção explícita entre estado atual e histórico.
