@@ -11,6 +11,13 @@ Registro de mudanças do módulo de autenticação.
 
 ### 2026-04-20
 
+- Mudança: criado `onboarding.md` e adicionados exemplos reais e códigos de resposta em `contracts.md`, além da distinção explícita entre estado vivo e snapshot no `current-state.md`.
+- Motivo: tornar o pacote de `auth` pronto para onboarding e reduzir ambiguidade para quem entra no módulo.
+- Impacto: o módulo ficou mais fácil de entender, operar e integrar com a futura API.
+- Arquivos: `docs/modules/auth/onboarding.md`, `docs/modules/auth/contracts.md`, `docs/modules/auth/current-state.md`, `docs/modules/auth/README.md`
+
+### 2026-04-20
+
 - Mudança: simplificado o `README` do módulo `auth` para apontar para `reading-paths.md` como referência principal de leitura por escopo.
 - Motivo: reduzir duplicação e manter o índice do módulo mais curto e mais fácil de manter.
 - Impacto: o módulo ganhou uma hierarquia mais clara entre índice, leitura mínima e documentos auxiliares.

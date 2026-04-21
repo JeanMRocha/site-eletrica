@@ -13,6 +13,7 @@ Estado vigente do módulo `auth`.
 - O módulo concentra regras, contratos, segurança, testes, execução local e decisões próprias.
 - Mudanças em auth precisam ser lidas de forma restrita ao escopo do módulo.
 - O estado vigente do módulo deve ficar aqui, não espalhado em ADRs.
+- Este arquivo descreve o que está vivo agora; o snapshot histórico da camada de decisão fica em `adr/current-state.md`.
 
 ## Invariants
 

@@ -55,7 +55,143 @@ Contratos esperados do módulo de autenticação.
 - Mudanças de contrato exigem atualização de testes e documentação.
 - Payloads devem ser claros e estáveis antes de virar dependência de outra área.
 
+## Common status codes
+
+- `200 OK`: successful read or refresh.
+- `201 Created`: new session created after login when applicable.
+- `204 No Content`: successful logout or revoke without response body.
+- `400 Bad Request`: invalid payload or missing required data.
+- `401 Unauthorized`: missing, expired, or invalid credentials.
+- `403 Forbidden`: authenticated but not allowed.
+- `404 Not Found`: session or token scope not found.
+- `409 Conflict`: revocation or refresh conflict.
+- `429 Too Many Requests`: rate limiting or brute force protection.
+
+## Example payloads
+
+### `POST /v1/auth/login`
+
+Request:
+
+```json
+{
+  "email": "operator@example.com",
+  "password": "secret-password"
+}
+```
+
+Response:
+
+```json
+{
+  "session": {
+    "id": "sess_123",
+    "expiresAt": "2026-04-20T18:30:00Z",
+    "permissions": ["nodes.read", "incidents.write"]
+  },
+  "token": {
+    "accessToken": "eyJhbGciOi...",
+    "refreshToken": "rft_abc123",
+    "tokenType": "Bearer"
+  },
+  "user": {
+    "id": "usr_123",
+    "email": "operator@example.com",
+    "displayName": "Operator"
+  }
+}
+```
+
+Example error:
+
+```json
+{
+  "error": {
+    "code": "invalid_credentials",
+    "message": "Invalid email or password."
+  }
+}
+```
+
+### `POST /v1/auth/refresh`
+
+Request:
+
+```json
+{
+  "refreshToken": "rft_abc123"
+}
+```
+
+Response:
+
+```json
+{
+  "session": {
+    "id": "sess_123",
+    "expiresAt": "2026-04-20T19:00:00Z"
+  },
+  "token": {
+    "accessToken": "eyJhbGciOi...",
+    "refreshToken": "rft_def456",
+    "tokenType": "Bearer"
+  }
+}
+```
+
+### `POST /v1/auth/logout`
+
+Request:
+
+```json
+{
+  "sessionId": "sess_123"
+}
+```
+
+Response:
+
+```json
+{
+  "revoked": true
+}
+```
+
+### `POST /v1/auth/revoke`
+
+Request:
+
+```json
+{
+  "sessionId": "sess_123"
+}
+```
+
+Response:
+
+```json
+{
+  "revoked": true,
+  "revokedAt": "2026-04-20T17:45:00Z"
+}
+```
+
+### `GET /v1/auth/session`
+
+Response:
+
+```json
+{
+  "session": {
+    "id": "sess_123",
+    "status": "active",
+    "expiresAt": "2026-04-20T18:30:00Z",
+    "permissions": ["nodes.read", "incidents.write"]
+  }
+}
+```
+
 ## Operational notes
 
 - Este arquivo é a fonte principal de contrato do módulo `auth`.
-- Quando a API for implementada, adicione exemplos reais de payloads e status codes.
+- Os exemplos acima são a base esperada para a primeira implementação da API.

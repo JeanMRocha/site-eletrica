@@ -30,6 +30,13 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-20
 
+- Mudança: criado `docs/modules/auth/onboarding.md`, enriquecidos os contratos com exemplos reais e códigos de resposta, e explicitada a diferença entre estado vivo e snapshot histórico do `auth`.
+- Motivo: fechar o pacote de onboarding do módulo e torná-lo mais útil para quem está começando ou integrando com a API.
+- Impacto: o módulo `auth` passou a ter uma porta de entrada mais clara, contratos mais concretos e distinção explícita entre estado atual e histórico.
+- Arquivos: `docs/modules/auth/onboarding.md`, `docs/modules/auth/contracts.md`, `docs/modules/auth/README.md`, `docs/modules/auth/current-state.md`
+
+### 2026-04-20
+
 - Mudança: enxugada a seção de regra de ouro de `docs/governance.md` para remover a última repetição já coberta pelos reading paths.
 - Motivo: deixar a autoridade central mais concisa e menos operacional.
 - Impacto: a governança ficou mais limpa e mais claramente separada dos guias de leitura por perfil.
