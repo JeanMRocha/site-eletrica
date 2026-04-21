@@ -1,0 +1,11 @@
+Regra do projeto:
+
+1. Antes de qualquer alteração de arquivo, criar e seguir um plano explícito.
+2. Ler `AGENTS.md` e a documentação em `docs/` antes de propor ou executar mudanças.
+3. Não executar mudanças diretas sem antes registrar a sequência de passos.
+4. Se uma tarefa não estiver clara o suficiente para planejamento, interromper e pedir esclarecimento.
+5. Manter as alterações pequenas, rastreáveis e alinhadas ao plano aprovado.
+6. Sempre validar o resultado após as mudanças.
+
+Objetivo:
+Garantir que todo trabalho neste repositório seja conduzido com planejamento prévio, execução controlada e respeito à arquitetura documentada.
