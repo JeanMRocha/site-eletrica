@@ -30,6 +30,13 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-20
 
+- Mudança: criado `docs/modules/auth/reading-paths.md` com caminhos mínimos de leitura por tipo de trabalho em auth.
+- Motivo: reduzir leitura desnecessária dentro do módulo mais sensível do sistema e deixar o fluxo de navegação mais objetivo.
+- Impacto: alterações em auth passam a ter um subconjunto explícito de docs para ler antes de abrir documentação não relacionada.
+- Arquivos: `docs/modules/auth/reading-paths.md`, `docs/modules/auth/README.md`, `docs/modules/README.md`
+
+### 2026-04-20
+
 - Mudança: refinado `docs/reading-paths.md` para uma tabela operacional com leitura mínima, opcional e documentos que devem ficar fora do padrão.
 - Motivo: tornar o guia mais prático para uso diário e reduzir o risco de abrir documentação desnecessária.
 - Impacto: o perfil de leitura ficou mais direto, curto e aplicável na rotina do agente e de colaboradores.

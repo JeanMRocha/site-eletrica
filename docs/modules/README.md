@@ -40,6 +40,7 @@ Camada de documentação por módulo. Use esta pasta para concentrar regras, con
 ## Exemplo de uso
 
 - Use `docs/reading-paths.md` para escolher o conjunto mínimo de documentos por perfil.
+- Use `docs/modules/<modulo>/reading-paths.md` quando a tarefa estiver restrita a um módulo específico.
 - Alteração em autenticação: leia `docs/modules/auth/*`
 - Alteração em incidentes: leia `docs/modules/incidents/*` quando existir
 - Alteração em UI geral: leia os documentos globais e o módulo afetado

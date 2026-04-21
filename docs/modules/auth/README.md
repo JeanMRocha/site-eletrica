@@ -22,6 +22,7 @@ Módulo responsável por autenticação, autorização e controle de sessão.
 - [`security.md`](security.md): controles de segurança e riscos
 - [`tests.md`](tests.md): testes e gates do módulo
 - [`runbook.md`](runbook.md): procedimentos operacionais do módulo
+- [`reading-paths.md`](reading-paths.md): caminhos mínimos de leitura por tipo de trabalho em auth
 - [`active-plan.md`](active-plan.md): execução atual do módulo
 - [`current-state.md`](current-state.md): estado vigente do módulo
 - [`changelog.md`](changelog.md): histórico de mudanças do módulo
@@ -44,6 +45,7 @@ Módulo responsável por autenticação, autorização e controle de sessão.
 - `docs/development-principles.md`
 - `docs/agent-rules.md`
 - `docs/modules/README.md`
+- `docs/modules/auth/reading-paths.md`
 - Este diretório do módulo
 
 ## Regra prática
