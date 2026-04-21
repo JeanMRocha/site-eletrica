@@ -32,6 +32,13 @@ Este arquivo complementa `AGENTS.md` e `.agent` com regras práticas de idioma e
 - Evite abreviações locais ou siglas sem necessidade.
 - Quando houver dúvida, mantenha o domínio técnico em inglês e o conteúdo da experiência do usuário em `pt-BR`.
 
+## Escopo de leitura e testes
+
+- Leia apenas a documentação global mínima e a documentação do módulo afetado quando a alteração for local.
+- Se a alteração tocar um módulo específico, execute primeiro os testes desse módulo.
+- Se a alteração tocar auth, trate o módulo como crítico e aplique gates mais rígidos.
+- Antes do commit ou PR, execute a suíte completa do repositório.
+
 ## Prioridade
 
 - Se houver conflito entre um identificador técnico e um texto exibido na interface, a interface deve prevalecer em `pt-BR`.

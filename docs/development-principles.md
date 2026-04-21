@@ -58,6 +58,9 @@
 - Keep unit tests close to the business logic
 - Add integration tests for API and persistence boundaries
 - Add end-to-end tests only for critical flows
+- Create or update the relevant tests before implementing new behavior
+- Run module-scoped tests during development
+- Run the full test suite before commit or pull request
 
 ## Security principles
 
