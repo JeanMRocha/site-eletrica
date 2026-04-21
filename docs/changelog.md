@@ -2,7 +2,7 @@
 
 > Status: active
 > Type: history
-> Last updated: 2026-04-20
+> Last updated: 2026-04-21
 > Owner: repository
 
 Registro cronológico das mudanças relevantes no repositório.
@@ -27,6 +27,13 @@ Registro cronológico das mudanças relevantes no repositório.
 ```
 
 ## Entradas
+
+### 2026-04-21
+
+- Mudança: detalhada a fase 1 em tarefas por módulo dentro de `docs/phase-1-plan.md` e conectado o plano ativo global a essa decomposição.
+- Motivo: transformar a primeira fase em trabalho executável com sequência clara de módulos e tarefas.
+- Impacto: o plano passou a orientar implementação real por módulo, não apenas o escopo geral.
+- Arquivos: `docs/phase-1-plan.md`, `docs/active-plan.md`
 
 ### 2026-04-21
 

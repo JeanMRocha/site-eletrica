@@ -18,6 +18,7 @@ Use este documento para registrar trabalho em andamento no nível global do repo
 - A documentação já definiu governança, MVP e processo para novos módulos.
 - O trabalho agora deve sair da fase de documentação e entrar na primeira implementação funcional.
 - O plano global atual passa a acompanhar a fase 1 do produto.
+- A decomposição detalhada da fase 1 está em `docs/phase-1-plan.md`.
 
 ## Scope
 
@@ -46,6 +47,7 @@ Use este documento para registrar trabalho em andamento no nível global do repo
 
 - Confirmar que a fase 1 segue o MVP e a arquitetura documentada.
 - Confirmar que cada módulo nasce com documentação mínima antes da implementação.
+- Confirmar que `auth`, `nodes`, `incidents` e `dashboard` avançam na ordem definida pela fase 1.
 
 ## Review criteria
 
