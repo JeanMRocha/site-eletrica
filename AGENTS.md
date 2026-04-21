@@ -1,5 +1,10 @@
 # Agent Instructions
 
+> Status: stable
+> Type: rules
+> Last updated: 2026-04-20
+> Owner: repository
+
 Before making any change in this repository, an agent must:
 
 1. Read `.agent`.
@@ -17,4 +22,3 @@ Non-negotiable project rules:
 - Keep production-critical logic in the Go API, not in the web layer.
 - Treat `vinext` as the web experience layer, not the source of truth.
 - Follow SOLID, clean boundaries, and testable design.
-
