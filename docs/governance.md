@@ -13,7 +13,7 @@
 | --- | --- | --- | --- |
 | Structural | `docs/architecture.md`, `docs/adr/README.md` | `docs/adr/` or module ADR | Decision is superseded |
 | Execution | `docs/active-plan.md`, `docs/plan-lifecycle.md` | `docs/active-plan.md` or module `active-plan.md` | Work is completed or paused beyond usefulness |
-| Current state | `docs/adr/current-state.md`, `docs/current-state-lifecycle.md` | `docs/adr/current-state.md` or module `current-state.md` | State no longer reflects the active scope |
+| Current state | `docs/current-state.md`, `docs/current-state-lifecycle.md` | `docs/current-state.md` or module `current-state.md` | State no longer reflects the active scope |
 | Decision | `docs/adr/template.md` or module ADR template | ADR in global or module scope | Decision is superseded or deprecated |
 | Incremental | `docs/changelog.md`, module changelog | `docs/changelog.md` or module changelog | Usually not archived; keep in changelog |
 | Module-local | `docs/modules/<modulo>/README.md` and module docs | Module docs only | Follow module archive rules |
@@ -23,6 +23,7 @@
 - `AGENTS.md`
 - `.agent`
 - [`docs/README.md`](README.md)
+- [`docs/product-overview.md`](product-overview.md)
 - [`docs/agent-rules.md`](agent-rules.md)
 - [`docs/development-principles.md`](development-principles.md)
 

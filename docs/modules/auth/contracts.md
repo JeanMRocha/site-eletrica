@@ -15,13 +15,47 @@ Contratos esperados do módulo de autenticação.
 - `POST /v1/auth/revoke`
 - `GET /v1/auth/session`
 
-## Regras de contrato
+## Request and response model
+
+### `POST /v1/auth/login`
+
+- Request: credentials or provider-specific login payload.
+- Response: authenticated session, token metadata, and user identity summary.
+- Errors: invalid credentials, locked account, rate-limited request, unsupported provider.
+
+### `POST /v1/auth/refresh`
+
+- Request: refresh token or equivalent session proof.
+- Response: renewed session or token pair.
+- Errors: expired token, revoked token, invalid session, replay detection.
+
+### `POST /v1/auth/logout`
+
+- Request: active session proof.
+- Response: confirmation of revocation.
+- Errors: invalid session, already revoked, unauthorized request.
+
+### `POST /v1/auth/revoke`
+
+- Request: session identifier or token scope to revoke.
+- Response: confirmation of revocation.
+- Errors: unauthorized request, not found, already revoked.
+
+### `GET /v1/auth/session`
+
+- Request: authenticated session proof.
+- Response: current session state, permissions, and expiry metadata.
+- Errors: unauthenticated request, expired session, revoked session.
+
+## Contract rules
 
 - Respostas devem ser versionadas.
 - Erros devem ser previsíveis e documentados.
 - Campos sensíveis não devem ser retornados sem necessidade.
 - Mudanças de contrato exigem atualização de testes e documentação.
+- Payloads devem ser claros e estáveis antes de virar dependência de outra área.
 
-## Observações
+## Operational notes
 
-- Este arquivo deve ser expandido com payloads, status codes e exemplos quando a API do módulo for definida.
+- Este arquivo é a fonte principal de contrato do módulo `auth`.
+- Quando a API for implementada, adicione exemplos reais de payloads e status codes.

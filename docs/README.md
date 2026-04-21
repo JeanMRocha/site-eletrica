@@ -10,12 +10,14 @@
 ## Visão geral
 
 - [`architecture.md`](architecture.md): descreve a arquitetura alvo, responsabilidades e comunicação entre camadas.
+- [`product-overview.md`](product-overview.md): visão de produto, fluxos e áreas principais.
 - [`stack.md`](stack.md): registra a stack escolhida e os motivos das decisões.
 - [`development-principles.md`](development-principles.md): consolida princípios de trabalho, qualidade e segurança.
 - [`agent-rules.md`](agent-rules.md): define regras práticas para o agente, incluindo idioma da UI e do código.
 - [`governance.md`](governance.md): índice mestre para leitura, escrita e ciclo de vida da documentação.
 - [`changelog.md`](changelog.md): histórico cronológico das mudanças relevantes.
 - [`active-plan.md`](active-plan.md): plano em execução no momento.
+- [`current-state.md`](current-state.md): estado vigente global.
 - [`roadmap.md`](roadmap.md): visão geral do que ainda falta fazer ou ampliar.
 - [`plan-template.md`](plan-template.md): modelo oficial de plan.
 - [`plan-lifecycle.md`](plan-lifecycle.md): política de ciclo de vida de plan.
@@ -26,7 +28,7 @@
 - [`modules/README.md`](modules/README.md): convenção para documentação por módulo.
 - [`adr/README.md`](adr/README.md): convenção para ADRs globais.
 - [`adr/template.md`](adr/template.md): modelo oficial de ADR global.
-- [`adr/current-state.md`](adr/current-state.md): resumo do estado vigente das decisões globais.
+- [`adr/current-state.md`](adr/current-state.md): snapshot da camada de decisão global.
 - [`adr/archive/README.md`](adr/archive/README.md): regras de arquivamento de ADRs globais.
 - [`archive/README.md`](archive/README.md): regras de arquivamento de planos e current-state globais.
 
@@ -37,7 +39,7 @@
 3. Leia `stack.md` para entender as escolhas tecnológicas.
 4. Leia `development-principles.md` para seguir o modo de trabalho.
 5. Consulte `agent-rules.md` para regras de idioma e consistência.
-6. Use `active-plan.md`, `roadmap.md` e `changelog.md` para organizar execução e rastreio.
+6. Use `active-plan.md`, `current-state.md`, `roadmap.md` e `changelog.md` para organizar execução e rastreio.
 7. Use `modules/README.md` e a documentação do módulo afetado quando a alteração for local.
 8. Use `adr/README.md` quando a alteração trouxer uma decisão arquitetural relevante.
 

@@ -22,7 +22,9 @@ Camada de documentação por módulo. Use esta pasta para concentrar regras, con
 - `contracts.md`: contratos, DTOs, endpoints e formatos esperados
 - `security.md`: riscos, controles e exigências de segurança
 - `tests.md`: estratégia de testes e gates do módulo
+- `runbook.md`: procedimentos operacionais do módulo
 - `active-plan.md`: execução atual do módulo
+- `current-state.md`: estado vigente do módulo
 - `changelog.md`: histórico de mudanças do módulo
 - `plan-template.md`: modelo oficial de plan do módulo
 - `plan-lifecycle.md`: política de ciclo de vida de plan do módulo
@@ -32,7 +34,7 @@ Camada de documentação por módulo. Use esta pasta para concentrar regras, con
 - `adr/README.md`: regras de decisão do módulo
 - `adr/template.md`: modelo oficial de ADR do módulo
 - `adr/0001-title.md`: primeira decisão relevante do módulo
-- `adr/current-state.md`: resumo do estado vigente do módulo
+- `adr/current-state.md`: snapshot da camada de decisão do módulo
 - `adr/archive/`: decisões antigas do módulo
 
 ## Exemplo de uso

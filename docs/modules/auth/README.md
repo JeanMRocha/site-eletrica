@@ -21,7 +21,9 @@ Módulo responsável por autenticação, autorização e controle de sessão.
 - [`contracts.md`](contracts.md): contratos e formatos esperados
 - [`security.md`](security.md): controles de segurança e riscos
 - [`tests.md`](tests.md): testes e gates do módulo
+- [`runbook.md`](runbook.md): procedimentos operacionais do módulo
 - [`active-plan.md`](active-plan.md): execução atual do módulo
+- [`current-state.md`](current-state.md): estado vigente do módulo
 - [`changelog.md`](changelog.md): histórico de mudanças do módulo
 - [`plan-template.md`](plan-template.md): modelo oficial de plan do módulo
 - [`plan-lifecycle.md`](plan-lifecycle.md): política de ciclo de vida de plan do módulo
@@ -30,13 +32,15 @@ Módulo responsável por autenticação, autorização e controle de sessão.
 - [`adr/README.md`](adr/README.md): regras de decisão do módulo
 - [`adr/template.md`](adr/template.md): modelo oficial de ADR do módulo
 - [`adr/0001-auth-governance.md`](adr/0001-auth-governance.md): decisão inicial do módulo
-- [`adr/current-state.md`](adr/current-state.md): estado vigente do módulo
+- [`adr/current-state.md`](adr/current-state.md): snapshot da camada de decisão do módulo
 - [`adr/archive/README.md`](adr/archive/README.md): arquivo morto do módulo
 - [`archive/README.md`](archive/README.md): arquivo morto de plan e current-state do módulo
 
 ## Leitura mínima para alteração
 
 - `docs/architecture.md`
+- `docs/product-overview.md`
+- `docs/modules/auth/current-state.md`
 - `docs/development-principles.md`
 - `docs/agent-rules.md`
 - `docs/modules/README.md`

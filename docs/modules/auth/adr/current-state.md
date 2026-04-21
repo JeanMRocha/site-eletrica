@@ -1,11 +1,11 @@
-# Auth Current State
+# Auth Decision State Snapshot
 
 > Status: draft
 > Type: state
 > Last updated: 2026-04-20
 > Owner: security
 
-Use este documento para registrar o estado vigente do módulo `auth`.
+Snapshot da camada de decisão do módulo `auth`.
 
 ## Lifecycle
 
@@ -14,33 +14,28 @@ Use este documento para registrar o estado vigente do módulo `auth`.
 
 ## Current state
 
-- `auth` é um módulo crítico.
-- O módulo possui regras próprias, contratos, segurança, testes e ADRs locais.
-- O módulo deve ser lido apenas quando a mudança tocar autenticação, autorização, sessão ou revogação.
-- O módulo exige testes de comportamento antes da implementação quando houver regra nova.
-- O módulo deve rodar testes locais durante o desenvolvimento e suíte completa antes de commit ou PR.
+- O estado vivo do módulo fica em `docs/modules/auth/current-state.md`.
+- Este arquivo existe apenas como snapshot da camada de decisão do módulo.
+- Decisões duradouras do módulo continuam nos ADRs locais.
 
 ## Invariants
 
+- O snapshot não substitui o estado vivo do módulo.
 - Auth continua sendo tratado como módulo crítico.
-- Segurança continua tendo prioridade sobre conveniência.
-- Mudanças de comportamento precisam de testes antes de implementação.
 
 ## Operational notes
 
-- Use este arquivo para resumir o que vale agora no módulo.
-- Não use este arquivo para registrar histórico detalhado.
+- Use este arquivo apenas como visão resumida da camada de decisão do módulo.
+- Mantenha o conteúdo curto o suficiente para leitura rápida.
 
 ## Update rule
 
-- Atualize este documento quando o modelo de auth mudar de forma relevante.
-- Se a mudança for uma decisão nova, crie um ADR.
+- Atualize este documento quando a camada de decisão do módulo mudar de forma relevante.
+- Se o estado vivo mudar, atualize `docs/modules/auth/current-state.md` primeiro.
 - Se a mudança for apenas implementação incremental, atualize `active-plan.md` ou `changelog.md`.
-- Se um ADR do módulo deixar de ser ativo mas continuar útil para histórico, mova-o para `archive/`.
-- Se um ADR perder uso ativo e a referência histórica puder ficar só no resumo do módulo, marque-o como `deprecated`.
 
 ## Review criteria
 
 - Quando este resumo ficou defasado?
 - Que mudança estrutural exige revisão?
-- O escopo do módulo mudou a ponto de exigir um novo resumo?
+- O estado vivo do módulo precisa de uma atualização própria?
