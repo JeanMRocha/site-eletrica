@@ -24,12 +24,15 @@ Módulo responsável por autenticação, autorização e controle de sessão.
 - [`active-plan.md`](active-plan.md): execução atual do módulo
 - [`changelog.md`](changelog.md): histórico de mudanças do módulo
 - [`plan-template.md`](plan-template.md): modelo oficial de plan do módulo
+- [`plan-lifecycle.md`](plan-lifecycle.md): política de ciclo de vida de plan do módulo
 - [`current-state-template.md`](current-state-template.md): modelo oficial de current-state do módulo
+- [`current-state-lifecycle.md`](current-state-lifecycle.md): política de ciclo de vida de current-state do módulo
 - [`adr/README.md`](adr/README.md): regras de decisão do módulo
 - [`adr/template.md`](adr/template.md): modelo oficial de ADR do módulo
 - [`adr/0001-auth-governance.md`](adr/0001-auth-governance.md): decisão inicial do módulo
 - [`adr/current-state.md`](adr/current-state.md): estado vigente do módulo
 - [`adr/archive/README.md`](adr/archive/README.md): arquivo morto do módulo
+- [`archive/README.md`](archive/README.md): arquivo morto de plan e current-state do módulo
 
 ## Leitura mínima para alteração
 

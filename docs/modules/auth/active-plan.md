@@ -7,6 +7,12 @@
 
 Use este documento para registrar trabalho em andamento no módulo `auth`.
 
+## Lifecycle
+
+- `active`: trabalho em execução.
+- `paused`: trabalho bloqueado ou suspenso temporariamente.
+- `completed`: trabalho concluído.
+
 ## Context
 
 - Estruturar documentação e gates do módulo de autenticação.
@@ -43,3 +49,4 @@ Use este documento para registrar trabalho em andamento no módulo `auth`.
 - Quando este plano deixa de fazer sentido?
 - O que precisa acontecer para atualizar o escopo?
 - Que mudança exige um novo plano?
+- O plano do módulo deve ser pausado, concluído ou substituído?

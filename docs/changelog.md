@@ -30,6 +30,13 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-20
 
+- Mudança: adicionados os ciclos de vida de `plan` e `current-state`, com política de archive para escopos globais.
+- Motivo: evitar que planos e resumos vigentes cresçam sem controle ou se acumulem como documentos mortos.
+- Impacto: o repositório passou a ter regra explícita para pausar, concluir e arquivar documentos de execução e estado.
+- Arquivos: `docs/plan-lifecycle.md`, `docs/current-state-lifecycle.md`, `docs/archive/README.md`, `docs/README.md`, `docs/active-plan.md`, `docs/adr/current-state.md`
+
+### 2026-04-20
+
 - Mudança: formalizada a regra de quando um ADR vira `superseded`, quando vai para `archive/` e quando é `deprecated`.
 - Motivo: evitar acúmulo desnecessário de ADRs e manter só o histórico realmente útil.
 - Impacto: o ciclo de vida de ADR ficou objetivo e o `current-state.md` ganhou papel de resumo do estado vigente.

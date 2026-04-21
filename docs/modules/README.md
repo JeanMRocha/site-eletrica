@@ -24,7 +24,10 @@ Camada de documentação por módulo. Use esta pasta para concentrar regras, con
 - `active-plan.md`: execução atual do módulo
 - `changelog.md`: histórico de mudanças do módulo
 - `plan-template.md`: modelo oficial de plan do módulo
+- `plan-lifecycle.md`: política de ciclo de vida de plan do módulo
 - `current-state-template.md`: modelo oficial de current-state do módulo
+- `current-state-lifecycle.md`: política de ciclo de vida de current-state do módulo
+- `archive/`: documentos antigos de plan e current-state do módulo
 - `adr/README.md`: regras de decisão do módulo
 - `adr/template.md`: modelo oficial de ADR do módulo
 - `adr/0001-title.md`: primeira decisão relevante do módulo

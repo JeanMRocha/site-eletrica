@@ -7,7 +7,10 @@
 
 Use este documento para registrar o estado vigente da camada de decisão global.
 
-Resumo do que hoje é verdade sobre a camada de decisão do sistema.
+## Lifecycle
+
+- `stable`: resumo vigente e confiável.
+- `draft`: resumo em formação ou aguardando consolidação.
 
 ## Current state
 
@@ -41,3 +44,4 @@ Resumo do que hoje é verdade sobre a camada de decisão do sistema.
 
 - Quando este resumo ficou defasado?
 - Que mudança estrutural exige revisão?
+- O escopo mudou a ponto de exigir um novo resumo?

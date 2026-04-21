@@ -11,6 +11,13 @@ Registro de mudanças do módulo de autenticação.
 
 ### 2026-04-20
 
+- Mudança: adicionados os ciclos de vida de `plan` e `current-state` do módulo `auth`, com archive próprio do módulo.
+- Motivo: manter o módulo crítico com documentação de execução e estado bem delimitada.
+- Impacto: auth passou a ter regra explícita para pausar, concluir e arquivar documentos de plano e estado.
+- Arquivos: `docs/modules/auth/plan-lifecycle.md`, `docs/modules/auth/current-state-lifecycle.md`, `docs/modules/auth/archive/README.md`, `docs/modules/auth/README.md`, `docs/modules/auth/active-plan.md`, `docs/modules/auth/adr/current-state.md`
+
+### 2026-04-20
+
 - Mudança: formalizada a regra de ciclo de vida dos ADRs do módulo `auth`, incluindo `superseded`, `archive/` e `deprecated`.
 - Motivo: manter o histórico do módulo útil sem multiplicar decisões antigas.
 - Impacto: auth passou a seguir uma regra explícita para substituir, arquivar ou depreciar ADRs.

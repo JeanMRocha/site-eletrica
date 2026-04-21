@@ -7,6 +7,12 @@
 
 Use este modelo para registrar trabalho em execução.
 
+## Lifecycle
+
+- `active`: trabalho em execução.
+- `paused`: trabalho bloqueado ou suspenso temporariamente.
+- `completed`: trabalho concluído.
+
 ## Context
 
 Explique o problema, a iniciativa ou o objetivo do trabalho em andamento.
@@ -43,6 +49,7 @@ Explique o problema, a iniciativa ou o objetivo do trabalho em andamento.
 - Quando este plano deixa de fazer sentido?
 - O que precisa acontecer para atualizar o escopo?
 - Que mudança exige um novo plano?
+- O plano deve ser pausado, concluído ou substituído?
 
 ## Status
 

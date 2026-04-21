@@ -7,7 +7,11 @@
 
 Use este documento para registrar trabalho em andamento no nível global do repositório.
 
-Documento para registrar o que está sendo feito agora.
+## Lifecycle
+
+- `active`: trabalho em execução.
+- `paused`: trabalho bloqueado ou suspenso temporariamente.
+- `completed`: trabalho concluído.
 
 ## Contexto
 
@@ -43,6 +47,7 @@ Documento para registrar o que está sendo feito agora.
 - Quando este plano deixa de fazer sentido?
 - O que precisa acontecer para atualizar o escopo?
 - Que mudança exige um novo plano?
+- O plano deve ser pausado, concluído ou substituído?
 
 ## Status
 

@@ -7,6 +7,12 @@
 
 Use este modelo para registrar trabalho em execução no módulo `auth`.
 
+## Lifecycle
+
+- `active`: trabalho em execução.
+- `paused`: trabalho bloqueado ou suspenso temporariamente.
+- `completed`: trabalho concluído.
+
 ## Context
 
 Explique o objetivo ou o problema em andamento no módulo.
@@ -43,6 +49,7 @@ Explique o objetivo ou o problema em andamento no módulo.
 - Quando este plano deixa de fazer sentido?
 - O que precisa acontecer para atualizar o escopo?
 - Que mudança exige um novo plano?
+- O plano do módulo deve ser pausado, concluído ou substituído?
 
 ## Status
 

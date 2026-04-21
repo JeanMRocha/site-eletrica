@@ -7,6 +7,11 @@
 
 Use este modelo para registrar o que hoje é verdade sobre uma área do sistema.
 
+## Lifecycle
+
+- `stable`: resumo vigente e confiável.
+- `draft`: resumo em formação ou aguardando consolidação.
+
 ## Current state
 
 - O que está vigente agora
@@ -32,6 +37,7 @@ Use este modelo para registrar o que hoje é verdade sobre uma área do sistema.
 
 - Quando este resumo ficou defasado?
 - Que mudança estrutural exige revisão?
+- O escopo mudou a ponto de exigir um novo resumo?
 
 ## Status
 

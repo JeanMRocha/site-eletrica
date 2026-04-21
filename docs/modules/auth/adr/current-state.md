@@ -7,7 +7,10 @@
 
 Use este documento para registrar o estado vigente do módulo `auth`.
 
-Resumo do estado atual da governança do módulo `auth`.
+## Lifecycle
+
+- `stable`: resumo vigente e confiável.
+- `draft`: resumo em formação ou aguardando consolidação.
 
 ## Current state
 
@@ -40,3 +43,4 @@ Resumo do estado atual da governança do módulo `auth`.
 
 - Quando este resumo ficou defasado?
 - Que mudança estrutural exige revisão?
+- O escopo do módulo mudou a ponto de exigir um novo resumo?
