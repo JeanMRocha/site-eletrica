@@ -19,6 +19,7 @@ Use este documento para registrar trabalho em andamento no nível global do repo
 - O trabalho agora deve sair da fase de documentação e entrar na primeira implementação funcional.
 - O plano global atual passa a acompanhar a fase 1 do produto.
 - A decomposição detalhada da fase 1 está em `docs/phase-1-plan.md`.
+- A primeira implementação funcional do módulo `auth` já foi iniciada em Go.
 
 ## Scope
 
@@ -57,4 +58,4 @@ Use este documento para registrar trabalho em andamento no nível global do repo
 
 ## Status
 
-- Fase 1 do produto aguardando início de implementação.
+- Fase 1 do produto em execução, com `auth` já iniciado como primeiro incremento funcional.

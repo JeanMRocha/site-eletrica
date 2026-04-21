@@ -22,6 +22,10 @@ Plano de implementação da primeira fase do produto, focado no mínimo necessá
 - Auditoria de acesso.
 - Base para controle de permissões.
 
+#### Status
+
+- Primeira implementação funcional iniciada em Go com serviço em memória, handlers HTTP e testes básicos.
+
 #### Tarefas
 
 - Definir modelo de sessão e papéis de operador.

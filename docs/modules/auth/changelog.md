@@ -9,6 +9,13 @@ Registro de mudanças do módulo de autenticação.
 
 ## Entradas
 
+### 2026-04-21
+
+- Mudança: criada a primeira implementação funcional do módulo `auth` em Go, com serviço em memória, HTTP handlers e testes para login, refresh, sessão e revogação.
+- Motivo: iniciar a execução da fase 1 com uma base funcional real do módulo mais crítico.
+- Impacto: o módulo passou a ter uma espinha dorsal executável para evoluir para persistência e integração futura.
+- Arquivos: `go.mod`, `cmd/api/main.go`, `internal/auth/*`, `docs/modules/auth/active-plan.md`, `docs/modules/auth/current-state.md`
+
 ### 2026-04-20
 
 - Mudança: criado `onboarding.md` e adicionados exemplos reais e códigos de resposta em `contracts.md`, além da distinção explícita entre estado vivo e snapshot no `current-state.md`.

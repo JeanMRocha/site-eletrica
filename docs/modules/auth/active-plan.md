@@ -2,7 +2,7 @@
 
 > Status: active
 > Type: plan
-> Last updated: 2026-04-20
+> Last updated: 2026-04-21
 > Owner: security
 
 Use este documento para registrar trabalho em andamento no módulo `auth`.
@@ -15,34 +15,36 @@ Use este documento para registrar trabalho em andamento no módulo `auth`.
 
 ## Context
 
-- Estruturar documentação e gates do módulo de autenticação.
+- A base inicial do módulo `auth` em Go já foi criada com serviço em memória, HTTP handlers e testes.
+- O próximo passo é evoluir o módulo para persistência e integração com o restante da fase 1.
 
 ## Scope
 
-- Regras específicas do módulo.
-- Contratos.
-- Controles de segurança.
-- Estratégia de testes.
+- Login, refresh, logout, revogação e consulta de sessão.
+- Serviço em memória como primeiro incremento funcional.
+- Regras específicas do módulo, contratos e testes.
 
 ## Out of scope
 
-- Implementação da API de auth
-- UI do fluxo de login
-- Integração com provedores externos
+- Persistência em PostgreSQL.
+- UI do fluxo de login.
+- Integração com provedores externos.
+- Fluxos avançados de recuperação ou MFA.
 
 ## Next steps
 
-1. Definir payloads e status codes.
-2. Definir modelo de sessão e revogação.
-3. Criar testes de comportamento esperado.
+1. Substituir o armazenamento em memória por persistência real.
+2. Ajustar contratos e validações conforme o uso do módulo crescer.
+3. Ampliar os testes de erro, auditoria e revogação.
 
 ## Blockers
 
-- Ainda não há contrato de API implementado.
+- Ainda não há camada de persistência.
 
 ## Validation
 
-- Confirmar que as regras do módulo cobrem segurança, contrato e testes.
+- Confirmar que login, refresh, logout, revogação e sessão funcionam em memória.
+- Confirmar que os testes de auth passam antes de evoluir o armazenamento.
 
 ## Review criteria
 

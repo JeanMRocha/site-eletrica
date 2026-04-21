@@ -2,7 +2,7 @@
 
 > Status: stable
 > Type: state
-> Last updated: 2026-04-20
+> Last updated: 2026-04-21
 > Owner: security
 
 Estado vigente do módulo `auth`.
@@ -14,12 +14,14 @@ Estado vigente do módulo `auth`.
 - Mudanças em auth precisam ser lidas de forma restrita ao escopo do módulo.
 - O estado vigente do módulo deve ficar aqui, não espalhado em ADRs.
 - Este arquivo descreve o que está vivo agora; o snapshot histórico da camada de decisão fica em `adr/current-state.md`.
+- A primeira implementação funcional do módulo existe como um serviço em memória com HTTP handlers e testes.
 
 ## Invariants
 
 - Segurança tem prioridade sobre conveniência.
 - Mudanças de comportamento precisam de testes antes de implementação.
 - O módulo deve manter autenticação, autorização e sessão explicitamente separadas.
+- A camada crítica continua na API, não na UI.
 
 ## Operational notes
 

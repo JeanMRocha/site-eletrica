@@ -30,6 +30,13 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-21
 
+- Mudança: iniciada a primeira implementação funcional do projeto com a espinha dorsal do módulo `auth` em Go, serviço em memória, handlers HTTP e testes.
+- Motivo: sair da fase de documentação e começar a execução real da fase 1.
+- Impacto: o repositório passou a conter código executável e testes para o primeiro módulo da plataforma.
+- Arquivos: `go.mod`, `cmd/api/main.go`, `internal/auth/*`, `docs/active-plan.md`, `docs/phase-1-plan.md`, `docs/modules/auth/active-plan.md`, `docs/modules/auth/current-state.md`, `docs/modules/auth/changelog.md`
+
+### 2026-04-21
+
 - Mudança: detalhada a fase 1 em tarefas por módulo dentro de `docs/phase-1-plan.md` e conectado o plano ativo global a essa decomposição.
 - Motivo: transformar a primeira fase em trabalho executável com sequência clara de módulos e tarefas.
 - Impacto: o plano passou a orientar implementação real por módulo, não apenas o escopo geral.
