@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"strings"
 	"time"
+
+	"github.com/JeanMRocha/site-eletrica/internal/shared/id"
 )
 
 type Service struct {
@@ -36,7 +38,7 @@ func (s *Service) Login(_ context.Context, credentials Credentials) (LoginRespon
 	}
 
 	now := s.now()
-	sessionID := randomID("sess")
+	sessionID := id.Base62(8)
 	accessToken := randomID("acc")
 	refreshToken := randomID("rft")
 

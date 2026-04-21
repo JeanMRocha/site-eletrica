@@ -150,3 +150,9 @@ Todo módulo deve expor:
 - Se um componente cresce demais, extraia subcomponentes com responsabilidade única.
 - Se uma tela mistura resumo, cadastro e cálculo, separe em consolidação e ação secundária.
 - Se o contrato não estiver claro, o componente ainda não está pronto para reaproveitamento.
+
+## Regra de Identificadores
+
+- Identificadores operacionais visíveis ao usuário devem preferir base62 com 8 caracteres.
+- IDs curtos devem ser gerados por contrato compartilhado entre backend, frontend e persistência.
+- Tokens de autenticação, refresh e segredos não seguem essa regra e devem manter requisitos próprios de segurança.

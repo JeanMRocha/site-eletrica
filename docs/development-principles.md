@@ -57,6 +57,13 @@
 - Every saved calculation should be reproducible
 - Fail closed when data is incomplete or inconsistent
 
+## Identifier principles
+
+- Prefer short human-facing identifiers in base62 with 8 characters for projects, calculations, assessments, and local UI entities.
+- Keep security tokens and secrets separate from human-facing identifiers.
+- Use a shared generator for identifiers so the format stays consistent across modules and layers.
+- Do not invent prefix-heavy identifiers unless the contract explicitly requires them.
+
 ## Testing principles
 
 - Test the rules, not only the UI
