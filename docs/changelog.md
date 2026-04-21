@@ -30,6 +30,13 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-20
 
+- Mudança: criado `docs/reading-paths.md` com mapas de leitura por perfil para novo contribuidor, auth, operação e revisão de arquitetura.
+- Motivo: reduzir carga desnecessária de documentação e deixar a navegação mais profissional e orientada ao escopo.
+- Impacto: o agente e os colaboradores passam a ter um caminho mínimo de leitura por perfil antes de abrir docs fora do escopo.
+- Arquivos: `docs/reading-paths.md`, `docs/README.md`, `docs/governance.md`, `docs/modules/README.md`
+
+### 2026-04-20
+
 - Mudança: reorganizada a documentação para incluir `product-overview.md`, `current-state.md`, runbook de `auth`, matriz de governança e separação entre estado vivo e snapshots de decisão.
 - Motivo: reduzir duplicação, melhorar navegação e deixar o docs mais profissional e orientado a uso real.
 - Impacto: a documentação passou a ter um fluxo mais claro para leitura, escrita, operação e histórico.

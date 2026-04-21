@@ -15,6 +15,7 @@
 - [`development-principles.md`](development-principles.md): consolida princípios de trabalho, qualidade e segurança.
 - [`agent-rules.md`](agent-rules.md): define regras práticas para o agente, incluindo idioma da UI e do código.
 - [`governance.md`](governance.md): índice mestre para leitura, escrita e ciclo de vida da documentação.
+- [`reading-paths.md`](reading-paths.md): mapas de leitura por perfil para evitar carga desnecessária de documentação.
 - [`changelog.md`](changelog.md): histórico cronológico das mudanças relevantes.
 - [`active-plan.md`](active-plan.md): plano em execução no momento.
 - [`current-state.md`](current-state.md): estado vigente global.
