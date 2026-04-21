@@ -8,13 +8,13 @@
 ## Current state
 
 - O módulo ainda está em definição documental.
-- O projeto é a unidade central para armazenar os dados do estudo.
+- O projeto é a unidade central para armazenar os dados do dimensionamento.
 
 ## Update rule
 
-- Atualize este arquivo quando a forma de representar estudos mudar de maneira relevante.
+- Atualize este arquivo quando a forma de representar projetos ou cálculos mudar de maneira relevante.
 
 ## Review criteria
 
-- O modelo ainda suporta a revisão técnica do estudo?
+- O modelo ainda suporta a revisão técnica do projeto?
 - O vínculo com cálculo continua claro?

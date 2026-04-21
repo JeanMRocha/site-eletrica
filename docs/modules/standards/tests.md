@@ -9,4 +9,4 @@
 
 - Testar seleção da norma.
 - Testar versionamento da base normativa.
-- Testar compatibilidade com estudos já salvos.
+- Testar compatibilidade com cálculos já salvos.

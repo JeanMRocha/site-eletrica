@@ -5,12 +5,12 @@
 > Last updated: 2026-04-21
 > Owner: platform
 
-Módulo responsável pelo cadastro e pela organização dos estudos elétricos.
+Módulo responsável pelo cadastro e pela organização dos projetos elétricos.
 
 ## Escopo
 
 - Cadastro de projetos
-- Contexto técnico do estudo
+- Contexto técnico do projeto
 - Relação entre projeto e cálculos executados
 - Base para revisão e histórico
 

@@ -7,6 +7,6 @@
 
 ## Controles mínimos
 
-- Apenas estudos autenticados podem gerar estimativas.
+- Apenas projetos autenticados podem gerar estimativas.
 - Estimativas devem ser auditáveis.
 - Alterações de preço-base devem ser visíveis no histórico.

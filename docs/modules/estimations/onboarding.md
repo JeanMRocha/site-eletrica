@@ -7,7 +7,7 @@
 
 ## O que o módulo cobre
 
-- Estimativas técnicas e financeiras do estudo.
+- Estimativas técnicas e financeiras do cálculo.
 
 ## Ordem de leitura
 

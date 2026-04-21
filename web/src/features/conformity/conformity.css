@@ -1,0 +1,5 @@
+.conformity-feature .compliance-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+}

@@ -7,7 +7,7 @@
 
 ## O que o módulo cobre
 
-- Cadastro e organização dos estudos elétricos.
+- Cadastro e organização dos projetos elétricos.
 
 ## Ordem de leitura
 
@@ -18,4 +18,4 @@
 
 ## Regra prática
 
-- Se você precisa criar ou editar um estudo, comece por este módulo.
+- Se você precisa criar ou editar um projeto, comece por este módulo.

@@ -18,11 +18,11 @@ type Study struct {
 }
 
 type CreateStudyInput struct {
-	Name        string
-	ClientName  string
-	Location    string
-	ProjectType string
-	Voltage     string
+	Name        string `json:"name"`
+	ClientName  string `json:"client_name"`
+	Location    string `json:"location"`
+	ProjectType string `json:"project_type"`
+	Voltage     string `json:"voltage"`
 }
 
 type AssessmentRecord struct {
@@ -34,6 +34,6 @@ type AssessmentRecord struct {
 }
 
 type StudyDetail struct {
-	Study       Study
-	Assessments []AssessmentRecord
+	Study       Study              `json:"study"`
+	Assessments []AssessmentRecord `json:"assessments"`
 }

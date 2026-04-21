@@ -7,7 +7,7 @@
 
 ## Regras
 
-- Cada estudo deve referenciar uma base normativa explícita.
+- Cada cálculo deve referenciar uma base normativa explícita.
 - A norma usada deve ser versionada ou identificável no histórico.
 - Mudanças de critério técnico não devem alterar o resultado sem deixar rastreabilidade.
 - A precedência legal deve seguir a matriz do módulo.

@@ -1,6 +1,7 @@
 import type {
   AssessmentInput,
   AssessmentRecord,
+  HierarchyLevel,
   Standard,
   Study,
   StudyDetail,
@@ -43,6 +44,10 @@ export async function listStudies() {
   return payload.studies;
 }
 
+export async function listProjects() {
+  return listStudies();
+}
+
 export async function createStudy(input: {
   name: string;
   client_name: string;
@@ -58,9 +63,23 @@ export async function createStudy(input: {
   return payload.study;
 }
 
+export async function createProject(input: {
+  name: string;
+  client_name: string;
+  location: string;
+  project_type: string;
+  voltage: string;
+}) {
+  return createStudy(input);
+}
+
 export async function getStudy(id: string) {
   const payload = await request<StudyDetail>(`/v1/studies/${id}`);
   return payload;
+}
+
+export async function getProject(id: string) {
+  return getStudy(id);
 }
 
 export async function assessStudy(id: string, input: AssessmentInput) {
@@ -72,7 +91,16 @@ export async function assessStudy(id: string, input: AssessmentInput) {
   return payload.assessment;
 }
 
+export async function assessProject(id: string, input: AssessmentInput) {
+  return assessStudy(id, input);
+}
+
 export async function listStandards() {
   const payload = await request<{ standards: Standard[] }>('/v1/standards/catalog');
   return payload.standards;
+}
+
+export async function listHierarchy() {
+  const payload = await request<{ hierarchy: HierarchyLevel[] }>('/v1/standards/hierarchy');
+  return payload.hierarchy;
 }

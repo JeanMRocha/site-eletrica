@@ -16,7 +16,7 @@
 
 - Nao guardar texto integral de norma como base computavel.
 - Guardar a referencia da fonte e a logica computavel.
-- Registrar o que foi aplicado em cada estudo.
+- Registrar o que foi aplicado em cada cálculo.
 - Se a entrada for incompleta, o retorno deve ser `incompleto` e nao apenas `fora`.
 
 ## Saidas possiveis

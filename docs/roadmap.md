@@ -86,7 +86,7 @@ Roadmap de alto nível para expandir o produto além do núcleo atual. O objetiv
 - Descrição: definir entradas, validações, fórmula aplicada e persistência do resultado.
 - Prioridade: alta
 - Dependências: autenticação, modelagem de banco e endpoints da API.
-- Critério de conclusão: o sistema salva o estudo e exibe o resultado no navegador.
+- Critério de conclusão: o sistema salva o projeto e exibe o resultado no navegador.
 - Observações: a UI apenas coleta e apresenta; a regra de cálculo fica no backend.
 
 ### Conformidade de um circuito
@@ -100,10 +100,10 @@ Roadmap de alto nível para expandir o produto além do núcleo atual. O objetiv
 
 ### Sugestão de rota e orçamento
 
-- Objetivo: comparar caminhos de instalação e custo estimado do estudo.
+- Objetivo: comparar caminhos de instalação e custo estimado do projeto.
 - Descrição: analisar áreas e distâncias, sugerir rota, estimar materiais, tempo e custo.
 - Prioridade: média
-- Dependências: estudo, cálculo base e catálogo técnico.
+- Dependências: projeto, cálculo base e catálogo técnico.
 - Critério de conclusão: o sistema oferece alternativas e um resumo de orçamento revisável.
 - Observações: a decisão final continua humana.
 

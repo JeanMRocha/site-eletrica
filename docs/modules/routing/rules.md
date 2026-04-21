@@ -8,5 +8,5 @@
 ## Regras
 
 - A sugestão de rota deve ser explícita e comparável.
-- A escolha do caminho deve considerar o estudo e suas restrições.
+- A escolha do caminho deve considerar o projeto e suas restrições.
 - O usuário precisa entender por que uma rota foi sugerida.

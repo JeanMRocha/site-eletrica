@@ -9,7 +9,7 @@ Resumo vigente do sistema como um todo.
 
 ## Current state
 
-- A documentação global define uma aplicação web para estudos elétricos, modelagem, dimensionamento, conformidade, estimativas e relatórios.
+- A documentação global define uma aplicação web para projetos elétricos, modelagem, dimensionamento, conformidade, estimativas e relatórios.
 - A documentação por módulo concentra regras, contratos, segurança, testes, planos, estado e histórico local.
 - `auth` continua sendo tratado como módulo crítico.
 - `projects`, `ambientes`, `cargas`, `circuitos`, `condutores`, `protecao`, `standards`, `calculations`, `conformidade`, `routing`, `estimations`, `reports`, `knowledge` e `core` são os módulos centrais do novo produto.

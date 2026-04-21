@@ -59,6 +59,9 @@ export type StudyDetail = {
   assessments: AssessmentRecord[];
 };
 
+export type Project = Study;
+export type ProjectDetail = StudyDetail;
+
 export type Standard = {
   code: string;
   title: string;
@@ -71,4 +74,9 @@ export type Standard = {
   hierarchy_weight: number;
   applies_to?: string[];
   notes?: string[];
+};
+
+export type HierarchyLevel = {
+  id: string;
+  weight: number;
 };

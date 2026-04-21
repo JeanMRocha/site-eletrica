@@ -7,7 +7,7 @@
 
 ## Regras
 
-- Um projeto deve representar um estudo elétrico rastreável.
+- Um projeto deve representar um dimensionamento elétrico rastreável.
 - O módulo não deve esconder dados necessários para revisão técnica.
 - O projeto deve ser a unidade de vínculo de cálculos e resultados.
 - Mudanças de estrutura que afetem histórico devem ser refletidas no estado vigente do módulo.

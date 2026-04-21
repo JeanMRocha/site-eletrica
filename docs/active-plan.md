@@ -15,7 +15,7 @@ Use este documento para registrar trabalho em andamento no nível global do repo
 
 ## Contexto
 
-- A documentação global já define o novo produto: aplicação web para estudos elétricos, modelagem, dimensionamento, conformidade, estimativas e relatórios.
+- A documentação global já define o novo produto: aplicação web para projetos elétricos, modelagem, dimensionamento, conformidade, estimativas e relatórios.
 - A prioridade agora é sair da base documental e começar a implementação funcional por módulos.
 - A primeira base visual em `Vite + React` e de persistência local já foi iniciada no MVP.
 - A fase 1 está detalhada em `docs/phase-1-plan.md`.

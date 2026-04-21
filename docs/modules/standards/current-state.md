@@ -10,7 +10,7 @@
 - O módulo já tem uma primeira implementação funcional na API.
 - Existe um catálogo inicial em memória com leitura por lista e por código.
 - Existe uma matriz de precedência e um resolvedor simples de conflito.
-- A base normativa precisa ser explícita para cada estudo salvo.
+- A base normativa precisa ser explícita para cada cálculo salvo.
 
 ## Update rule
 
@@ -20,4 +20,4 @@
 ## Review criteria
 
 - A seleção da norma continua rastreável?
-- O estudo ainda sabe qual base técnica usou?
+- O cálculo ainda sabe qual base técnica usou?

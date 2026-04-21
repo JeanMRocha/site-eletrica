@@ -9,16 +9,16 @@ Visão de produto para orientar leitura, módulos e decisões de documentação.
 
 ## What this is
 
-- A web application for electrical studies, dimensioning, compliance, and technical planning.
-- A product that keeps engineering rules in the backend and persists study data in a database.
+- A web application for electrical dimensioning, compliance, and technical planning.
+- A product that keeps engineering rules in the backend and persists calculation data in a database.
 - A system that needs authentication, project context, traceable calculations, route suggestions, estimates, reports, and a separate conformity layer.
 
 ## Product context
 
 - The application is meant for engineering work, not infrastructure control.
-- Users create or open electrical studies, enter areas, distances, loads, constraints, and site data, then review saved results.
+- Users create or open electrical projects, enter areas, distances, loads, constraints, and site data, then review saved results.
 - The system should model the installation first and then apply calculations, compliance checks, route suggestions, material choices, labor and equipment estimates, stage breakdowns, costs, and technical reports.
-- Authentication remains necessary because saved studies, project data, and outputs are user-scoped.
+- Authentication remains necessary because saved projects, project data, and outputs are user-scoped.
 - `standards` is the catalog of sources and technical criteria.
 - `conformidade` is the validator that reads the electrical model and returns status, severity, applied rules, and required corrections.
 - `knowledge` explains concepts, limits, and recommendations.
@@ -27,7 +27,7 @@ Visão de produto para orientar leitura, módulos e decisões de documentação.
 ## Primary flows
 
 - Authenticate into the application.
-- Create or open an electrical study.
+- Create or open an electrical project or calculation context.
 - Enter areas, distances, loads, circuits, and technical constraints.
 - Model the installation by environments, loads, circuits, conductors, protection, and boards.
 - Apply the relevant standard or technical rule set.
@@ -42,7 +42,7 @@ Visão de produto para orientar leitura, módulos e decisões de documentação.
 ## Main areas
 
 - `auth`: authentication, authorization, session handling, and access control.
-- `projects`: electrical study lifecycle, metadata, and ownership.
+- `projects`: project lifecycle, metadata, and ownership.
 - `standards`: norm catalog, versioning, applicability, and rule references.
 - `calculations`: dimensioning and engineering rules.
 - `conformidade`: validation of the calculated electrical model against legal and normative criteria.

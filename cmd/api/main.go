@@ -42,9 +42,13 @@ func main() {
 	studiesHandler := studies.NewHandler(studiesService)
 
 	root := http.NewServeMux()
+	root.Handle("/v1/auth", handler.Routes())
 	root.Handle("/v1/auth/", handler.Routes())
+	root.Handle("/v1/standards", standardsHandler.Routes())
 	root.Handle("/v1/standards/", standardsHandler.Routes())
+	root.Handle("/v1/conformidade", conformidadeHandler.Routes())
 	root.Handle("/v1/conformidade/", conformidadeHandler.Routes())
+	root.Handle("/v1/studies", studiesHandler.Routes())
 	root.Handle("/v1/studies/", studiesHandler.Routes())
 	root.HandleFunc("/healthz", func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusOK)

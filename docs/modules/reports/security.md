@@ -8,5 +8,5 @@
 ## Controles mínimos
 
 - Apenas usuários autorizados podem gerar relatórios.
-- Relatórios devem ser rastreáveis ao estudo de origem.
+- Relatórios devem ser rastreáveis ao cálculo de origem.
 - Saídas exportadas precisam manter a base usada na geração.

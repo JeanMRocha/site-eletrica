@@ -5,7 +5,7 @@
 > Last updated: 2026-04-21
 > Owner: platform
 
-Módulo responsável por gerar relatórios técnicos, resumos e passo a passo do estudo.
+Módulo responsável por gerar relatórios técnicos, resumos e passo a passo do dimensionamento.
 
 ## Escopo
 
@@ -35,4 +35,4 @@ Módulo responsável por gerar relatórios técnicos, resumos e passo a passo do
 
 - O escopo está definido em nível de produto.
 - A implementação ainda será iniciada.
-- O módulo deve transformar o estudo em saída clara e auditável.
+- O módulo deve transformar o cálculo em saída clara e auditável.

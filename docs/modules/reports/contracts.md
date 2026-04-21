@@ -17,4 +17,4 @@
 ## Regras de contrato
 
 - O contrato precisa suportar revisão humana e exportação futura.
-- O contrato precisa apontar para a versão do estudo que gerou o relatório.
+- O contrato precisa apontar para a versão do cálculo que gerou o relatório.

@@ -1,14 +1,14 @@
 # Eletrica
 
-Aplicação web para cálculos e dimensionamentos elétricos com interface Vite + React, banco de dados local e autenticação.
+Aplicação web para dimensionamentos elétricos com interface Vite + React, banco de dados local e autenticação.
 
 ## Status
 
 - Fase atual: definição da base do produto e da arquitetura
 - Stack atual do MVP: interface `Vite + React`, API em `Go`, banco local `SQLite`
-- Execução: Docker
+- Execução local: `.\scripts\dev.ps1`
 - O módulo `auth` permanece necessário.
-- Novos módulos de domínio serão adicionados para projetos, cálculos e apoio à revisão técnica.
+- Novos módulos de domínio serão adicionados para projetos, dimensionamentos e apoio à revisão técnica.
 
 ## Documentos principais
 
@@ -19,5 +19,6 @@ Aplicação web para cálculos e dimensionamentos elétricos com interface Vite 
 - [`docs/phase-1-plan.md`](docs/phase-1-plan.md)
 - [`web/`](web/)
 - [`docs/modules/README.md`](docs/modules/README.md)
+- [`docs/runbooks/local-dev.md`](docs/runbooks/local-dev.md)
 - [`AGENTS.md`](AGENTS.md)
 - [`.agent`](.agent)

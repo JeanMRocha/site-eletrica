@@ -10,7 +10,7 @@ Plano de implementação da primeira fase do produto, focado no mínimo necessá
 ## Objetivo
 
 - Entregar a base funcional da aplicação web.
-- Cobrir autenticação, cadastro de estudos, modelagem eletrica inicial, primeiro fluxo de cálculo, conformidade e persistência.
+- Cobrir autenticação, cadastro de projetos, modelagem eletrica inicial, primeiro fluxo de cálculo, conformidade e persistência.
 - Evitar regras espalhadas na UI antes de ter a base técnica confiável.
 
 ## Escopo
@@ -32,16 +32,16 @@ Plano de implementação da primeira fase do produto, focado no mínimo necessá
 
 ### `projects`
 
-- Cadastro de estudos elétricos.
+- Cadastro de projetos elétricos.
 - Identificação do cliente ou contexto técnico.
-- Organização das entradas do estudo.
-- Relação entre estudo e execuções de cálculo.
+- Organização das entradas do projeto.
+- Relação entre projeto e execuções de cálculo.
 
 #### Tarefas
 
-- Definir modelo de estudo.
+- Definir modelo de projeto.
 - Criar o contrato de criação e consulta.
-- Persistir dados básicos do estudo.
+- Persistir dados básicos do projeto.
 - Criar testes de criação, leitura e atualização básica.
 
 ### `ambientes`
@@ -65,7 +65,7 @@ Plano de implementação da primeira fase do produto, focado no mínimo necessá
 
 - Definir o modelo de carga.
 - Criar o contrato de entrada e consulta.
-- Persistir cargas associadas ao estudo.
+- Persistir cargas associadas ao projeto.
 
 ### `circuitos`
 
@@ -103,13 +103,13 @@ Plano de implementação da primeira fase do produto, focado no mínimo necessá
 ### `standards`
 
 - Catálogo de normas e critérios técnicos.
-- Versão da regra aplicada ao estudo.
+- Versão da regra aplicada ao cálculo.
 
 #### Tarefas
 
 - Definir o modelo de norma e versão.
 - Criar o contrato de consulta e seleção da norma aplicada.
-- Persistir a referência normativa usada no estudo.
+- Persistir a referência normativa usada no cálculo.
 
 ### `conformidade`
 
@@ -154,12 +154,12 @@ Plano de implementação da primeira fase do produto, focado no mínimo necessá
 
 - Formulários de entrada.
 - Visualização de resultados.
-- Navegação simples entre estudos e cálculos.
+- Navegação simples entre projetos e cálculos.
 
 #### Tarefas
 
 - Desenhar a primeira jornada web.
-- Exibir estudo e resultado de cálculo.
+- Exibir projeto e resultado de cálculo.
 - Garantir que a UI apenas consuma contratos da API.
 
 ## Fora de escopo
@@ -218,7 +218,7 @@ Plano de implementação da primeira fase do produto, focado no mínimo necessá
 ### 2. `projects`
 
 - Criar cadastro e persistência.
-- Expor o estado do estudo para consumo da API e da UI.
+- Expor o estado do projeto para consumo da API e da UI.
 
 ### 3. `ambientes`
 
@@ -248,7 +248,7 @@ Plano de implementação da primeira fase do produto, focado no mínimo necessá
 ### 8. `standards`
 
 - Criar o catálogo inicial de normas e critérios.
-- Persistir a norma aplicada ao estudo.
+- Persistir a norma aplicada ao cálculo.
 
 ### 9. `calculations`
 
@@ -275,7 +275,7 @@ Plano de implementação da primeira fase do produto, focado no mínimo necessá
 ## Critérios de conclusão
 
 - É possível entrar na aplicação com autenticação segura.
-- É possível criar e consultar um estudo elétrico.
+- É possível criar e consultar um projeto elétrico.
 - É possível cadastrar ambientes, cargas e circuitos base.
 - É possível registrar a norma aplicada.
 - É possível executar e revisar pelo menos um cálculo persistido.

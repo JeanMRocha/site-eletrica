@@ -6,4 +6,5 @@ data/
 web/node_modules/
 web/dist/
 web/.vite/
+web/*.log
 web/tsconfig.tsbuildinfo

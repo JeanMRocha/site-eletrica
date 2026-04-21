@@ -5,13 +5,13 @@
 > Last updated: 2026-04-21
 > Owner: platform
 
-Módulo responsável pelo catálogo de normas, critérios técnicos e versão da base normativa aplicada aos estudos.
+Módulo responsável pelo catálogo de normas, critérios técnicos e versão da base normativa aplicada aos cálculos.
 
 ## Escopo
 
 - Registro de normas e critérios técnicos
 - Versionamento de regras aplicáveis
-- Seleção da norma usada em cada estudo
+- Seleção da norma usada em cada cálculo
 - Rastreabilidade da base normativa
 - Hierarquia legal e técnica por precedência
 - Regras computáveis e resolução de conflito

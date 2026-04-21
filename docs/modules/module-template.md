@@ -45,6 +45,18 @@ Template base para iniciar um módulo novo com a documentação mínima já alin
 
 - <o que o módulo cobre>
 
+### Responsabilidades
+
+- <responsabilidade primária>
+- <o que o módulo não faz>
+
+### Contratos
+
+- <dados de entrada>
+- <dados de saída>
+- <eventos públicos>
+- <dependências permitidas>
+
 ### Documentos do módulo
 
 - `rules.md`: <descrição>

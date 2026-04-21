@@ -9,7 +9,7 @@
 
 ```json
 {
-  "study_id": "ST-001",
+  "project_id": "PR-001",
   "version": "core-2026.04",
   "audit_id": "AUD-10001"
 }

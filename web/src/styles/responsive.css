@@ -1,0 +1,75 @@
+@media (max-width: 1180px) {
+  .auth-card,
+  .workspace,
+  .compliance-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .topbar,
+  .hero-strip,
+  .panel-head,
+  .row {
+    grid-template-columns: 1fr;
+    grid-auto-flow: row;
+    align-items: start;
+  }
+
+  .topbar {
+    grid-template-columns: 1fr;
+    justify-items: stretch;
+  }
+
+  .user-zone {
+    justify-items: start;
+  }
+
+  .hero-metrics,
+  .summary-strip,
+  .actions-grid,
+  .form-grid,
+  .form-grid.three,
+  .sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .shell {
+    width: min(100vw - 16px, 1360px);
+  }
+
+  .auth-card,
+  .panel,
+  .hero-strip {
+    border-radius: 20px;
+  }
+
+  .step-chip {
+    min-width: 96px;
+    padding: 9px 12px;
+  }
+
+  .user-chip {
+    width: 100%;
+  }
+
+  .popover {
+    left: 0;
+    right: 0;
+    width: auto;
+  }
+}

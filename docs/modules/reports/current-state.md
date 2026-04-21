@@ -8,7 +8,7 @@
 ## Current state
 
 - O módulo ainda está em definição documental.
-- O relatório precisa ser uma visão fiel do estudo.
+- O relatório precisa ser uma visão fiel do cálculo.
 
 ## Update rule
 

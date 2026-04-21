@@ -1,0 +1,54 @@
+.home-feature .hero-strip {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  margin-bottom: 16px;
+  padding: 18px 20px;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+}
+
+.home-feature .hero-strip h1 {
+  margin: 6px 0 0;
+  font-size: clamp(1.5rem, 3vw, 3rem);
+}
+
+.home-feature .hero-strip p {
+  margin: 8px 0 0;
+}
+
+.home-feature .hero-metrics {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.home-feature .metric {
+  min-width: 108px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.home-feature .metric strong {
+  display: block;
+  font-size: 1.5rem;
+}
+
+.home-feature .metric span {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.hero-strip.home-feature h1 {
+  margin: 8px 0 0;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+.hero-strip.home-feature p {
+  color: var(--muted);
+}

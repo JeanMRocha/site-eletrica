@@ -9,7 +9,7 @@
 
 ```json
 {
-  "study_id": "ST-001",
+  "project_id": "PR-001",
   "circuit_id": "C1",
   "current_project_a": 17.3,
   "conductor_mm2": 2.5,
@@ -25,7 +25,7 @@
 
 ```json
 {
-  "study_id": "ST-001",
+  "project_id": "PR-001",
   "circuit_id": "C1",
   "status": "conforme",
   "severity": "none",
@@ -40,7 +40,7 @@
 
 ## Contrato minimo
 
-- Identificador do estudo.
+- Identificador do projeto.
 - Identificador do circuito ou item validado.
 - Lista de regras aplicadas.
 - Status consolidado.

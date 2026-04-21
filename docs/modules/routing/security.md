@@ -7,6 +7,6 @@
 
 ## Controles mínimos
 
-- Apenas estudos autenticados podem receber sugestões de rota.
+- Apenas projetos autenticados podem receber sugestões de rota.
 - A decisão sugerida precisa ser auditável.
 - O critério de rota não deve ser invisível para o usuário.

@@ -22,7 +22,7 @@
 5. `docs/modules/standards/tests.md`
 6. `docs/modules/standards/current-state.md`
 
-### Mudança de norma aplicada ao estudo
+### Mudança de norma aplicada ao cálculo
 
 1. `docs/governance.md`
 2. `docs/modules/standards/README.md`

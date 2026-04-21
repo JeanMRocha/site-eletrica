@@ -9,4 +9,4 @@
 
 - Testar montagem do relatório.
 - Testar inclusão de norma, cálculo e estimativa.
-- Testar rastreabilidade do estudo de origem.
+- Testar rastreabilidade do cálculo de origem.

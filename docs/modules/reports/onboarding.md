@@ -7,7 +7,7 @@
 
 ## O que o módulo cobre
 
-- Relatórios e saídas consolidadas do estudo.
+- Relatórios e saídas consolidadas do cálculo.
 
 ## Ordem de leitura
 
@@ -18,4 +18,4 @@
 
 ## Regra prática
 
-- Se você precisa transformar o estudo em saída revisável, comece por este módulo.
+- Se você precisa transformar o cálculo em saída revisável, comece por este módulo.

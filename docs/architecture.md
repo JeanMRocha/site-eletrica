@@ -7,7 +7,7 @@
 
 ## Goal
 
-Build a web application that stores electrical studies, models installations, runs calculations, validates compliance, suggests installation routes, generates estimates, and presents the results through a browser-based interface.
+Build a web application that stores electrical projects and calculations, models installations, validates compliance, suggests installation routes, generates estimates, and presents the results through a browser-based interface.
 
 ## High-level design
 
@@ -23,7 +23,7 @@ Build a web application that stores electrical studies, models installations, ru
 
 ### Web layer
 
-- Present studies, inputs, results, estimates, and comparison views
+- Present projects, inputs, results, estimates, and comparison views
 - Collect user input for modeling, calculations, compliance review, and route estimation
 - Keep presentation logic separate from engineering rules
 - Never be the source of truth for calculations or costs
@@ -34,7 +34,7 @@ Build a web application that stores electrical studies, models installations, ru
 - Own authentication and authorization decisions
 - Validate request payloads
 - Execute engineering, dimensioning, and compliance rules through services
-- Persist studies, calculation runs, compliance snapshots, route alternatives, estimates, and derived outputs
+- Persist projects, calculation runs, compliance snapshots, route alternatives, estimates, and derived outputs
 - Expose stable, versioned endpoints
 
 ### Domain services
@@ -50,7 +50,7 @@ Build a web application that stores electrical studies, models installations, ru
 
 ### Persistence
 
-- Store user accounts, studies, model snapshots, calculation runs, conformity verdicts, domain catalogs, standards versions, route alternatives, estimates, report snapshots, and audit history
+- Store user accounts, projects, model snapshots, calculation runs, conformity verdicts, domain catalogs, standards versions, route alternatives, estimates, report snapshots, and audit history
 - Preserve enough history to reproduce important technical results
 - Keep read models and write models simple enough to evolve
 - Use a local SQLite file for the MVP and migrate to PostgreSQL when the product is ready for multi-user deployment
@@ -74,6 +74,16 @@ Build a web application that stores electrical studies, models installations, ru
 - The core domain should center on project, environment, load, circuit, conductor, protection, board, route, material, and technical result.
 - Compliance should read the model instead of becoming the model.
 - Shared contracts, units, formulas, version identifiers, and audit metadata belong in `core`.
+- UI layout, tabs, and shell behavior belong to reusable frontend contracts, not to domain modules.
+- Domain modules should expose data and actions through explicit contracts, not direct coupling to the global layout.
+
+## Separation contract
+
+- Layout: shell, topbar, navigation, responsive scaffolding.
+- Consolidation screens: summary, list, status, and next action.
+- Secondary forms: create/edit flows hidden inside relevant tabs or panels.
+- Domain modules: rules, state, persistence, and technical outputs.
+- Shared components: identity, buttons, cards, tabs, and badges with explicit props only.
 
 ## Runtime posture
 

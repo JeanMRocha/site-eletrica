@@ -9,4 +9,4 @@
 
 - Apenas usuários autenticados podem alterar critérios técnicos.
 - Mudanças de norma devem ser auditáveis.
-- A norma aplicada em um estudo salvo não deve ser alterada sem rastreio.
+- A norma aplicada em um cálculo salvo não deve ser alterada sem rastreio.

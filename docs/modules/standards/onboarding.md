@@ -7,7 +7,7 @@
 
 ## O que o módulo cobre
 
-- Normas e critérios técnicos que orientam os estudos.
+- Normas e critérios técnicos que orientam os cálculos.
 
 ## Ordem de leitura
 
@@ -18,4 +18,4 @@
 
 ## Regra prática
 
-- Se você precisa saber qual regra técnica vale para o estudo, comece por este módulo.
+- Se você precisa saber qual regra técnica vale para o cálculo, comece por este módulo.

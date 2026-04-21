@@ -44,6 +44,11 @@
 - Keep presentational components dumb when possible
 - Keep product-specific components in the repo
 - Avoid turning the frontend into the place where engineering rules live
+- Primary screens must be consolidation views, not raw data-entry forms
+- Use tabs to separate domain areas; place creation and edit actions as secondary flows inside the relevant tab
+- Do not expose standalone "cadastro" screens as primary navigation items
+- Prefer split responsibilities over monolithic components and screens
+- Extract reusable layout, behavior, and domain contracts early enough to avoid copy-paste growth
 
 ## Reliability principles
 

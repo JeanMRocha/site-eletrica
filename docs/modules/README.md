@@ -10,6 +10,7 @@ Camada de documentação por módulo. Use esta pasta para concentrar regras, con
 ## Regra de leitura por escopo
 
 - `docs/governance.md` é a autoridade principal para navegação por documentação.
+- `docs/decoupling.md` define a regra de desacoplamento para telas, componentes e layout global.
 - `docs/modules/<modulo>/reading-paths.md` é o guia mínimo quando a mudança ficar restrita a um módulo.
 - Leia os documentos do módulo afetado, sem carregar módulos não relacionados por padrão.
 
@@ -31,7 +32,7 @@ Camada de documentação por módulo. Use esta pasta para concentrar regras, con
 ## Módulos atuais
 
 - `auth`: autenticação, autorização e sessão
-- `projects`: cadastro e organização de estudos eletricos
+- `projects`: cadastro e organização de projetos eletricos
 - `standards`: catalogo de normas, fontes e critérios tecnicos
 - `calculations`: dimensionamento e regras tecnicas
 - `conformidade`: validacao normativa, legal e tecnica do modelo eletrico

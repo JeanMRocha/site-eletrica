@@ -1,6 +1,23 @@
 import { useEffect, useState } from 'react';
-import { assessStudy, createStudy, getStudy, listStandards, listStudies } from './api';
-import type { AssessmentInput, AssessmentRecord, Standard, Study, StudyDetail } from './types';
+import type { FormEvent } from 'react';
+import { assessProject, createProject, getProject, listHierarchy, listProjects, listStandards } from './api';
+import type { AssessmentInput, AssessmentRecord, HierarchyLevel, Project, ProjectDetail, Standard } from './types';
+import { defaultProjectForm, defaultSession, defaultWorkspace, type ProjectForm, type Session, type Workspace } from './domain/workspace';
+import { sortStandards } from './lib/presentation';
+import { AppLayout } from './layout/AppLayout';
+import { tabs, type TabKey } from './navigation';
+import { AuthScreen } from './features/auth/AuthScreen';
+import { CalculationTab } from './features/calculation/CalculationFeature';
+import { ConformityTab } from './features/conformity/ConformityFeature';
+import { HomeDashboard } from './features/home/HomeFeature';
+import { ModelingTab } from './features/modeling/ModelingFeature';
+import { ProjectTab } from './features/project/ProjectFeature';
+import { ReportsTab } from './features/reports/ReportsFeature';
+import { StandardsTab } from './features/standards/StandardsFeature';
+import './features/home/home.css';
+
+const sessionKey = 'eletrica.session';
+const workspaceKey = 'eletrica.workspace';
 
 const defaultAssessment: AssessmentInput = {
   circuit_id: 'C1',
@@ -14,105 +31,76 @@ const defaultAssessment: AssessmentInput = {
   standard_version: 'catalog-2026.04',
 };
 
-const defaultStudy = {
-  name: 'Residência piloto',
-  client_name: 'Cliente teste',
-  location: 'Campinas/SP',
-  project_type: 'residencial',
-  voltage: '127/220 V',
-};
-
-function statusLabel(status: string) {
-  switch (status) {
-    case 'conforme':
-      return 'Conforme';
-    case 'nao_conforme':
-      return 'Não conforme';
-    case 'incompleto':
-      return 'Incompleto';
-    case 'revisao_humana':
-      return 'Revisão humana';
-    default:
-      return 'Pendente';
+function safeParse<T>(value: string | null, fallback: T): T {
+  if (!value) return fallback;
+  try {
+    return JSON.parse(value) as T;
+  } catch {
+    return fallback;
   }
 }
 
-function statusClass(status: string) {
-  switch (status) {
-    case 'conforme':
-      return 'ok';
-    case 'nao_conforme':
-      return 'bad';
-    case 'incompleto':
-      return 'warn';
-    case 'revisao_humana':
-      return 'neutral';
-    default:
-      return 'neutral';
-  }
+function loadSession() {
+  return safeParse<Session | null>(window.localStorage.getItem(sessionKey), null);
 }
 
-function formatDate(value: string) {
-  return new Intl.DateTimeFormat('pt-BR', {
-    dateStyle: 'short',
-    timeStyle: 'short',
-  }).format(new Date(value));
+function loadWorkspace() {
+  return safeParse<Workspace>(window.localStorage.getItem(workspaceKey), defaultWorkspace);
 }
 
-function readStudyId() {
-  const value = new URLSearchParams(window.location.search).get('studyId');
-  return value ?? '';
-}
-
-function setStudyId(id: string) {
-  const url = new URL(window.location.href);
-  if (id) {
-    url.searchParams.set('studyId', id);
-  } else {
-    url.searchParams.delete('studyId');
-  }
-  window.history.replaceState({}, '', url);
+function saveJson(key: string, value: unknown) {
+  window.localStorage.setItem(key, JSON.stringify(value));
 }
 
 export function App() {
-  const [studies, setStudies] = useState<Study[]>([]);
+  const [session, setSession] = useState<Session | null>(() => loadSession());
+  const [sessionDraft, setSessionDraft] = useState<Session>(() => session ?? defaultSession);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<TabKey>('home');
+  const [workspace, setWorkspace] = useState<Workspace>(() => loadWorkspace());
+  const [projects, setProjects] = useState<Project[]>([]);
   const [standards, setStandards] = useState<Standard[]>([]);
-  const [selectedStudyId, setSelectedStudyId] = useState(readStudyId());
-  const [detail, setDetail] = useState<StudyDetail | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [hierarchy, setHierarchy] = useState<HierarchyLevel[]>([]);
+  const [selectedProjectId, setSelectedProjectId] = useState('');
+  const [detail, setDetail] = useState<ProjectDetail | null>(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [createForm, setCreateForm] = useState(defaultStudy);
-  const [assessmentForm, setAssessmentForm] = useState(defaultAssessment);
-  const [savingStudy, setSavingStudy] = useState(false);
+  const [projectForm, setProjectForm] = useState<ProjectForm>(defaultProjectForm);
+  const [assessmentForm, setAssessmentForm] = useState<AssessmentInput>(defaultAssessment);
+  const [savingProject, setSavingProject] = useState(false);
   const [savingAssessment, setSavingAssessment] = useState(false);
 
-  useEffect(() => {
-    const onPopState = () => {
-      setSelectedStudyId(readStudyId());
-    };
-    window.addEventListener('popstate', onPopState);
-    return () => window.removeEventListener('popstate', onPopState);
-  }, []);
+  useEffect(() => saveJson(sessionKey, session), [session]);
+  useEffect(() => saveJson(workspaceKey, workspace), [workspace]);
 
   useEffect(() => {
+    if (!session) {
+      setProjects([]);
+      setStandards([]);
+      setHierarchy([]);
+      setDetail(null);
+      setSelectedProjectId('');
+      return;
+    }
+
     async function load() {
       try {
         setLoading(true);
-        const [studyList, standardList] = await Promise.all([listStudies(), listStandards()]);
-        setStudies(studyList);
+        const [projectList, standardList, hierarchyList] = await Promise.all([
+          listProjects(),
+          listStandards(),
+          listHierarchy(),
+        ]);
+        setProjects(projectList);
         setStandards(standardList);
+        setHierarchy(hierarchyList);
 
-        if (selectedStudyId) {
-          const nextDetail = await getStudy(selectedStudyId);
-          setDetail(nextDetail);
+        const nextSelected = selectedProjectId || projectList[0]?.id || '';
+        if (nextSelected) {
+          setSelectedProjectId(nextSelected);
+          setDetail(await getProject(nextSelected));
         } else {
           setDetail(null);
-        }
-
-        if (!selectedStudyId && studyList[0]) {
-          setSelectedStudyId(studyList[0].id);
-          setStudyId(studyList[0].id);
-          setDetail(await getStudy(studyList[0].id));
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Falha ao carregar dados');
@@ -122,426 +110,254 @@ export function App() {
     }
 
     void load();
-  }, [selectedStudyId]);
+  }, [session, selectedProjectId]);
 
   useEffect(() => {
-    const firstStandard = standards[0];
-    if (firstStandard && !assessmentForm.standard_code) {
+    const firstStandard = sortStandards(standards)[0];
+    if (firstStandard) {
       setAssessmentForm((current) => ({
         ...current,
-        standard_code: firstStandard.code,
-        standard_version: firstStandard.version,
+        standard_code: current.standard_code || firstStandard.code,
+        standard_version: current.standard_version || firstStandard.version,
       }));
     }
-  }, [assessmentForm.standard_code, standards]);
+  }, [standards]);
 
-  async function refreshDetail(id: string) {
-    const nextDetail = await getStudy(id);
-    setDetail(nextDetail);
-    setStudies(await listStudies());
+  function saveSession(nextSession: Session) {
+    setSession(nextSession);
+    setSessionDraft(nextSession);
+    setProfileOpen(false);
+    setError('');
   }
 
-  async function onCreateStudy(event: React.FormEvent<HTMLFormElement>) {
+  function logout() {
+    setSession(null);
+    setSessionDraft(defaultSession);
+    setProfileOpen(false);
+    setProjects([]);
+    setHierarchy([]);
+    setStandards([]);
+    setDetail(null);
+    setSelectedProjectId('');
+  }
+
+  function activateProject(id: string) {
+    setSelectedProjectId(id);
+    void getProject(id)
+      .then(setDetail)
+      .catch((err) => setError(err instanceof Error ? err.message : 'Falha ao abrir projeto'));
+  }
+
+  async function onCreateProject(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setSavingStudy(true);
+    setSavingProject(true);
     setError('');
     try {
-      const study = await createStudy(createForm);
-      setStudies(await listStudies());
-      setSelectedStudyId(study.id);
-      setStudyId(study.id);
-      setDetail(await getStudy(study.id));
+      const project = await createProject(projectForm);
+      setProjects(await listProjects());
+      activateProject(project.id);
+      setActiveTab('project');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Falha ao criar estudo');
+      setError(err instanceof Error ? err.message : 'Falha ao criar projeto');
     } finally {
-      setSavingStudy(false);
+      setSavingProject(false);
     }
   }
 
-  async function onAssessStudy(event: React.FormEvent<HTMLFormElement>) {
+  async function onAssessProject(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!selectedStudyId) {
-      return;
-    }
-
+    if (!selectedProjectId) return;
     setSavingAssessment(true);
     setError('');
     try {
-      await assessStudy(selectedStudyId, {
-        ...assessmentForm,
-        study_id: selectedStudyId,
-      });
-      await refreshDetail(selectedStudyId);
+      await assessProject(selectedProjectId, { ...assessmentForm, study_id: selectedProjectId });
+      const nextDetail = await getProject(selectedProjectId);
+      setDetail(nextDetail);
+      setProjects(await listProjects());
+      setActiveTab('conformity');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Falha ao avaliar estudo');
+      setError(err instanceof Error ? err.message : 'Falha ao executar cálculo');
     } finally {
       setSavingAssessment(false);
     }
   }
 
-  const assessments: AssessmentRecord[] = detail?.assessments ?? [];
+  function addEnvironment(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const name = String(data.get('env_name') ?? '').trim();
+    if (!name) return;
+
+    setWorkspace((current) => ({
+      ...current,
+      environments: [
+        {
+          id: `env_${Math.random().toString(36).slice(2, 10)}`,
+          name,
+          area: String(data.get('env_area') ?? '').trim(),
+          usage: String(data.get('env_usage') ?? '').trim(),
+          distance: String(data.get('env_distance') ?? '').trim(),
+        },
+        ...current.environments,
+      ],
+    }));
+    event.currentTarget.reset();
+  }
+
+  function addLoad(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const name = String(data.get('load_name') ?? '').trim();
+    if (!name) return;
+
+    setWorkspace((current) => ({
+      ...current,
+      loads: [
+        {
+          id: `load_${Math.random().toString(36).slice(2, 10)}`,
+          name,
+          category: String(data.get('load_category') ?? '').trim(),
+          power: String(data.get('load_power') ?? '').trim(),
+          quantity: String(data.get('load_quantity') ?? '').trim(),
+        },
+        ...current.loads,
+      ],
+    }));
+    event.currentTarget.reset();
+  }
+
+  function addCircuit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const name = String(data.get('circuit_name') ?? '').trim();
+    if (!name) return;
+
+    setWorkspace((current) => ({
+      ...current,
+      circuits: [
+        {
+          id: `ckt_${Math.random().toString(36).slice(2, 10)}`,
+          name,
+          environment: String(data.get('circuit_environment') ?? '').trim(),
+          breaker: String(data.get('circuit_breaker') ?? '').trim(),
+          conductor: String(data.get('circuit_conductor') ?? '').trim(),
+        },
+        ...current.circuits,
+      ],
+    }));
+    event.currentTarget.reset();
+  }
+
+  if (!session) {
+    return <AuthScreen draft={sessionDraft} onChange={setSessionDraft} onSubmit={() => saveSession({ name: sessionDraft.name.trim() || 'Engenheiro', image: sessionDraft.image.trim() })} />;
+  }
+
+  const latestAssessment: AssessmentRecord | null = detail?.assessments?.[0] ?? null;
 
   return (
-    <>
-      <header className="topbar">
-        <div className="brand">
-          <strong>Site Elétrica</strong>
-          <span>Stack visual do MVP com persistência local</span>
-        </div>
-        <div className="toolbar">
-          <a className="ghost" href="/v1/standards/catalog" target="_blank" rel="noreferrer">
-            Catálogo
-          </a>
-          <a className="button" href="#new-study">
-            Novo estudo
-          </a>
-        </div>
-      </header>
-
-      <main className="shell">
-        <section className="hero">
-          <div className="hero-card">
-            <p className="eyebrow">MVP local-first</p>
-            <h1>Dimensionamento elétrico com interface visual, normas versionadas e veredito rastreável.</h1>
-            <p>
-              O sistema começa com estudos, catálogo normativo, conformidade e persistência local.
-              A interface visual segue a stack do produto e conversa com a API do Go.
-            </p>
-            <div className="toolbar">
-              <button className="button" onClick={() => document.getElementById('new-study')?.scrollIntoView({ behavior: 'smooth' })}>
-                Criar estudo
-              </button>
-              <a className="ghost" href="/v1/conformidade/assess" target="_blank" rel="noreferrer">
-                API de conformidade
-              </a>
-            </div>
+      <AppLayout
+        session={session}
+        activeTab={activeTab}
+        tabs={tabs}
+        profileOpen={profileOpen}
+        activeProjectName={detail?.study.name ?? 'nenhum projeto ativo'}
+        onToggleProfile={() => setProfileOpen((current) => !current)}
+        onOpenTab={setActiveTab}
+        draft={sessionDraft}
+        onDraftChange={setSessionDraft}
+        onSaveProfile={() =>
+          saveSession({
+            name: sessionDraft.name.trim() || 'Engenheiro',
+            image: sessionDraft.image.trim(),
+          })
+        }
+        onLogout={logout}
+      >
+        <section className="hero-strip home-feature">
+          <div>
+            <p className="eyebrow">Home</p>
+            <h1>Consolidação geral do projeto</h1>
+            <p>As abas abaixo mostram síntese, hierarquia normativa, modelagem e veredito, sem menus de cadastro como tela principal.</p>
           </div>
-
-          <div className="stats">
-            <div className="stat">
-              <strong>{studies.length}</strong>
-              <span>estudos salvos</span>
+          <div className="hero-metrics">
+            <div className="metric">
+              <strong>{projects.length}</strong>
+              <span>projetos</span>
             </div>
-            <div className="stat">
+            <div className="metric">
               <strong>{standards.length}</strong>
-              <span>normas no catálogo</span>
+              <span>normas</span>
             </div>
-            <div className="stat">
-              <strong>{assessments.length}</strong>
-              <span>veredictos do estudo</span>
+            <div className="metric">
+              <strong>{latestAssessment ? 1 : 0}</strong>
+              <span>último veredito</span>
             </div>
           </div>
         </section>
 
         {error ? <div className="error">{error}</div> : null}
-        {loading ? <div className="loading">Carregando base inicial...</div> : null}
+        {loading ? <div className="loading">Carregando dados iniciais...</div> : null}
 
-        <section className="grid cols-2">
-          <article className="panel" id="new-study">
-            <div className="panel-head">
-              <div>
-                <h2>Novo estudo</h2>
-                <p className="muted">Primeiro ponto de entrada do MVP.</p>
-              </div>
-            </div>
-            <form onSubmit={onCreateStudy}>
-              <div className="form-grid">
-                <label>
-                  Nome do estudo
-                  <input
-                    value={createForm.name}
-                    onChange={(event) => setCreateForm((current) => ({ ...current, name: event.target.value }))}
-                  />
-                </label>
-                <label>
-                  Cliente
-                  <input
-                    value={createForm.client_name}
-                    onChange={(event) => setCreateForm((current) => ({ ...current, client_name: event.target.value }))}
-                  />
-                </label>
-              </div>
-              <div className="form-grid">
-                <label>
-                  Local
-                  <input
-                    value={createForm.location}
-                    onChange={(event) => setCreateForm((current) => ({ ...current, location: event.target.value }))}
-                  />
-                </label>
-                <label>
-                  Tipo
-                  <input
-                    value={createForm.project_type}
-                    onChange={(event) => setCreateForm((current) => ({ ...current, project_type: event.target.value }))}
-                  />
-                </label>
-              </div>
-              <label>
-                Tensão
-                <input
-                  value={createForm.voltage}
-                  onChange={(event) => setCreateForm((current) => ({ ...current, voltage: event.target.value }))}
-                />
-              </label>
-              <button className="button" disabled={savingStudy} type="submit">
-                {savingStudy ? 'Salvando...' : 'Salvar estudo'}
-              </button>
-            </form>
-          </article>
-
-          <article className="panel">
-            <div className="panel-head">
-              <div>
-                <h2>Estudos</h2>
-                <p className="muted">Selecione um estudo para ver o histórico.</p>
-              </div>
-            </div>
-            <div className="list">
-              {studies.length === 0 ? (
-                <div className="item">
-                  <strong>Nenhum estudo salvo ainda.</strong>
-                  <p className="muted">Crie o primeiro estudo para começar o MVP.</p>
-                </div>
-              ) : null}
-              {studies.map((study) => (
-                <button
-                  key={study.id}
-                  className={`item selectable ${study.id === selectedStudyId ? 'selected' : ''}`}
-                  onClick={() => {
-                    setSelectedStudyId(study.id);
-                    setStudyId(study.id);
-                    void refreshDetail(study.id);
-                  }}
-                  type="button"
-                >
-                  <div className="row">
-                    <div>
-                      <strong>{study.name}</strong>
-                      <p className="muted">{study.client_name} · {study.location}</p>
-                    </div>
-                    <span className="badge neutral">{study.project_type}</span>
-                  </div>
-                  <div className="meta">
-                    <span>{study.voltage}</span>
-                    <span>{formatDate(study.created_at)}</span>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </article>
-        </section>
-
-        {detail ? (
-          <section className="grid cols-2 detail-grid">
-            <article className="panel">
-              <div className="panel-head">
-                <div>
-                  <h2>{detail.study.name}</h2>
-                  <p className="muted">{detail.study.client_name} · {detail.study.location}</p>
-                </div>
-                <span className="badge neutral">{detail.study.voltage}</span>
-              </div>
-
-              <div className="meta">
-                <span>Criado em {formatDate(detail.study.created_at)}</span>
-                <span>Atualizado em {formatDate(detail.study.updated_at)}</span>
-              </div>
-
-              <div className="subpanel">
-                <h3>Catálogo ativo</h3>
-                <div className="catalog-list">
-                  {standards.map((standard) => (
-                    <div key={standard.code} className="catalog-item">
-                      <strong>{standard.code}</strong>
-                      <span>{standard.title}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </article>
-
-            <article className="panel">
-              <div className="panel-head">
-                <div>
-                  <h2>Nova avaliação</h2>
-                  <p className="muted">Liga a conformidade ao catálogo de normas.</p>
-                </div>
-              </div>
-
-              <form onSubmit={onAssessStudy}>
-                <div className="form-grid three">
-                  <label>
-                    Circuito
-                    <input
-                      value={assessmentForm.circuit_id}
-                      onChange={(event) => setAssessmentForm((current) => ({ ...current, circuit_id: event.target.value }))}
-                    />
-                  </label>
-                  <label>
-                    Norma
-                    <select
-                      value={assessmentForm.standard_code}
-                      onChange={(event) =>
-                        setAssessmentForm((current) => ({
-                          ...current,
-                          standard_code: event.target.value,
-                        }))
-                      }
-                    >
-                      {standards.map((standard) => (
-                        <option key={standard.code} value={standard.code}>
-                          {standard.code}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label>
-                    Versão
-                    <input
-                      value={assessmentForm.standard_version}
-                      onChange={(event) =>
-                        setAssessmentForm((current) => ({ ...current, standard_version: event.target.value }))
-                      }
-                    />
-                  </label>
-                </div>
-
-                <div className="form-grid three">
-                  <label>
-                    Corrente de projeto (A)
-                    <input
-                      type="number"
-                      step="0.1"
-                      value={assessmentForm.current_project_a}
-                      onChange={(event) =>
-                        setAssessmentForm((current) => ({
-                          ...current,
-                          current_project_a: Number(event.target.value),
-                        }))
-                      }
-                    />
-                  </label>
-                  <label>
-                    Condutor (mm²)
-                    <input
-                      type="number"
-                      step="0.1"
-                      value={assessmentForm.conductor_mm2}
-                      onChange={(event) =>
-                        setAssessmentForm((current) => ({
-                          ...current,
-                          conductor_mm2: Number(event.target.value),
-                        }))
-                      }
-                    />
-                  </label>
-                  <label>
-                    Disjuntor (A)
-                    <input
-                      type="number"
-                      step="0.1"
-                      value={assessmentForm.breaker_a}
-                      onChange={(event) =>
-                        setAssessmentForm((current) => ({
-                          ...current,
-                          breaker_a: Number(event.target.value),
-                        }))
-                      }
-                    />
-                  </label>
-                </div>
-
-                <div className="form-grid three">
-                  <label>
-                    Queda de tensão (%)
-                    <input
-                      type="number"
-                      step="0.1"
-                      value={assessmentForm.voltage_drop_percent}
-                      onChange={(event) =>
-                        setAssessmentForm((current) => ({
-                          ...current,
-                          voltage_drop_percent: Number(event.target.value),
-                        }))
-                      }
-                    />
-                  </label>
-                  <label>
-                    Método de instalação
-                    <input
-                      value={assessmentForm.installation_method}
-                      onChange={(event) =>
-                        setAssessmentForm((current) => ({ ...current, installation_method: event.target.value }))
-                      }
-                    />
-                  </label>
-                  <label>
-                    Ambiente
-                    <input
-                      value={assessmentForm.environment_type}
-                      onChange={(event) =>
-                        setAssessmentForm((current) => ({ ...current, environment_type: event.target.value }))
-                      }
-                    />
-                  </label>
-                </div>
-
-                <button className="button" disabled={savingAssessment} type="submit">
-                  {savingAssessment ? 'Avaliando...' : 'Avaliar conformidade'}
-                </button>
-              </form>
-            </article>
-          </section>
+        {activeTab === 'home' ? (
+          <HomeDashboard
+            projects={projects}
+            standards={standards}
+            hierarchy={hierarchy}
+            latestAssessment={latestAssessment}
+            selectedProjectId={selectedProjectId}
+            onSelectProject={activateProject}
+            onOpenTab={setActiveTab}
+          />
         ) : null}
 
-        {detail ? (
-          <section className="panel">
-            <div className="panel-head">
-              <div>
-                <h2>Histórico do estudo</h2>
-                <p className="muted">Resultados persistidos localmente.</p>
-              </div>
-            </div>
-            <div className="list">
-              {assessments.length === 0 ? (
-                <div className="item">
-                  <strong>Nenhuma avaliação ainda.</strong>
-                  <p className="muted">Execute a primeira conformidade para salvar o histórico.</p>
-                </div>
-              ) : null}
-              {assessments.map((assessment) => (
-                <div key={assessment.id} className="item">
-                  <div className="row">
-                    <div>
-                      <strong>{assessment.input.circuit_id}</strong>
-                      <p className="muted">
-                        {assessment.verdict.standard_code} · {formatDate(assessment.created_at)}
-                      </p>
-                    </div>
-                    <span className={`badge ${statusClass(assessment.verdict.status)}`}>
-                      {statusLabel(assessment.verdict.status)}
-                    </span>
-                  </div>
-                  <div className="meta">
-                    <span>Severidade: {assessment.verdict.severity}</span>
-                    <span>Revisão humana: {assessment.verdict.requires_human_review ? 'sim' : 'não'}</span>
-                    <span>Regras: {assessment.verdict.rules_applied.length}</span>
-                  </div>
-                  <details>
-                    <summary>Mensagens</summary>
-                    <div className="message-list">
-                      {assessment.verdict.messages.map((message) => (
-                        <span key={message}>• {message}</span>
-                      ))}
-                    </div>
-                  </details>
-                </div>
-              ))}
-            </div>
-          </section>
+        {activeTab === 'project' ? (
+          <ProjectTab
+            projects={projects}
+            selectedProjectId={selectedProjectId}
+            detail={detail}
+            form={projectForm}
+            saving={savingProject}
+            onSelectProject={activateProject}
+            onChangeForm={setProjectForm}
+            onSubmit={onCreateProject}
+          />
         ) : null}
-      </main>
-    </>
+
+        {activeTab === 'standards' ? (
+          <StandardsTab
+            standards={standards}
+            hierarchy={hierarchy}
+            assessmentForm={assessmentForm}
+            onSelectStandard={(standard: Standard) => {
+              setAssessmentForm((current) => ({
+                ...current,
+                standard_code: standard.code,
+                standard_version: standard.version,
+              }));
+              setActiveTab('calculation');
+            }}
+          />
+        ) : null}
+
+        {activeTab === 'modeling' ? (
+          <ModelingTab workspace={workspace} onAddEnvironment={addEnvironment} onAddLoad={addLoad} onAddCircuit={addCircuit} />
+        ) : null}
+
+        {activeTab === 'calculation' ? (
+          <CalculationTab
+            assessmentForm={assessmentForm}
+            standards={sortStandards(standards)}
+            detail={detail}
+            latestAssessment={latestAssessment}
+            saving={savingAssessment}
+            onChangeAssessment={setAssessmentForm}
+            onSubmit={onAssessProject}
+          />
+        ) : null}
+
+        {activeTab === 'conformity' ? <ConformityTab latestAssessment={latestAssessment} /> : null}
+
+        {activeTab === 'reports' ? <ReportsTab projects={projects} standards={standards} latestAssessment={latestAssessment} /> : null}
+    </AppLayout>
   );
 }

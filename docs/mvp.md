@@ -10,7 +10,7 @@ Escopo mínimo para transformar o problema do produto em um sistema útil, sem e
 ## Objetivo
 
 - Entregar uma base web funcional para engenharia elétrica.
-- Permitir autenticação, criação de estudos e execução do primeiro fluxo técnico útil.
+- Permitir autenticação, criação de projetos elétricos e execução do primeiro fluxo técnico útil.
 - Persistir entradas, resultados e histórico para revisão posterior.
 - Deixar a base pronta para o modelo eletrico, normas, conformidade, rotas, estimativas e relatórios sem travar o fluxo.
 
@@ -22,22 +22,22 @@ Escopo mínimo para transformar o problema do produto em um sistema útil, sem e
 - Sessão e autorização.
 - Registro de eventos de acesso.
 
-### 2. Estudos elétricos
+### 2. Projetos elétricos
 
-- Criar e listar estudos.
+- Criar e listar projetos.
 - Registrar áreas, ambientes, distâncias, cargas e contexto técnico.
-- Vincular cada cálculo a um estudo.
-- Estruturar o estudo como modelo eletrico da instalacao.
+- Vincular cada cálculo a um projeto.
+- Estruturar o projeto como modelo eletrico da instalacao.
 
 ### 3. Modelo eletrico inicial
 
 - Registrar ambientes, cargas, circuitos, condutores, proteção e quadros.
 - Manter referencias que permitam recalcular e validar o modelo.
-- Preparar o estudo para a camada de conformidade.
+- Preparar o projeto para a camada de conformidade.
 
 ### 4. Normas e critérios
 
-- Registrar qual norma ou critério técnico foi usado no estudo.
+- Registrar qual norma ou critério técnico foi usado no cálculo.
 - Versionar a regra aplicada para permitir rastreabilidade.
 - Manter referência explícita da base normativa do cálculo.
 
@@ -57,11 +57,11 @@ Escopo mínimo para transformar o problema do produto em um sistema útil, sem e
 
 - Exibir formulário de entrada.
 - Exibir resultados de cálculo de forma clara.
-- Permitir navegação simples entre estudos e resultados.
+- Permitir navegação simples entre projetos e resultados.
 
 ### 8. Persistência
 
-- Salvar usuários, estudos e cálculos.
+- Salvar usuários, projetos e cálculos.
 - Recuperar o estado salvo para edição ou consulta.
 
 ## Opcional no começo
@@ -100,7 +100,7 @@ Escopo mínimo para transformar o problema do produto em um sistema útil, sem e
 ## Critério de sucesso
 
 - Eu consigo entrar na aplicação com autenticação.
-- Eu consigo criar um estudo elétrico.
+- Eu consigo criar um projeto elétrico.
 - Eu consigo modelar a instalação com os dados principais.
 - Eu consigo executar e salvar pelo menos um cálculo.
 - Eu consigo validar o resultado contra regras versionadas.

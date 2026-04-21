@@ -35,7 +35,7 @@ Guia prático derivado de `docs/governance.md` para decidir quais documentos ler
 
 - Se o trabalho for novo para o colaborador, use o caminho de `Novo contribuidor`.
 - Se o trabalho tocar `auth`, use o caminho de `Dev de auth`.
-- Se o trabalho tocar fluxo de estudo, use o caminho de `Dev de projetos`.
+- Se o trabalho tocar fluxo de projeto/dimensionamento, use o caminho de `Dev de projetos`.
 - Se o trabalho tocar norma técnica, use o caminho de `Dev de normas`.
 - Se o trabalho tocar cálculo, use o caminho de `Dev de cálculos`.
 - Se o trabalho tocar conformidade, use o caminho de `Dev de conformidade`.
@@ -50,7 +50,7 @@ Guia prático derivado de `docs/governance.md` para decidir quais documentos ler
 
 - Novo contribuidor: visão geral primeiro.
 - Auth: docs locais do módulo + segurança + testes.
-- Projetos: dados do estudo + persistência + contrato.
+- Projetos: dados do projeto + persistência + contrato.
 - Normas: versão e aplicabilidade da regra.
 - Cálculos: regras + contrato + testes.
 - Conformidade: veredito, severidade e justificativa.
