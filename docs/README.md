@@ -19,6 +19,7 @@
 - [`header-template.md`](header-template.md): padrão de cabeçalho reutilizável para documentos de `docs/`.
 - [`modules/README.md`](modules/README.md): convenção para documentação por módulo.
 - [`adr/README.md`](adr/README.md): convenção para ADRs globais.
+- [`adr/template.md`](adr/template.md): modelo oficial de ADR global.
 - [`adr/current-state.md`](adr/current-state.md): resumo do estado vigente das decisões globais.
 - [`adr/archive/README.md`](adr/archive/README.md): regras de arquivamento de ADRs globais.
 

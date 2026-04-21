@@ -11,6 +11,13 @@ Registro de mudanças do módulo de autenticação.
 
 ### 2026-04-20
 
+- Mudança: criado o template oficial de ADR do módulo `auth` e aplicado aos ADRs existentes.
+- Motivo: manter as decisões do módulo curtas, revisáveis e padronizadas.
+- Impacto: o módulo ganhou um formato único para decisões de arquitetura, com contexto, decisão, alternativas, consequências e critérios de revisão.
+- Arquivos: `docs/modules/auth/adr/template.md`, `docs/modules/auth/adr/0001-auth-governance.md`, `docs/modules/auth/adr/0002-session-model.md`, `docs/modules/auth/adr/README.md`, `docs/modules/auth/adr/current-state.md`, `docs/modules/auth/adr/archive/README.md`
+
+### 2026-04-20
+
 - Mudança: formalizada a política local de ciclo de vida de ADR para o módulo `auth`.
 - Motivo: evitar duplicação de decisões e manter apenas o estado vigente e o histórico útil.
 - Impacto: o módulo ganhou `current-state` e `archive` para separar decisão ativa de histórico.

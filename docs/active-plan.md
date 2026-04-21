@@ -9,7 +9,7 @@ Documento para registrar o que está sendo feito agora.
 
 ## Objetivo atual
 
-- Implantar a política oficial de ADR com ciclo de vida, archive e current-state.
+- Implantar a política oficial de ADR com ciclo de vida, archive, current-state e template fixo.
 
 ## Estrutura sugerida
 
@@ -68,7 +68,7 @@ Documento para registrar o que está sendo feito agora.
 
 ## Status
 
-- Implantação da política de ADR em andamento.
+- Implantação da política de ADR e template em andamento.
 
 ## Última atualização
 

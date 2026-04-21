@@ -24,6 +24,11 @@ Use scope-based testing:
 - Critical modules keep stronger validation.
 - Integration points remain protected by full-suite validation before publishing changes.
 
+## Review criteria
+
+- Rever se a política ainda protege o fluxo de integração sem impor custo excessivo.
+- Criar novo ADR se o modelo de testes por escopo deixar de atender um módulo crítico.
+
 ## Alternatives considered
 
 - Run the full suite for every change.
@@ -32,4 +37,4 @@ Use scope-based testing:
 
 ## Status
 
-- Decision accepted
+- accepted

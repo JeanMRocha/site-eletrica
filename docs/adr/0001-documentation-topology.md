@@ -24,6 +24,11 @@ Adotar uma topologia em camadas:
 - Decisões relevantes ficam registradas com justificativa e trade-offs.
 - Módulos críticos, como auth, podem aplicar gates mais rígidos sem penalizar o restante do sistema.
 
+## Review criteria
+
+- Rever se a separação entre documentação global, por módulo e ADR continua reduzindo leitura desnecessária.
+- Criar novo ADR se surgir uma exceção estrutural que invalide essa topologia.
+
 ## Alternatives considered
 
 - Manter toda a documentação em uma árvore única.
@@ -32,4 +37,4 @@ Adotar uma topologia em camadas:
 
 ## Status
 
-- Decision accepted
+- accepted

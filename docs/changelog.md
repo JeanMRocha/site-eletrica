@@ -30,6 +30,13 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-20
 
+- Mudança: criado e aplicado o template oficial de ADR com `review criteria` e ciclo de vida padronizado.
+- Motivo: evitar ADRs prolixos e manter decisões úteis, rastreáveis e fáceis de revisar.
+- Impacto: os ADRs globais e do módulo `auth` passaram a seguir o mesmo formato, com estado, revisão e consequência explícitos.
+- Arquivos: `docs/adr/template.md`, `docs/modules/auth/adr/template.md`, `docs/adr/0001-documentation-topology.md`, `docs/adr/0002-scope-based-testing.md`, `docs/modules/auth/adr/0001-auth-governance.md`, `docs/modules/auth/adr/0002-session-model.md`, `docs/adr/README.md`, `docs/modules/auth/adr/README.md`, `docs/README.md`, `docs/modules/README.md`, `docs/active-plan.md`
+
+### 2026-04-20
+
 - Mudança: formalizada a política de ciclo de vida de ADR com `current-state`, `archive` e critérios objetivos de criação.
 - Motivo: evitar crescimento desnecessário de ADRs e manter decisões realmente úteis e rastreáveis.
 - Impacto: decisões antigas passam a ter caminho de arquivamento e o estado vigente ganha resumo próprio.

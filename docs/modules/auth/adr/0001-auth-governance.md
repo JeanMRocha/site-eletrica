@@ -25,6 +25,11 @@ Tratar auth como um módulo isolado com:
 - Mudanças em auth exigem validação mais completa antes de commit.
 - O restante do sistema não herda complexidade de auth sem necessidade.
 
+## Review criteria
+
+- Rever se auth continua sendo um módulo crítico com gates reforçados.
+- Criar novo ADR se a estratégia de isolamento de auth mudar.
+
 ## Alternatives considered
 
 - Misturar auth com regras globais apenas.
@@ -32,4 +37,4 @@ Tratar auth como um módulo isolado com:
 
 ## Status
 
-- Decision accepted
+- accepted

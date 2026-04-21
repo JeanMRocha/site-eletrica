@@ -24,6 +24,11 @@ Documentar a sessão como um contrato explícito do módulo, com:
 - O contrato não fica implícito na UI.
 - Alterações futuras terão trilha de decisão.
 
+## Review criteria
+
+- Rever se o modelo de sessão continua compatível com segurança e revogação auditável.
+- Criar novo ADR se o mecanismo de sessão mudar de forma relevante.
+
 ## Alternatives considered
 
 - Sessão implícita sem documento.
@@ -31,4 +36,4 @@ Documentar a sessão como um contrato explícito do módulo, com:
 
 ## Status
 
-- Tentative until implementation
+- proposed

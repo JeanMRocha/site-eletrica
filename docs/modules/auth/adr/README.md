@@ -29,6 +29,7 @@ ADR do módulo `auth`.
 
 - `0001-title.md`: primeira decisão relevante do módulo
 - `0002-title.md`: próxima decisão relevante do módulo
+- `template.md`: modelo oficial de ADR do módulo
 - `current-state.md`: resumo do estado vigente do módulo
 - `archive/`: decisões antigas, superseded ou deprecated
 - `README.md`: regras gerais do ADR do módulo
