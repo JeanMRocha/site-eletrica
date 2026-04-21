@@ -1,4 +1,4 @@
-module github.com/JeanMRocha/vps-control
+module github.com/JeanMRocha/site-eletrica
 
 go 1.23.0
 

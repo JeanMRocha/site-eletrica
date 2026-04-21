@@ -1,21 +1,5 @@
-> Status: active
-> Type: rules
-> Last updated: 2026-04-20
-> Owner: repository
+Read `AGENTS.md` and `docs/governance.md` first.
 
-Start here:
+Use the reusable skills for documentation governance, ADR decisions, module bootstrap, and plan/current-state lifecycle.
 
-1. Read `AGENTS.md`.
-2. Read `docs/governance.md`.
-3. Follow the minimal reading path for the change.
-4. Create or update an explicit plan before editing files.
-
-Core rules:
-
-- Do not edit files while the scope is still being defined.
-- Keep changes small, traceable, and aligned to the approved plan.
-- Create or update tests before implementing new behavior.
-- Run module tests during development and the full suite before commit or PR.
-- Validate the result after changes.
-
-If this file conflicts with `docs/governance.md`, governance wins.
+Keep repository-specific truth in `docs/` and avoid repeating the rules here.

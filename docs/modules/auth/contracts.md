@@ -87,7 +87,7 @@ Response:
   "session": {
     "id": "sess_123",
     "expiresAt": "2026-04-20T18:30:00Z",
-    "permissions": ["nodes.read", "incidents.write"]
+    "permissions": ["projects.read", "calculations.write"]
   },
   "token": {
     "accessToken": "eyJhbGciOi...",
@@ -186,7 +186,7 @@ Response:
     "id": "sess_123",
     "status": "active",
     "expiresAt": "2026-04-20T18:30:00Z",
-    "permissions": ["nodes.read", "incidents.write"]
+    "permissions": ["projects.read", "calculations.write"]
   }
 }
 ```

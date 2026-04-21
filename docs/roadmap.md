@@ -1,11 +1,11 @@
-# Planejamento Geral
+# Roadmap
 
 > Status: active
 > Type: roadmap
-> Last updated: 2026-04-20
+> Last updated: 2026-04-21
 > Owner: repository
 
-Mapa de longo prazo com o que ainda não foi feito e o que precisa de ampliação.
+Roadmap de alto nível para expandir o produto além do núcleo atual. O objetivo é registrar iniciativas amplas, não tarefas finas.
 
 ## Como usar
 
@@ -18,33 +18,33 @@ Mapa de longo prazo com o que ainda não foi feito e o que precisa de ampliaçã
 ### Base do produto
 
 - Identidade e autenticação
-- Inventário de nós e agentes
-- Telemetria e heartbeats
-- Incidentes e auditoria
+- Projetos elétricos
+- Cálculos e dimensionamento
+- Catálogos e tabelas de apoio
 - MVP técnico mínimo detalhado em `docs/mvp.md`
 - Fase 1 de implementação detalhada em `docs/phase-1-plan.md`
 
-### Operação
+### Domínio elétrico
 
-- Modelo de alertas
-- Fluxos de remediação segura
-- Logs e rastreabilidade
-- Health checks e verificação de integridade
-- Canal SSH padrão para manutenção e troubleshooting
-- Adaptadores de controle alternativos quando o SSH não for suficiente
+- Regras de dimensionamento por tipo de circuito
+- Fórmulas e critérios técnicos versionados
+- Conferência e revisão dos resultados
+- Histórico de alterações em cálculos
+- Exportação de memorial ou relatório técnico
 
 ### Web e experiência
 
-- Telas principais do operador
+- Telas principais da aplicação
 - Componentes reutilizáveis da UI
 - Padronização visual e textual em `pt-BR`
+- Fluxo de entrada e revisão de dados
 
 ### Plataforma e entrega
 
 - Dockerfiles por serviço
 - Variáveis de ambiente e segredos
 - Configuração de dev, staging e produção
-- Observabilidade e backups
+- Banco de dados e migrações
 
 ## Modelo de item
 
@@ -61,14 +61,14 @@ Mapa de longo prazo com o que ainda não foi feito e o que precisa de ampliaçã
 
 ## Exemplo de item
 
-### Telemetria e heartbeats
+### Cálculo de corrente e condutores
 
-- Objetivo: receber sinais periódicos dos nós e consolidar o estado da infraestrutura.
-- Descrição: definir contrato de envio, persistência dos eventos e regras de avaliação de saúde.
+- Objetivo: executar o primeiro fluxo técnico do produto com dados persistidos.
+- Descrição: definir entradas, validações, fórmula aplicada e persistência do resultado.
 - Prioridade: alta
-- Dependências: autenticação do agente, modelagem de banco e endpoints da API.
-- Critério de conclusão: o sistema registra heartbeats, identifica ausência de sinal e expõe o estado para a UI.
-- Observações: a UI apenas consome o resultado; a regra de decisão fica na API.
+- Dependências: autenticação, modelagem de banco e endpoints da API.
+- Critério de conclusão: o sistema salva o estudo e exibe o resultado no navegador.
+- Observações: a UI apenas coleta e apresenta; a regra de cálculo fica no backend.
 
 ## Status
 

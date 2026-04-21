@@ -2,7 +2,7 @@
 
 > Status: stable
 > Type: guide
-> Last updated: 2026-04-20
+> Last updated: 2026-04-21
 > Owner: repository
 
 Processo oficial para criar e evoluir um novo módulo com base em escopo e stack.
@@ -37,64 +37,29 @@ Antes de criar um módulo novo, leia nesta ordem:
 - Valide se a solução respeita `Go` na API, `vinext` como camada de experiência e `PostgreSQL` como persistência.
 - Confirme se a solução mantém portabilidade e evita dependência de provedor.
 - Confirme se o módulo pode ser implementado com componentes pequenos, explícitos e testáveis.
-- Quando o módulo tocar operação remota, trate SSH como canal padrão de controle e mantenha provider APIs como adapters opcionais.
 
-### 3. Criar a documentação primeiro
+### 3. Estruturar a documentação
 
-Crie o conjunto mínimo de documentação antes da implementação:
+- Crie a pasta do módulo.
+- Copie `docs/modules/module-template.md`.
+- Preencha `README.md`, `reading-paths.md`, `rules.md`, `contracts.md`, `security.md`, `tests.md`, `current-state.md`, `active-plan.md`, `onboarding.md` e `changelog.md` quando aplicável.
+- Se houver decisão duradoura, crie ADR do módulo.
 
-- `module-template.md`
-- `README.md`
-- `reading-paths.md`
-- `rules.md`
-- `contracts.md`
-- `security.md`
-- `tests.md`
-- `current-state.md`
-- `active-plan.md`
-- `changelog.md`
-- `onboarding.md`
-- `adr/README.md`
-- `adr/current-state.md`
+### 4. Implementar por fatias
 
-Se o módulo precisar de controle remoto, inclua também a descrição do canal padrão e dos adapters alternativos esperados.
+- Comece pelo contrato.
+- Depois implemente a regra de domínio.
+- Em seguida ligue a persistência.
+- Por fim, conecte a UI ou a integração externa.
 
-### 4. Adicionar decisões apenas quando necessário
+## Critérios de saída do processo
 
-- Crie ADR apenas para decisões duradouras.
-- Use `current-state.md` para o que vale agora.
-- Use `changelog.md` para evolução incremental.
-- Use `active-plan.md` para execução em andamento.
-
-### 5. Implementar a partir dos docs
-
-- Escreva testes antes da implementação quando houver comportamento novo.
-- Implemente somente depois que os contratos, regras e segurança estiverem claros.
-- Atualize os docs quando a implementação revelar uma regra real que ainda não estava registrada.
-
-### 6. Fechar o incremento do módulo
-
-- Rode os testes do módulo.
-- Rode a suíte completa antes de commit ou PR.
-- Atualize `current-state.md`, `changelog.md` e `active-plan.md` quando necessário.
-- Atualize ou crie ADR apenas se uma decisão nova for realmente duradoura.
-
-## Formato mínimo do módulo
-
-Todo módulo novo deve, no mínimo, ter:
-
-- um README de entrada
-- leitura mínima por escopo
-- contratos explícitos
-- segurança documentada
-- estratégia de testes
-- estado vivo
-- histórico incremental
-- onboarding quando o módulo começar a crescer
-- ADR apenas quando houver decisão relevante
+- O módulo tem escopo claro.
+- O módulo tem leitura mínima definida.
+- O módulo tem contrato e testes previstos.
+- O módulo tem regra de decisão clara para mudanças duradouras.
 
 ## Regra prática
 
-- Se o módulo ainda não tem docs mínimos, ele ainda não está pronto para implementação ampla.
-- Se o escopo mudar, atualize primeiro a documentação, depois a implementação.
-- Use `docs/modules/module-template.md` como base inicial quando for criar a primeira versão do módulo.
+- Se a mudança ainda não puder ser lida como um módulo, ela não deve virar pasta própria.
+- Se o módulo começar a crescer em complexidade, atualize o onboarding e o reading path antes de ampliar o código.

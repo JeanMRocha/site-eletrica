@@ -2,7 +2,7 @@
 
 > Status: stable
 > Type: module
-> Last updated: 2026-04-20
+> Last updated: 2026-04-21
 > Owner: security
 
 Módulo responsável por autenticação, autorização e controle de sessão.
@@ -21,11 +21,9 @@ Módulo responsável por autenticação, autorização e controle de sessão.
 - [`contracts.md`](contracts.md): contratos e formatos esperados
 - [`security.md`](security.md): controles de segurança e riscos
 - [`tests.md`](tests.md): testes e gates do módulo
-- [`runbook.md`](runbook.md): procedimentos operacionais do módulo
-- [`reading-paths.md`](reading-paths.md): caminhos mínimos de leitura por tipo de trabalho em auth
 - [`onboarding.md`](onboarding.md): guia de entrada para quem está conhecendo o módulo
-- [`active-plan.md`](active-plan.md): execução atual do módulo
 - [`current-state.md`](current-state.md): estado vigente do módulo
+- [`active-plan.md`](active-plan.md): execução atual do módulo
 - [`changelog.md`](changelog.md): histórico de mudanças do módulo
 - [`plan-template.md`](plan-template.md): modelo oficial de plan do módulo
 - [`plan-lifecycle.md`](plan-lifecycle.md): política de ciclo de vida de plan do módulo
@@ -42,15 +40,13 @@ Módulo responsável por autenticação, autorização e controle de sessão.
 
 - Use `docs/governance.md` como autoridade principal.
 - Use `docs/modules/auth/onboarding.md` quando estiver entrando no módulo pela primeira vez.
-- Use `docs/modules/auth/reading-paths.md` como caminho mínimo padrão para qualquer alteração em auth.
 - Use `docs/modules/auth/current-state.md` quando precisar do estado vigente.
-- Use `docs/modules/auth/adr/current-state.md` apenas como snapshot histórico da camada de decisão.
 - Abra os demais documentos do módulo apenas quando o tipo de mudança exigir.
 
 ## Maturidade do módulo
 
 - A navegação, os contratos, os testes e os controles de segurança já têm estrutura estável.
-- Alguns documentos ainda são guias de preparação e devem ser refinados conforme a API e a operação crescerem.
+- Alguns documentos ainda são guias de preparação e devem ser refinados conforme a aplicação crescer.
 - `current-state.md` representa o estado vivo.
 - `adr/current-state.md` representa apenas o snapshot histórico da camada de decisão.
 

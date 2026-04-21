@@ -2,7 +2,7 @@
 
 > Status: stable
 > Type: principles
-> Last updated: 2026-04-20
+> Last updated: 2026-04-21
 > Owner: platform
 
 ## Working style
@@ -36,21 +36,21 @@
 - Handlers should be thin
 - Services should be deterministic when possible
 - Repositories should hide persistence details
-- External integrations should be wrapped behind adapters
+- Domain rules for calculations must stay out of the frontend
 
 ## Frontend principles
 
 - The UI must be a consumer of API contracts
 - Keep presentational components dumb when possible
 - Keep product-specific components in the repo
-- Avoid turning the frontend into the place where business rules live
+- Avoid turning the frontend into the place where engineering rules live
 
 ## Reliability principles
 
 - Idempotent operations are preferred
-- Remediation actions must be safe by default
-- Every automated action should be auditable
-- Health checks must fail closed when uncertain
+- Technical outputs must be traceable to inputs
+- Every saved calculation should be reproducible
+- Fail closed when data is incomplete or inconsistent
 
 ## Testing principles
 
@@ -66,8 +66,7 @@
 
 - Use least privilege
 - Protect secrets outside the repository
-- Sign or authenticate agent traffic
-- Assume every node can be compromised individually
+- Authenticate access to saved projects and calculations
 - Log security-relevant actions
 
 ## Documentation principles

@@ -7,83 +7,62 @@
 
 ## Goal
 
-Build a portable infrastructure control plane to monitor, alert, diagnose, and apply safe remediation actions across multiple machines.
+Build a web application that stores electrical projects, runs calculations and dimensioning rules, and presents the results through a browser-based interface.
 
 ## High-level design
 
 - Web layer: `vinext`
 - API layer: `Go`
 - Persistence: `PostgreSQL`
-- Execution model: Docker-based agents running on each node
-- Orchestration: Coolify where it fits operationally
-- External redundancy: Oracle Free Tier
-- Local lab and support: Proxmox
-- Primary operator control channel: SSH
+- Runtime: Docker
+- Authentication: dedicated `auth` module
+- Domain modules: `projects`, `calculations`, `catalogs`, and future engineering areas
 
 ## Responsibilities
 
 ### Web layer
 
-- Display health, incidents, nodes, actions, and trends
-- Provide operator workflows
-- Never act as the source of truth
-- Never hold business-critical rules that must survive frontend replacement
+- Present projects, inputs, results, and comparison views
+- Collect user input for calculations
+- Keep presentation logic separate from engineering rules
+- Never be the source of truth for calculations
 
 ### Go API
 
 - Own authentication and authorization decisions
-- Receive heartbeats and telemetry summaries
-- Evaluate health rules
-- Trigger remediation actions
-- Record audit events and incidents
+- Validate request payloads
+- Execute engineering and dimensioning rules through services
+- Persist projects, calculation runs, and derived outputs
 - Expose stable, versioned endpoints
 
-### Node agent
+### Domain services
 
-- Collect local metrics
-- Detect node-level conditions
-- Send heartbeats and snapshots to the API
-- Execute narrowly scoped actions approved by policy
-- Prefer safe, idempotent operations
-
-### Control channel
-
-- Use SSH as the default operator control path for bootstrap, troubleshooting, maintenance, and controlled remediation.
-- Prefer key-based authentication with a dedicated non-root operator account and restricted sudo.
-- Keep telemetry and control separate so operator actions do not depend on the same transport as health reporting.
-- Treat provider APIs, remote consoles, and future integrations as optional adapters instead of the primary contract.
-- If the current node still uses `root` for SSH, treat that as a transitional state and schedule a dedicated operator user as a security improvement.
+- Encapsulate electrical formulas and decision rules
+- Keep calculation inputs explicit and reproducible
+- Return traceable intermediate values when needed
+- Avoid hidden state inside the UI layer
 
 ### Persistence
 
-- Store system state, incident history, node inventory, action logs, and configuration
-- Keep audit trails immutable where possible
-
-## Node topology
-
-- Main VPS on the current hosting provider: primary workload and main agent
-- Oracle Free Tier: remote monitoring, backup, and independent reachability checks
-- Local VPS/Proxmox support environment: support services, test environments, storage, and contingency workloads
-- Main VPS snapshot on 2026-04-21: `srv856573.hstgr.cloud`, `78.142.242.236`, Ubuntu 24.04 with Coolify, `KVM 2`, `2` CPU, `8 GB` RAM, `100 GB` disk, auto-renewal active until `2027-06-05`
+- Store user accounts, projects, calculation runs, domain catalogs, and audit history
+- Preserve enough history to reproduce important technical results
+- Keep read models and write models simple enough to evolve
 
 ## Operational intent
 
-- Centralize health, security, and performance visibility across the three environments.
-- Keep the main production workloads portable so the hosting provider can change in the future.
-- Use the monitoring VPS as an external point of trust, not as the source of business truth.
-- Use the local environment to absorb support workloads or improve performance when needed.
-- Keep remediations controlled and auditable from the API.
+- Keep the application portable across environments.
+- Keep engineering logic in the backend.
+- Keep the frontend focused on usability and review.
+- Make outputs reviewable, traceable, and suitable for technical work.
 
 ## Communication model
 
-- Operators may use SSH directly or through an adapter managed by the control plane.
-- Agents should initiate outbound HTTPS connections to the API
-- Avoid relying on inbound access to every node
-- Use signed requests or short-lived credentials
-- Version all external APIs
+- The browser talks to the API through versioned endpoints.
+- The API talks to PostgreSQL through repository or data-access abstractions.
+- Domain rules stay inside services or calculation engines, not in controllers.
 
 ## Runtime posture
 
-- Everything deployable should be container-friendly
-- No hard dependency on a specific hosting provider
-- Use environment variables and secrets management for deployment-specific data
+- Everything deployable should be container-friendly.
+- Use environment variables and secrets management for deployment-specific data.
+- Avoid hard dependency on provider-specific services in the core logic.

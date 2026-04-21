@@ -9,9 +9,9 @@ Plano de implementação da primeira fase do produto, focado no mínimo necessá
 
 ## Objetivo
 
-- Entregar a base funcional do control plane.
-- Cobrir inventário, autenticação, monitoramento básico, incidentes e painel central.
-- Evitar automação excessiva antes de ter visibilidade confiável.
+- Entregar a base funcional da aplicação web.
+- Cobrir autenticação, cadastro de projetos, primeiro fluxo de cálculo e persistência.
+- Evitar regras espalhadas na UI antes de ter a base técnica confiável.
 
 ## Escopo
 
@@ -22,75 +22,62 @@ Plano de implementação da primeira fase do produto, focado no mínimo necessá
 - Auditoria de acesso.
 - Base para controle de permissões.
 
-#### Status
-
-- Primeira implementação funcional iniciada em Go com serviço em memória, handlers HTTP e testes básicos.
-- A base de `nodes` foi iniciada com conector SSH e probe de inventário mínimo.
-
 #### Tarefas
 
-- Definir modelo de sessão e papéis de operador.
+- Definir modelo de sessão e perfis de acesso.
 - Fechar contratos de login, refresh, logout e revogação.
 - Criar testes de login válido, login inválido e revogação.
 - Garantir logging de eventos de acesso e falha.
 - Preparar o onboarding do módulo para a primeira implementação.
 
-### `nodes`
+### `projects`
 
-- Cadastro das VPS e seus papéis.
-- Estado de saúde básico.
-- Heartbeats e coleta inicial de métricas.
-- Relação entre a VPS principal, a VPS Oracle e a VPS local.
-- Canal SSH padrão para controle inicial e troubleshooting.
-- Estrutura para adapters alternativos de controle quando necessário.
+- Cadastro de projetos elétricos.
+- Identificação do cliente ou contexto técnico.
+- Organização das entradas do estudo.
+- Relação entre projeto e execuções de cálculo.
 
 #### Tarefas
 
-- Definir inventário inicial das três VPS.
-- Criar o modelo de dados para nós e papéis.
-- Desenhar o contrato de heartbeat.
-- Persistir estado básico de saúde e última comunicação.
-- Definir credenciais e configuração SSH da primeira VPS.
-- Criar teste de conexão SSH e coleta mínima de inventário.
-- Criar testes para ausência de heartbeat e nó indisponível.
+- Definir modelo de projeto.
+- Criar o contrato de criação e consulta.
+- Persistir dados básicos do projeto.
+- Criar testes de criação, leitura e atualização básica.
 
-### `incidents`
+### `calculations`
 
-- Registro de degradação e falhas.
-- Severidade.
-- Linha do tempo do incidente.
-- Histórico de resolução.
+- Primeiro fluxo de dimensionamento elétrico.
+- Entradas técnicas explícitas.
+- Regras de cálculo no backend.
+- Histórico de execuções e resultados.
 
 #### Tarefas
 
-- Definir estrutura de incidente, severidade e status.
-- Criar o fluxo de abertura de incidente a partir de falha ou degradação.
-- Registrar linha do tempo e resolução.
-- Ligar incidente ao nó afetado e ao evento que o originou.
-- Criar testes para abertura, atualização e encerramento de incidente.
+- Definir o primeiro caso de cálculo da aplicação.
+- Criar o modelo de entrada e saída.
+- Implementar o serviço de cálculo.
+- Persistir resultados e parâmetros usados.
+- Criar testes para entradas válidas, inválidas e resultados esperados.
 
-### `dashboard`
+### `web`
 
-- Visão consolidada do estado dos ambientes.
-- Alertas e incidentes recentes.
-- Estado de saúde resumido.
-- Acesso rápido aos detalhes operacionais.
+- Formulários de entrada.
+- Visualização de resultados.
+- Navegação simples entre projetos e cálculos.
 
 #### Tarefas
 
-- Desenhar a visão de resumo da infraestrutura.
-- Exibir o estado consolidado das três VPS.
-- Exibir alertas e incidentes recentes.
-- Exibir caminhos rápidos para detalhes de nós e incidentes.
+- Desenhar a primeira jornada web.
+- Exibir projeto e resultado de cálculo.
 - Garantir que a UI apenas consuma contratos da API.
 
 ## Fora de escopo
 
-- Remediação automática complexa.
-- Migração automática entre provedores.
-- Observabilidade avançada completa.
-- Orquestração própria de larga escala.
+- Exportações avançadas.
+- Catálogos complexos.
+- Regras técnicas para múltiplos tipos de sistemas ao mesmo tempo.
 - Fluxos de aprovação múltipla para todas as ações.
+- Automação que esconda o cálculo do usuário.
 
 ## Dependências
 
@@ -101,13 +88,15 @@ Plano de implementação da primeira fase do produto, focado no mínimo necessá
 - `docs/modules/new-module-process.md`
 - `docs/modules/module-template.md`
 - `docs/modules/auth/*`
+- `docs/modules/projects/*`
+- `docs/modules/calculations/*`
 
 ## Ordem de implementação
 
 1. `auth`
-2. `nodes`
-3. `incidents`
-4. `dashboard`
+2. `projects`
+3. `calculations`
+4. `web`
 
 ## Tarefas por etapa
 
@@ -116,43 +105,34 @@ Plano de implementação da primeira fase do produto, focado no mínimo necessá
 - Criar o esqueleto do módulo.
 - Escrever testes de fluxo e autorização.
 - Implementar login, sessão e revogação.
-- Conectar auditoria básica.
 
-### 2. `nodes`
+### 2. `projects`
 
-- Criar inventário e persistência.
-- Implementar heartbeat e health básico.
-- Expor o estado dos nós para consumo da API e da UI.
-- Adicionar o primeiro conector SSH como canal padrão.
+- Criar cadastro e persistência.
+- Expor o estado do projeto para consumo da API e da UI.
 
-#### Status
+### 3. `calculations`
 
-- Conector SSH inicial criado em Go com probe de inventário mínimo e testes unitários.
-- O inventário operacional da VPS principal já está modelado e exposto pela API.
+- Criar o primeiro cálculo dimensionado.
+- Persistir parâmetros, resultado e histórico.
+- Garantir que o serviço seja testável de forma isolada.
 
-### 3. `incidents`
+### 4. `web`
 
-- Criar modelo de incidente.
-- Gerar e atualizar incidentes a partir de estados degradados.
-- Preservar histórico e severidade.
-
-### 4. `dashboard`
-
-- Montar a visão consolidada.
-- Exibir os principais estados e alertas.
-- Ajustar navegação para operação diária.
+- Montar a primeira visão da aplicação.
+- Exibir os principais dados e resultados.
+- Ajustar navegação para uso diário.
 
 ## Critérios de conclusão
 
-- É possível entrar no painel com autenticação segura.
-- É possível ver as máquinas monitoradas e seus estados básicos.
-- É possível registrar e acompanhar incidentes.
-- É possível visualizar o estado consolidado em um painel central.
-- É possível conectar a VPS principal por SSH com credenciais controladas.
-- As regras críticas continuam na API e não na UI.
+- É possível entrar na aplicação com autenticação segura.
+- É possível criar e consultar um projeto elétrico.
+- É possível executar e revisar pelo menos um cálculo persistido.
+- É possível visualizar o resultado em um painel web.
+- As regras críticas continuam no backend e não na UI.
 - Cada módulo da fase 1 tem docs mínimos, testes e critérios claros antes de ampliar o escopo.
 
 ## Regra prática
 
-- Se um item não ajuda a provar que o sistema vê, entende ou protege as VPS, ele fica fora da fase 1.
-- Se uma automação puder aumentar o risco mais do que o benefício, ela fica para a próxima fase.
+- Se um item não ajuda a provar que o sistema calcula, persiste ou apresenta o resultado técnico, ele fica fora da fase 1.
+- Se uma automação puder aumentar o risco de erro técnico, ela fica para a próxima fase.

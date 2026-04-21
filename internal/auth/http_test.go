@@ -15,7 +15,7 @@ func TestLoginAndSessionHTTP(t *testing.T) {
 				ID:          "usr_1",
 				Email:       "operator@example.com",
 				DisplayName: "Operator",
-				Permissions: []string{"nodes.read"},
+				Permissions: []string{"projects.read"},
 			},
 			PasswordHash: HashPassword("secret"),
 		},

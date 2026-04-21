@@ -2,7 +2,7 @@
 
 > Status: stable
 > Type: index
-> Last updated: 2026-04-20
+> Last updated: 2026-04-21
 > Owner: repository
 
 Camada de documentação por módulo. Use esta pasta para concentrar regras, contratos, testes e histórico de cada área funcional.
@@ -16,26 +16,23 @@ Camada de documentação por módulo. Use esta pasta para concentrar regras, con
 ## Estrutura sugerida por módulo
 
 - `README.md`: objetivo, escopo e links do módulo
-- `module-template.md`: template inicial para novos módulos
+- `reading-paths.md`: leitura mínima por tipo de mudança
 - `rules.md`: regras específicas do módulo
 - `contracts.md`: contratos, DTOs, endpoints e formatos esperados
 - `security.md`: riscos, controles e exigências de segurança
 - `tests.md`: estratégia de testes e gates do módulo
-- `runbook.md`: procedimentos operacionais do módulo
 - `onboarding.md`: guia de entrada do módulo quando ele precisar de mais contexto
-- `active-plan.md`: execução atual do módulo
 - `current-state.md`: estado vigente do módulo
+- `active-plan.md`: execução atual do módulo
 - `changelog.md`: histórico de mudanças do módulo
-- `plan-template.md`: modelo oficial de plan do módulo
-- `plan-lifecycle.md`: política de ciclo de vida de plan do módulo
-- `current-state-template.md`: modelo oficial de current-state do módulo
-- `current-state-lifecycle.md`: política de ciclo de vida de current-state do módulo
-- `archive/`: documentos antigos de plan e current-state do módulo
 - `adr/README.md`: regras de decisão do módulo
-- `adr/template.md`: modelo oficial de ADR do módulo
-- `adr/0001-title.md`: primeira decisão relevante do módulo
 - `adr/current-state.md`: snapshot da camada de decisão do módulo
-- `adr/archive/`: decisões antigas do módulo
+
+## Módulos atuais
+
+- `auth`: autenticação, autorização e sessão
+- `projects`: cadastro e organização de estudos elétricos
+- `calculations`: dimensionamento e regras técnicas
 
 ## Uso prático
 

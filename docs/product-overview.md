@@ -9,42 +9,37 @@ Visão de produto para orientar leitura, módulos e decisões de documentação.
 
 ## What this is
 
-- A control plane for monitoring, diagnosing, and safely remediating infrastructure.
-- A product that favors portability, provider independence, and container-first deployment.
+- A web application for electrical calculations and dimensioning.
+- A product that keeps engineering rules in the backend and persists technical studies in a database.
+- A system that needs authentication, project context, traceable calculations, and a browser-based interface.
 
-## Contexto operacional atual
+## Product context
 
-- A VPS principal hospeda os sistemas em produção e roda atualmente em um provedor externo, com Coolify e padrão Docker.
-- Uma VPS Oracle Free Tier serve como ponto independente de monitoramento da VPS principal.
-- Uma VPS local serve como laboratório, suporte e apoio para armazenamento ou desempenho quando necessário.
-- O objetivo imediato é centralizar a visão, a segurança e a saúde desses ambientes em um painel administrativo único.
-- Snapshot operacional da VPS principal em 2026-04-21: `srv856573.hstgr.cloud`, `78.142.242.236`, Ubuntu 24.04 with Coolify, `KVM 2`, `2` CPU, `8 GB` RAM, `100 GB` disk, auto-renewal active until `2027-06-05`.
+- The application is meant for engineering work, not infrastructure control.
+- Users create or open electrical projects, run calculations, and review saved results.
+- Authentication remains necessary because saved studies, project data, and outputs are user-scoped.
 
 ## Primary flows
 
-- Observe node health and telemetry.
-- Detect incidents and degraded conditions.
-- Review audit trails and historical events.
-- Trigger controlled remediation actions.
-- Manage authentication and authorization for operators.
-- Surface the current state of the main VPS, monitoring VPS, and local support VPS in one place.
-- Use SSH as the default control path for remote maintenance and troubleshooting.
-- Keep telemetry separate from operator actions so health reporting remains lightweight.
-- Treat the current SSH user as a transitional operational detail until the node is moved to a dedicated non-root account.
+- Authenticate into the application.
+- Create or open an electrical project.
+- Enter technical data needed for dimensioning.
+- Run electrical calculations and inspect intermediate values.
+- Persist results for later review or revision.
+- Present calculation outputs in a browser-friendly interface.
 
 ## Main areas
 
-- `auth`: authentication, authorization, session handling, and security gates.
-- `nodes`: remote agents, telemetry, and health snapshots.
-- `incidents`: detection, triage, and remediation tracking.
-- `dashboard`: operator-facing views and workflows.
+- `auth`: authentication, authorization, session handling, and access control.
+- `projects`: electrical project lifecycle, metadata, and ownership.
+- `calculations`: dimensioning and engineering rules.
+- `catalogs`: reusable electrical reference data, tables, and presets.
+- `web`: browser UI for data entry, review, and output.
 
 ## Non-goals
 
-- Frontend-driven business rules.
-- Provider-specific coupling.
-- Hidden operational steps without auditability.
-- Making provider APIs the primary control path.
+- Provider-specific coupling in business logic.
+- Putting engineering rules in the frontend.
 
 ## Documentation rule
 

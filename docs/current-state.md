@@ -2,16 +2,17 @@
 
 > Status: stable
 > Type: state
-> Last updated: 2026-04-20
+> Last updated: 2026-04-21
 > Owner: repository
 
 Resumo vigente do sistema como um todo.
 
 ## Current state
 
-- A documentação global define arquitetura, princípios, regras, stack, produto e governança.
+- A documentação global define uma aplicação web para cálculos e dimensionamentos elétricos.
 - A documentação por módulo concentra regras, contratos, segurança, testes, planos, estado e histórico local.
 - `auth` continua sendo tratado como módulo crítico.
+- `projects` e `calculations` são os próximos módulos centrais do novo produto.
 - Mudanças locais devem ler somente o contexto necessário.
 - O estado vigente do sistema deve ser resumido aqui, não espalhado em ADRs.
 

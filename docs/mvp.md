@@ -9,92 +9,75 @@ Escopo mínimo para transformar o problema do produto em um sistema útil, sem e
 
 ## Objetivo
 
-- Centralizar a visão das VPS e sistemas em um painel único.
-- Monitorar saúde, segurança e desempenho.
-- Registrar incidentes e histórico.
-- Permitir ações controladas e auditáveis.
+- Entregar uma base web funcional para engenharia elétrica.
+- Permitir autenticação, criação de projetos e execução de cálculos básicos.
+- Persistir entradas, resultados e histórico para revisão posterior.
 
 ## Obrigatório
 
-### 1. Inventário
+### 1. Autenticação
 
-- Listar as máquinas monitoradas.
-- Registrar papel de cada VPS.
-- Guardar provider, ambiente, endereço e estado.
+- Login seguro.
+- Sessão e autorização.
+- Registro de eventos de acesso.
 
-### 2. Autenticação e autorização
+### 2. Projetos elétricos
 
-- Proteger o painel com login seguro.
-- Separar operador com permissões explícitas.
-- Registrar eventos de acesso.
+- Criar e listar projetos.
+- Registrar dados do contexto técnico.
+- Vincular cada cálculo a um projeto.
 
-### 3. Monitoramento básico
+### 3. Cálculos e dimensionamento
 
-- Heartbeats.
-- Uptime.
-- CPU, memória, disco e rede.
-- Estado dos serviços principais.
+- Executar cálculos elétricos básicos.
+- Expor entradas, regras aplicadas e resultados.
+- Guardar histórico das execuções.
 
-### 4. Incidentes
+### 4. Persistência
 
-- Detectar falha ou degradação.
-- Registrar severidade.
-- Registrar início, resolução e histórico.
+- Salvar usuários, projetos e cálculos.
+- Recuperar o estado salvo para edição ou consulta.
 
-### 5. Painel central
+### 5. Interface web
 
-- Exibir o estado das máquinas.
-- Exibir alertas e incidentes.
-- Exibir histórico e ações recentes.
-
-### 6. Controle SSH básico
-
-- Definir SSH como canal padrão de controle para a primeira VPS.
-- Guardar host, porta, usuário e chave no ambiente seguro.
-- Validar conexão e coleta mínima de inventário via SSH.
-- Manter adaptadores alternativos como extensão futura, não como dependência inicial.
+- Exibir formulário de entrada.
+- Exibir resultados de cálculo de forma clara.
+- Permitir navegação simples entre projetos e resultados.
 
 ## Opcional no começo
 
-- Remediação automática avançada.
-- Otimização autônoma de desempenho.
-- Múltiplos níveis de aprovação para ações sensíveis.
-- Dashboards muito detalhados de observabilidade.
-- Migração automática entre provedores.
-- Orquestração complexa própria.
+- Bibliotecas de catálogos elétricos mais amplas.
+- Exportação em PDF.
+- Comparação entre cenários.
+- Relatórios avançados.
+- Aprovações adicionais para fluxos sensíveis.
 
 ## Arquitetura ideal para este caso
 
 - API em `Go` como fonte de verdade.
 - UI em `vinext` apenas como camada de experiência.
 - Persistência em `PostgreSQL`.
-- Agentes Docker rodando nas máquinas monitoradas.
-- VPS Oracle como ponto externo de monitoramento.
-- VPS local como suporte, laboratório e contingência.
-- SSH como canal padrão de controle para manutenção e troubleshooting.
-- Adaptadores futuros para provider API ou outros mecanismos quando houver necessidade real.
+- Regras de dimensionamento em serviços de domínio no backend.
+- Frontend apenas coleta dados e apresenta resultados.
 
 ## Prioridade de construção
 
-1. Inventário e autenticação
-2. Monitoramento básico
-3. Incidentes e histórico
-4. Painel central
-5. Controle SSH básico
-6. Ações controladas
-7. Melhorias de desempenho e suporte
+1. Autenticação
+2. Projetos elétricos
+3. Cálculos e dimensionamento
+4. Persistência e histórico
+5. Interface web de consulta e edição
 
 ## Critério de sucesso
 
-- Eu consigo ver o estado das VPS em um único lugar.
-- Eu consigo saber quando algo falha.
-- Eu consigo entender o que aconteceu e quando.
-- Eu consigo agir de forma controlada e auditável.
-- Eu consigo manter a solução portátil entre provedores.
-- Eu consigo conectar e operar a VPS principal por SSH com controle explícito.
+- Eu consigo entrar na aplicação com autenticação.
+- Eu consigo criar um projeto elétrico.
+- Eu consigo executar e salvar pelo menos um cálculo.
+- Eu consigo revisar o resultado no navegador.
+- Eu consigo manter as regras principais no backend.
 
 ## Regra prática
 
-- Se algo não ajuda a reduzir risco, aumentar visibilidade ou controlar operação, ele não entra no MVP.
-- Se uma automação puder causar mais dano do que benefício no começo, ela fica para depois.
-- Se uma integração alternativa não melhorar controle, visibilidade ou portabilidade, ela fica como adapter futuro.
+- Se algo não ajuda a apoiar cálculo, rastreabilidade ou revisão técnica, ele não entra no MVP.
+- Se uma automação puder aumentar o risco de erro técnico, ela fica para depois.
+- Se um recurso não melhorar a confiança no cálculo ou a usabilidade da entrada de dados, ele fica fora da fase inicial.

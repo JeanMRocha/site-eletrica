@@ -25,8 +25,6 @@ Template base para iniciar um módulo novo com a documentação mínima já alin
 - `active-plan.md`
 - `changelog.md`
 - `onboarding.md`
-- `adr/README.md`
-- `adr/current-state.md`
 
 ## Cabeçalho do módulo
 
@@ -53,13 +51,11 @@ Template base para iniciar um módulo novo com a documentação mínima já alin
 - `contracts.md`: <descrição>
 - `security.md`: <descrição>
 - `tests.md`: <descrição>
-- `runbook.md`: <descrição, se existir>
 - `reading-paths.md`: <descrição>
 - `onboarding.md`: <descrição>
 - `active-plan.md`: <descrição>
 - `current-state.md`: <descrição>
 - `changelog.md`: <descrição>
-- `adr/README.md`: <descrição>
 
 ### Navegação mínima
 
@@ -83,8 +79,10 @@ Template base para iniciar um módulo novo com a documentação mínima já alin
 
 | Tipo de mudança | Leitura mínima | Leitura opcional | Evitar por padrão |
 | --- | --- | --- | --- |
-| <tipo 1> | <arquivos> | <arquivos> | <arquivos> |
-| <tipo 2> | <arquivos> | <arquivos> | <arquivos> |
+| Nova regra do módulo | `README.md`, `rules.md`, `contracts.md`, `tests.md` | `security.md`, `onboarding.md`, `current-state.md` | Módulos não relacionados |
+| Mudança de contrato | `README.md`, `contracts.md`, `tests.md` | `rules.md`, `current-state.md`, `security.md` | ADRs fora do módulo sem necessidade |
+| Mudança de segurança | `README.md`, `security.md`, `tests.md` | `contracts.md`, `onboarding.md`, `current-state.md` | Docs de outros módulos |
+| Mudança de estado | `current-state.md`, `changelog.md`, `active-plan.md` | `README.md`, `onboarding.md` | ADRs antigos sem relação direta |
 
 ## Seções recomendadas do `contracts.md`
 
@@ -93,7 +91,6 @@ Template base para iniciar um módulo novo com a documentação mínima já alin
 - Códigos de status e erros esperados
 - Regras de versionamento e compatibilidade
 - Exemplos reais de payload quando aplicável
-- Se houver controle remoto, documente o canal padrão e os adapters alternativos esperados
 
 ## Seções recomendadas do `security.md`
 
@@ -101,7 +98,6 @@ Template base para iniciar um módulo novo com a documentação mínima já alin
 - Riscos a considerar
 - Exigências de revisão
 - Regras de auditoria e abuso
-- Para controle remoto, detalhe autenticação, rotação de credenciais e trilha de auditoria do canal padrão
 
 ## Seções recomendadas do `tests.md`
 
@@ -125,7 +121,6 @@ Template base para iniciar um módulo novo com a documentação mínima já alin
 - Estado vivo versus snapshot
 - O que olhar primeiro
 - Regra prática
-- Se o módulo usa controle remoto, explique quando SSH é padrão e quando outro adapter pode ser usado
 
 ## Seções recomendadas do `adr/README.md`
 
