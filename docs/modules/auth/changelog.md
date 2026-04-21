@@ -11,6 +11,13 @@ Registro de mudanças do módulo de autenticação.
 
 ### 2026-04-20
 
+- Mudança: simplificado o `README` do módulo `auth` para apontar para `reading-paths.md` como referência principal de leitura por escopo.
+- Motivo: reduzir duplicação e manter o índice do módulo mais curto e mais fácil de manter.
+- Impacto: o módulo ganhou uma hierarquia mais clara entre índice, leitura mínima e documentos auxiliares.
+- Arquivos: `docs/modules/auth/README.md`, `docs/modules/auth/reading-paths.md`
+
+### 2026-04-20
+
 - Mudança: alinhado o índice do módulo `auth` para `stable`, ajustada a leitura mínima e criado o mapa de leitura específico do módulo.
 - Motivo: refletir melhor o uso real do documento como ponto de entrada operacional e reduzir duplicação de orientação.
 - Impacto: o índice de auth agora funciona como guia principal estável para o módulo, com leitura mínima mais clara.

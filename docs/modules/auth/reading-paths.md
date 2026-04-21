@@ -6,6 +6,7 @@
 > Owner: security
 
 Guia mínimo derivado de `docs/governance.md` para ler apenas o que é necessário quando a mudança toca `auth`.
+Este documento é a referência principal de leitura por escopo dentro do módulo; o `README.md` do módulo só aponta para ele.
 
 ## Regra geral
 

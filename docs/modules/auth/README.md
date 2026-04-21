@@ -37,17 +37,12 @@ Módulo responsável por autenticação, autorização e controle de sessão.
 - [`adr/archive/README.md`](adr/archive/README.md): arquivo morto do módulo
 - [`archive/README.md`](archive/README.md): arquivo morto de plan e current-state do módulo
 
-## Leitura mínima para alteração
+## Navegação mínima
 
-- `docs/governance.md`
-- `docs/modules/auth/reading-paths.md`
-- `docs/modules/auth/current-state.md`
-- `docs/architecture.md`
-- `docs/product-overview.md`
-- `docs/development-principles.md`
-- `docs/agent-rules.md`
-- `docs/modules/README.md`
-- Este diretório do módulo
+- Use `docs/governance.md` como autoridade principal.
+- Use `docs/modules/auth/reading-paths.md` como caminho mínimo padrão para qualquer alteração em auth.
+- Use `docs/modules/auth/current-state.md` quando precisar do estado vigente.
+- Abra os demais documentos do módulo apenas quando o tipo de mudança exigir.
 
 ## Regra prática
 
