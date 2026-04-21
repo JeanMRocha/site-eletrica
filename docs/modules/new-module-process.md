@@ -42,6 +42,7 @@ Antes de criar um módulo novo, leia nesta ordem:
 
 Crie o conjunto mínimo de documentação antes da implementação:
 
+- `module-template.md`
 - `README.md`
 - `reading-paths.md`
 - `rules.md`
@@ -93,3 +94,4 @@ Todo módulo novo deve, no mínimo, ter:
 
 - Se o módulo ainda não tem docs mínimos, ele ainda não está pronto para implementação ampla.
 - Se o escopo mudar, atualize primeiro a documentação, depois a implementação.
+- Use `docs/modules/module-template.md` como base inicial quando for criar a primeira versão do módulo.

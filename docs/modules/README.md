@@ -16,6 +16,7 @@ Camada de documentação por módulo. Use esta pasta para concentrar regras, con
 ## Estrutura sugerida por módulo
 
 - `README.md`: objetivo, escopo e links do módulo
+- `module-template.md`: template inicial para novos módulos
 - `rules.md`: regras específicas do módulo
 - `contracts.md`: contratos, DTOs, endpoints e formatos esperados
 - `security.md`: riscos, controles e exigências de segurança
@@ -42,3 +43,4 @@ Camada de documentação por módulo. Use esta pasta para concentrar regras, con
 - Use `docs/modules/<modulo>/reading-paths.md` quando a tarefa estiver restrita a um módulo específico.
 - Para qualquer alteração em um módulo, leia primeiro o `README.md` do próprio módulo e depois os arquivos indicados pelo reading path.
 - Use `docs/modules/new-module-process.md` quando estiver criando ou ampliando um módulo novo com base em escopo e stack.
+- Use `docs/modules/module-template.md` como base de preenchimento para a primeira versão de um módulo novo.

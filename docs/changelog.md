@@ -30,6 +30,13 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-20
 
+- Mudança: criado `docs/modules/module-template.md` para servir como base copiável na primeira versão de qualquer módulo novo e ligado ao processo de evolução de módulos.
+- Motivo: acelerar a criação de módulos sem perder o padrão documental já estabelecido.
+- Impacto: novos módulos passam a ter um molde inicial claro e um fluxo explícito antes da implementação.
+- Arquivos: `docs/modules/module-template.md`, `docs/modules/new-module-process.md`, `docs/modules/README.md`, `docs/README.md`, `docs/governance.md`
+
+### 2026-04-20
+
 - Mudança: ajustado `docs/modules/README.md` para incluir `onboarding.md` como parte esperada da estrutura de módulos em crescimento.
 - Motivo: deixar explícito que novos módulos devem ter uma entrada de onboarding quando precisarem de mais contexto de uso.
 - Impacto: o índice de módulos passou a reconhecer onboarding como peça normal da evolução documental.

@@ -28,6 +28,7 @@
 - [`docs/agent-rules.md`](agent-rules.md)
 - [`docs/development-principles.md`](development-principles.md)
 - [`docs/modules/new-module-process.md`](modules/new-module-process.md) when starting or expanding a module
+- [`docs/modules/module-template.md`](modules/module-template.md) when creating the first version of a new module
 
 ## Authority
 

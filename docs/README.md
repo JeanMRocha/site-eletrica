@@ -17,6 +17,7 @@
 - [`governance.md`](governance.md): autoridade principal para navegação, escrita e arquivamento.
 - [`reading-paths.md`](reading-paths.md): caminhos mínimos de leitura por perfil.
 - [`modules/new-module-process.md`](modules/new-module-process.md): processo para criar e evoluir módulos novos com base em escopo e stack.
+- [`modules/module-template.md`](modules/module-template.md): template inicial para montar a documentação de um módulo novo.
 - [`changelog.md`](changelog.md): histórico cronológico de mudanças.
 - [`current-state.md`](current-state.md): estado vigente global.
 - [`active-plan.md`](active-plan.md): plano em execução global.
