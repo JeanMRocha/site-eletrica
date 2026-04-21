@@ -11,6 +11,13 @@ Registro de mudanças do módulo de autenticação.
 
 ### 2026-04-20
 
+- Mudança: formalizada a regra de quando abrir um novo `plan` no módulo `auth` versus quando apenas atualizar `plan`, `current-state` e `changelog`.
+- Motivo: evitar fragmentação desnecessária da execução do módulo e manter o estado vigente alinhado ao trabalho real.
+- Impacto: auth passa a distinguir evolução do mesmo esforço de uma nova execução com escopo diferente.
+- Arquivos: `docs/modules/auth/plan-lifecycle.md`, `docs/modules/auth/current-state-lifecycle.md`, `docs/modules/auth/active-plan.md`, `docs/modules/auth/adr/current-state.md`
+
+### 2026-04-20
+
 - Mudança: adicionados os ciclos de vida de `plan` e `current-state` do módulo `auth`, com archive próprio do módulo.
 - Motivo: manter o módulo crítico com documentação de execução e estado bem delimitada.
 - Impacto: auth passou a ter regra explícita para pausar, concluir e arquivar documentos de plano e estado.

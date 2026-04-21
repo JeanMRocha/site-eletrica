@@ -15,7 +15,7 @@ Política de ciclo de vida para documentos de estado vigente do módulo `auth`.
 ## Rule
 
 - Mantenha um `current-state` para o módulo `auth`.
-- Atualize o arquivo quando o estado vigente do módulo mudar de forma relevante.
+- Atualize o arquivo quando o estado vigente do módulo mudar de forma relevante, mesmo sem abrir um novo plano.
 - Se o foco do módulo mudar, arquive o resumo antigo quando ele deixar de representar o estado atual.
 - Não use `current-state` como histórico detalhado.
 

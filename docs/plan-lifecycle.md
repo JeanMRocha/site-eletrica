@@ -16,7 +16,8 @@ Política de ciclo de vida para documentos de plano.
 ## Rule
 
 - Mantenha apenas um `active` por escopo principal.
-- Se o trabalho mudar de foco, atualize o plano vigente ou crie um novo plano e marque o anterior como `completed` ou `paused`.
+- Se o trabalho novo tiver escopo, risco ou gate diferente, crie um novo plano e marque o anterior como `completed` ou `paused`.
+- Se a mudança for apenas evolução do mesmo trabalho, atualize o plano vigente, o `current-state` e o `changelog`.
 - Não mantenha planos antigos como documentos vivos sem necessidade.
 - Se o plano não descreve mais trabalho real, mova o conteúdo útil para `changelog.md`, `current-state.md` ou archive específico do módulo.
 

@@ -30,6 +30,13 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-20
 
+- Mudança: formalizada a regra de quando abrir um novo `plan` versus quando apenas atualizar `plan`, `current-state` e `changelog`.
+- Motivo: evitar fragmentação desnecessária de planos e preservar a continuidade do mesmo trabalho.
+- Impacto: o agente agora diferencia trabalho novo de evolução incremental do mesmo escopo.
+- Arquivos: `docs/plan-lifecycle.md`, `docs/current-state-lifecycle.md`, `docs/active-plan.md`, `docs/adr/current-state.md`
+
+### 2026-04-20
+
 - Mudança: adicionados os ciclos de vida de `plan` e `current-state`, com política de archive para escopos globais.
 - Motivo: evitar que planos e resumos vigentes cresçam sem controle ou se acumulem como documentos mortos.
 - Impacto: o repositório passou a ter regra explícita para pausar, concluir e arquivar documentos de execução e estado.
