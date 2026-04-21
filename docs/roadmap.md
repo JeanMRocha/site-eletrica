@@ -37,6 +37,30 @@ Mapa de longo prazo com o que ainda não foi feito e o que precisa de ampliaçã
 - Configuração de dev, staging e produção
 - Observabilidade e backups
 
+## Modelo de item
+
+```md
+### Nome da iniciativa
+
+- Objetivo: ...
+- Descrição: ...
+- Prioridade: alta | média | baixa
+- Dependências: ...
+- Critério de conclusão: ...
+- Observações: ...
+```
+
+## Exemplo de item
+
+### Telemetria e heartbeats
+
+- Objetivo: receber sinais periódicos dos nós e consolidar o estado da infraestrutura.
+- Descrição: definir contrato de envio, persistência dos eventos e regras de avaliação de saúde.
+- Prioridade: alta
+- Dependências: autenticação do agente, modelagem de banco e endpoints da API.
+- Critério de conclusão: o sistema registra heartbeats, identifica ausência de sinal e expõe o estado para a UI.
+- Observações: a UI apenas consome o resultado; a regra de decisão fica na API.
+
 ## Status
 
 - Ainda não detalhado por prioridade.
