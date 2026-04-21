@@ -9,6 +9,7 @@ Projeto em fase de planejamento para monitorar, diagnosticar e automatizar a sa�
 - Execução: Docker + Coolify
 - Infra de apoio: Oracle Free Tier e ambiente local em Proxmox
 - Controle remoto padrão: SSH, com outros adaptadores apenas quando necessário
+- Segredos locais e chaves SSH devem ficar em [`.secrets/ssh/`](.secrets/ssh/) e nunca no Git; o `.env` só aponta para os caminhos desses arquivos.
 
 ## Documentos principais
 

@@ -2,7 +2,7 @@
 
 > Status: stable
 > Type: index
-> Last updated: 2026-04-20
+> Last updated: 2026-04-21
 > Owner: repository
 
 Índice mestre e autoridade principal para decidir rapidamente o que ler, onde escrever e quando arquivar.
@@ -48,3 +48,5 @@
 - If the change creates a durable decision, use ADR.
 - If the current file no longer reflects the live scope, move the useful content to the relevant archive.
 - If you are starting a new module, follow `docs/modules/new-module-process.md` before implementation.
+- SSH keys, `known_hosts`, and other local secrets should live in `.secrets/ssh/` (or another ignored local secrets path) and never be committed.
+- The `.env` must reference secret file paths, not secret contents.

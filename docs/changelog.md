@@ -30,6 +30,13 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-21
 
+- Mudança: formalizada a convenção de segredos locais em `.secrets/ssh/`, com o `.env` contendo apenas caminhos para arquivos de chave e `known_hosts`.
+- Motivo: evitar que chaves SSH ou outros segredos caiam no Git e deixar o fluxo de operação mais claro.
+- Impacto: a raiz do projeto e a governança agora apontam explicitamente para a pasta local de segredos como padrão operacional.
+- Arquivos: `README.md`, `docs/governance.md`, `.gitignore`, `.secrets/ssh/.gitkeep`, `.env`, `.env.example`
+
+### 2026-04-21
+
 - Mudança: o módulo `nodes` passou a ler a VPS principal do `.env` e a expor um probe operacional configurado por ambiente.
 - Motivo: permitir a primeira tentativa real de conexão com a VPS principal usando a configuração local de SSH.
 - Impacto: o inventário do node principal e a rota de probe agora seguem a configuração do ambiente sem exigir payload manual.
