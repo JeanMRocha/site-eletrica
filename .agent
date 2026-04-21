@@ -26,3 +26,13 @@ Garantir que todo trabalho neste repositório seja conduzido com planejamento pr
 Atalho de governança:
 
 - Use `docs/governance.md` como o primeiro ponto de leitura para decidir o que consultar, atualizar ou arquivar.
+
+Matriz mínima:
+
+| Change type | Read first | Write/update |
+| --- | --- | --- |
+| Structural | `docs/governance.md` | `docs/adr/` |
+| Execution | `docs/governance.md` | `docs/active-plan.md` |
+| Current state | `docs/governance.md` | `docs/adr/current-state.md` |
+| Incremental | `docs/governance.md` | `docs/changelog.md` |
+| Module-local | `docs/governance.md` | module docs |
