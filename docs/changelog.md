@@ -30,6 +30,13 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-20
 
+- Mudança: simplificado `docs/README.md` para funcionar só como índice de entrada, sem repetir a política central de navegação.
+- Motivo: reduzir duplicação com `docs/governance.md` e deixar o arquivo raiz mais leve.
+- Impacto: o ponto de entrada de `docs/` ficou mais curto e mais fácil de manter sem competir com a governança.
+- Arquivos: `docs/README.md`
+
+### 2026-04-20
+
 - Mudança: enxugado `docs/modules/README.md` para reduzir repetição com a governança e deixar o índice de módulos mais direto.
 - Motivo: diminuir ruído, manter uma autoridade principal única para navegação e tornar a leitura por módulo mais objetiva.
 - Impacto: a pasta de módulos ficou com um índice mais curto e mais fácil de manter sem duplicar a política central.
