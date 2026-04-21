@@ -7,10 +7,18 @@ Regra do projeto:
 
 1. Antes de qualquer alteração de arquivo, criar e seguir um plano explícito.
 2. Ler `AGENTS.md` e a documentação em `docs/` antes de propor ou executar mudanças.
-3. Não executar mudanças diretas sem antes registrar a sequência de passos.
-4. Se uma tarefa não estiver clara o suficiente para planejamento, interromper e pedir esclarecimento.
-5. Manter as alterações pequenas, rastreáveis e alinhadas ao plano aprovado.
-6. Sempre validar o resultado após as mudanças.
+3. Ler `docs/adr/README.md` quando a mudança envolver uma decisão arquitetural.
+4. Ler `docs/modules/<modulo>/README.md` e as regras do módulo quando a alteração for local.
+5. Não executar mudanças diretas sem antes registrar a sequência de passos.
+6. Se uma tarefa não estiver clara o suficiente para planejamento, interromper e pedir esclarecimento.
+7. Manter as alterações pequenas, rastreáveis e alinhadas ao plano aprovado.
+8. Sempre validar o resultado após as mudanças.
+
+Regra de testes:
+
+1. Criar ou atualizar os testes antes da implementação quando houver comportamento novo.
+2. Rodar os testes do módulo afetado durante o desenvolvimento.
+3. Rodar a suíte completa antes de commit ou PR.
 
 Objetivo:
 Garantir que todo trabalho neste repositório seja conduzido com planejamento prévio, execução controlada e respeito à arquitetura documentada.

@@ -11,6 +11,8 @@ Estratégia de testes do módulo de autenticação.
 
 - Escreva os testes antes da implementação quando houver comportamento novo.
 - Atualize os testes antes de alterar contrato ou regra de auth.
+- Durante a implementação, rode os testes do módulo `auth`.
+- Antes de commit ou PR, rode a suíte completa do repositório.
 
 ## Testes mínimos
 

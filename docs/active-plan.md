@@ -9,7 +9,7 @@ Documento para registrar o que está sendo feito agora.
 
 ## Objetivo atual
 
-- Descrever o foco imediato da próxima entrega.
+- Implantar a governança de documentação por escopo, com ADRs globais e por módulo.
 
 ## Estrutura sugerida
 
@@ -68,7 +68,7 @@ Documento para registrar o que está sendo feito agora.
 
 ## Status
 
-- Sem plano ativo registrado.
+- Implantação da governança de documentação em andamento.
 
 ## Última atualização
 

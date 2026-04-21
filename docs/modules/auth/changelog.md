@@ -11,6 +11,13 @@ Registro de mudanças do módulo de autenticação.
 
 ### 2026-04-20
 
+- Mudança: criado o esqueleto de decisão do módulo `auth` com ADRs iniciais.
+- Motivo: registrar governança local para autenticação, sessão e segurança.
+- Impacto: o módulo ganhou trilha de decisão própria para futuras implementações.
+- Arquivos: `docs/modules/auth/adr/README.md`, `docs/modules/auth/adr/0001-auth-governance.md`, `docs/modules/auth/adr/0002-session-model.md`
+
+### 2026-04-20
+
 - Mudança: criado o esqueleto de documentação do módulo `auth`.
 - Motivo: isolar regras, contratos, segurança e testes em uma área própria.
 - Impacto: o agente pode ler apenas os documentos do módulo quando a alteração for local.

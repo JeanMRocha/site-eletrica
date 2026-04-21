@@ -4,7 +4,7 @@ Use este bloco no topo dos arquivos de `docs/` quando o documento precisar de me
 
 ```md
 > Status: active | draft | stable
-> Type: architecture | principles | rules | plan | roadmap | history | index | module | contracts | security | tests
+> Type: architecture | principles | rules | plan | roadmap | history | index | module | contracts | security | tests | adr
 > Last updated: AAAA-MM-DD
 > Owner: team or area responsible
 ```

@@ -9,9 +9,11 @@ Before making any change in this repository, an agent must:
 
 1. Read `.agent`.
 2. Read the architecture and stack documentation in `docs/`.
-3. Produce or update an explicit plan before editing files.
-4. Respect the planning phase if the user is still defining scope or architecture.
-5. Avoid implementing code while the project is in documentation or decision mode unless the user explicitly asks for it.
+3. Read `docs/adr/README.md` when the change involves an architectural decision.
+4. Read `docs/modules/<modulo>/README.md` and the related module docs when the change is local to a module.
+5. Produce or update an explicit plan before editing files.
+6. Respect the planning phase if the user is still defining scope or architecture.
+7. Avoid implementing code while the project is in documentation or decision mode unless the user explicitly asks for it.
 
 Non-negotiable project rules:
 
@@ -22,3 +24,4 @@ Non-negotiable project rules:
 - Keep production-critical logic in the Go API, not in the web layer.
 - Treat `vinext` as the web experience layer, not the source of truth.
 - Follow SOLID, clean boundaries, and testable design.
+- Prefer tests before implementation when introducing new behavior.

@@ -23,6 +23,8 @@ Módulo responsável por autenticação, autorização e controle de sessão.
 - [`tests.md`](tests.md): testes e gates do módulo
 - [`active-plan.md`](active-plan.md): execução atual do módulo
 - [`changelog.md`](changelog.md): histórico de mudanças do módulo
+- [`adr/README.md`](adr/README.md): regras de decisão do módulo
+- [`adr/0001-auth-governance.md`](adr/0001-auth-governance.md): decisão inicial do módulo
 
 ## Leitura mínima para alteração
 

@@ -30,6 +30,13 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-20
 
+- Mudança: implantada a governança de documentação por escopo, com ADRs globais e por módulo, além da política de testes por escopo.
+- Motivo: permitir que o agente leia apenas o contexto necessário e manter decisões arquiteturais rastreáveis.
+- Impacto: a documentação agora separa leitura global, leitura por módulo, decisões arquiteturais e testes por escopo.
+- Arquivos: `docs/README.md`, `docs/adr/README.md`, `docs/adr/0001-documentation-topology.md`, `docs/adr/0002-scope-based-testing.md`, `docs/modules/README.md`, `docs/modules/auth/adr/*`, `docs/agent-rules.md`, `docs/development-principles.md`, `AGENTS.md`, `.agent`
+
+### 2026-04-20
+
 - Mudança: criado o arquivo `docs/agent-rules.md` com regras de idioma e consistência do agente.
 - Motivo: explicitar convenções de trabalho para evitar ambiguidade entre UI, código e documentação.
 - Impacto: o agente passa a ter uma referência direta para manter UI em `pt-BR` e código em inglês internacional.

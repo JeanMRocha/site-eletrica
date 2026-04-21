@@ -18,6 +18,7 @@
 - [`roadmap.md`](roadmap.md): visão geral do que ainda falta fazer ou ampliar.
 - [`header-template.md`](header-template.md): padrão de cabeçalho reutilizável para documentos de `docs/`.
 - [`modules/README.md`](modules/README.md): convenção para documentação por módulo.
+- [`adr/README.md`](adr/README.md): convenção para ADRs globais.
 
 ## Ordem sugerida de uso
 
@@ -27,6 +28,7 @@
 4. Consulte `agent-rules.md` para regras de idioma e consistência.
 5. Use `active-plan.md`, `roadmap.md` e `changelog.md` para organizar execução e rastreio.
 6. Use `modules/README.md` e a documentação do módulo afetado quando a alteração for local.
+7. Use `adr/README.md` quando a alteração trouxer uma decisão arquitetural relevante.
 
 ## Regra prática
 
@@ -35,3 +37,4 @@
 - Se a mudança for uma ampliação futura, registre em `roadmap.md`.
 - Se a mudança já foi concluída, registre em `changelog.md`.
 - Se a mudança for de um módulo, consulte a pasta `docs/modules/<nome>/`.
+- Se a mudança exigir uma decisão arquitetural, registre em `docs/adr/` ou no `adr/` do módulo.
