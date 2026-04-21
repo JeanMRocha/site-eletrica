@@ -28,6 +28,13 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ## Entradas
 
+### 2026-04-21
+
+- Mudança: criado `docs/mvp.md` para definir o MVP técnico mínimo, separar obrigatório de opcional e registrar a arquitetura ideal para o problema do projeto.
+- Motivo: transformar a análise técnica em uma referência prática para decidir o que construir primeiro.
+- Impacto: o projeto passou a ter uma linha de corte clara entre o que é essencial para iniciar e o que pode ficar para fases futuras.
+- Arquivos: `docs/mvp.md`, `docs/README.md`, `docs/product-overview.md`, `docs/roadmap.md`
+
 ### 2026-04-20
 
 - Mudança: incorporado o contexto operacional real do projeto em `docs/product-overview.md` e `docs/architecture.md`, incluindo a VPS principal, a VPS Oracle de monitoramento e a VPS local de suporte.

@@ -44,3 +44,4 @@ Visão de produto para orientar leitura, módulos e decisões de documentação.
 ## Documentation rule
 
 - Use this file when you need the product context before entering module or architecture detail.
+- Use `docs/mvp.md` when you need to separate the minimum necessary from future expansion.

@@ -16,6 +16,7 @@
 - [`agent-rules.md`](agent-rules.md): regras do agente, idioma e consistência.
 - [`governance.md`](governance.md): autoridade principal para navegação, escrita e arquivamento.
 - [`reading-paths.md`](reading-paths.md): caminhos mínimos de leitura por perfil.
+- [`mvp.md`](mvp.md): definição do MVP técnico mínimo e do que é obrigatório versus opcional.
 - [`modules/new-module-process.md`](modules/new-module-process.md): processo para criar e evoluir módulos novos com base em escopo e stack.
 - [`modules/module-template.md`](modules/module-template.md): template inicial para montar a documentação de um módulo novo.
 - [`changelog.md`](changelog.md): histórico cronológico de mudanças.

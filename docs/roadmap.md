@@ -21,6 +21,7 @@ Mapa de longo prazo com o que ainda não foi feito e o que precisa de ampliaçã
 - Inventário de nós e agentes
 - Telemetria e heartbeats
 - Incidentes e auditoria
+- MVP técnico mínimo detalhado em `docs/mvp.md`
 
 ### Operação
 
@@ -68,4 +69,4 @@ Mapa de longo prazo com o que ainda não foi feito e o que precisa de ampliaçã
 
 ## Status
 
-- Ainda não detalhado por prioridade.
+- A prioridade do MVP está detalhada em `docs/mvp.md`.
