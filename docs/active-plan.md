@@ -2,7 +2,7 @@
 
 > Status: active
 > Type: plan
-> Last updated: 2026-04-20
+> Last updated: 2026-04-21
 > Owner: repository
 
 Use este documento para registrar trabalho em andamento no nível global do repositório.
@@ -15,40 +15,44 @@ Use este documento para registrar trabalho em andamento no nível global do repo
 
 ## Contexto
 
-- Implantar a política oficial de ADR com ciclo de vida, archive, current-state e template fixo.
+- A documentação já definiu governança, MVP e processo para novos módulos.
+- O trabalho agora deve sair da fase de documentação e entrar na primeira implementação funcional.
+- O plano global atual passa a acompanhar a fase 1 do produto.
 
 ## Scope
 
-- Manter a política de ADR consistente.
-- Preparar a documentação para leitura por escopo.
+- Acompanhar a implementação da fase 1 definida em `docs/phase-1-plan.md`.
+- Manter visível o progresso de `auth`, `nodes`, `incidents` e `dashboard`.
+- Atualizar a execução à medida que os docs do módulo forem sendo preenchidos e a implementação avançar.
 
 ## Out of scope
 
-- Implementação da API.
-- UI do produto.
-- Integração com infraestrutura.
+- Mudanças de governança documental já concluídas.
+- Reescrita ampla da arquitetura sem necessidade real.
+- Automação avançada fora do MVP.
 
 ## Next steps
 
-1. Consolidar o padrão de `plan` e `current-state`.
-2. Atualizar referências globais e por módulo.
-3. Validar a coerência do índice de documentação.
+1. Começar por `auth`.
+2. Criar a base de `nodes`.
+3. Ligar o fluxo de incidentes.
+4. Montar o painel consolidado.
 
 ## Blockers
 
-- Definição de novos módulos ainda pendentes.
+- Falta de implementação inicial dos módulos.
 
 ## Validation
 
-- Confirmar que os templates existem e que os documentos ativos seguem o padrão.
+- Confirmar que a fase 1 segue o MVP e a arquitetura documentada.
+- Confirmar que cada módulo nasce com documentação mínima antes da implementação.
 
 ## Review criteria
 
-- Quando este plano deixa de fazer sentido?
-- O que precisa acontecer para atualizar o escopo?
-- Que mudança exige um novo plano?
+- A fase 1 ainda representa o trabalho ativo?
+- O escopo mudou a ponto de exigir novo plano?
 - O plano deve ser pausado, concluído ou substituído?
 
 ## Status
 
-- Implantação da política de ADR e template em andamento.
+- Fase 1 do produto aguardando início de implementação.

@@ -30,6 +30,13 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-21
 
+- Mudança: criado `docs/phase-1-plan.md` e atualizado `docs/active-plan.md` para acompanhar a primeira fase de implementação por módulo.
+- Motivo: transformar o MVP em um plano executável com sequência clara de módulos e critérios de conclusão.
+- Impacto: o projeto passou a ter um plano ativo de implementação, não apenas um roadmap conceitual.
+- Arquivos: `docs/phase-1-plan.md`, `docs/active-plan.md`, `docs/README.md`, `docs/roadmap.md`
+
+### 2026-04-21
+
 - Mudança: criado `docs/mvp.md` para definir o MVP técnico mínimo, separar obrigatório de opcional e registrar a arquitetura ideal para o problema do projeto.
 - Motivo: transformar a análise técnica em uma referência prática para decidir o que construir primeiro.
 - Impacto: o projeto passou a ter uma linha de corte clara entre o que é essencial para iniciar e o que pode ficar para fases futuras.

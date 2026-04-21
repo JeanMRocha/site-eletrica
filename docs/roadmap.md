@@ -22,6 +22,7 @@ Mapa de longo prazo com o que ainda não foi feito e o que precisa de ampliaçã
 - Telemetria e heartbeats
 - Incidentes e auditoria
 - MVP técnico mínimo detalhado em `docs/mvp.md`
+- Fase 1 de implementação detalhada em `docs/phase-1-plan.md`
 
 ### Operação
 
@@ -69,4 +70,4 @@ Mapa de longo prazo com o que ainda não foi feito e o que precisa de ampliaçã
 
 ## Status
 
-- A prioridade do MVP está detalhada em `docs/mvp.md`.
+- A prioridade do MVP está detalhada em `docs/mvp.md` e a primeira fase de implementação em `docs/phase-1-plan.md`.
