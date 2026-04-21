@@ -30,6 +30,13 @@ Registro cronológico das mudanças relevantes no repositório.
 
 ### 2026-04-20
 
+- Mudança: refinado `docs/reading-paths.md` para uma tabela operacional com leitura mínima, opcional e documentos que devem ficar fora do padrão.
+- Motivo: tornar o guia mais prático para uso diário e reduzir o risco de abrir documentação desnecessária.
+- Impacto: o perfil de leitura ficou mais direto, curto e aplicável na rotina do agente e de colaboradores.
+- Arquivos: `docs/reading-paths.md`
+
+### 2026-04-20
+
 - Mudança: criado `docs/reading-paths.md` com mapas de leitura por perfil para novo contribuidor, auth, operação e revisão de arquitetura.
 - Motivo: reduzir carga desnecessária de documentação e deixar a navegação mais profissional e orientada ao escopo.
 - Impacto: o agente e os colaboradores passam a ter um caminho mínimo de leitura por perfil antes de abrir docs fora do escopo.

@@ -14,7 +14,26 @@ Guia prático para decidir quais documentos ler por perfil, sem carregar a docum
 - Não carregue módulos ou ADRs fora do escopo da mudança.
 - Se a mudança tocar `auth`, use o caminho de `auth` abaixo.
 
-## 1. Novo contribuidor
+## Mapa rápido
+
+| Perfil | Leitura mínima | Leitura opcional | Não ler por padrão |
+| --- | --- | --- | --- |
+| Novo contribuidor | `docs/governance.md`, `docs/product-overview.md`, `docs/architecture.md`, `docs/stack.md`, `docs/development-principles.md` | `docs/README.md`, `docs/modules/README.md`, `docs/current-state.md`, `docs/roadmap.md` | ADRs, módulos não relacionados, snapshots antigos |
+| Dev de auth | `docs/governance.md`, `docs/modules/auth/README.md`, `docs/modules/auth/rules.md`, `docs/modules/auth/contracts.md`, `docs/modules/auth/security.md`, `docs/modules/auth/tests.md`, `docs/modules/auth/current-state.md` | `docs/product-overview.md`, `docs/architecture.md`, `docs/modules/auth/runbook.md`, `docs/modules/auth/active-plan.md`, `docs/modules/auth/adr/README.md` | Outros módulos, ADRs fora de auth, docs globais sem relação direta |
+| Operador | `docs/governance.md`, `docs/product-overview.md`, `docs/current-state.md`, `docs/changelog.md` | `docs/modules/auth/runbook.md`, `docs/modules/auth/current-state.md` quando auth estiver envolvido | ADRs extensos, arquitetura profunda, módulos não afetados |
+| Revisor de arquitetura | `docs/governance.md`, `docs/product-overview.md`, `docs/architecture.md`, `docs/stack.md`, `docs/development-principles.md`, `docs/adr/README.md`, `docs/current-state.md` | `docs/modules/README.md`, `docs/modules/auth/README.md`, `docs/modules/auth/adr/README.md`, `docs/roadmap.md` | Runbooks e planos operacionais quando a revisão for só estrutural |
+
+## Como usar
+
+- Se o trabalho for novo para o colaborador, use o caminho de `Novo contribuidor`.
+- Se o trabalho tocar `auth`, use o caminho de `Dev de auth`.
+- Se o trabalho for operacional, use o caminho de `Operador`.
+- Se o trabalho for revisão de fronteiras ou trade-offs, use o caminho de `Revisor de arquitetura`.
+- Se nada disso se aplicar, leia apenas o mínimo necessário definido pela governança.
+
+## Caminhos detalhados
+
+### Novo contribuidor
 
 Leia nesta ordem:
 
@@ -23,49 +42,39 @@ Leia nesta ordem:
 3. `docs/architecture.md`
 4. `docs/stack.md`
 5. `docs/development-principles.md`
-6. `docs/agent-rules.md`
-7. `docs/README.md`
-8. `docs/modules/README.md`
-9. `docs/current-state.md`
-10. `docs/roadmap.md`
 
-Use documentos de módulo apenas quando a tarefa apontar para uma área específica.
+Use os demais documentos apenas quando a tarefa apontar para um escopo específico.
 
-## 2. Dev mexendo em auth
+### Dev mexendo em auth
 
 Leia nesta ordem:
 
 1. `docs/governance.md`
 2. `docs/product-overview.md`
 3. `docs/architecture.md`
-4. `docs/agent-rules.md`
-5. `docs/modules/README.md`
-6. `docs/modules/auth/README.md`
-7. `docs/modules/auth/rules.md`
-8. `docs/modules/auth/contracts.md`
-9. `docs/modules/auth/security.md`
-10. `docs/modules/auth/tests.md`
-11. `docs/modules/auth/runbook.md`
-12. `docs/modules/auth/current-state.md`
-13. `docs/modules/auth/active-plan.md`
-14. `docs/modules/auth/adr/README.md`
+4. `docs/modules/auth/README.md`
+5. `docs/modules/auth/rules.md`
+6. `docs/modules/auth/contracts.md`
+7. `docs/modules/auth/security.md`
+8. `docs/modules/auth/tests.md`
+9. `docs/modules/auth/current-state.md`
+
+Use `runbook.md`, `active-plan.md` e `adr/README.md` quando a tarefa exigir contexto de operação, execução ou decisão.
 
 Se a alteração criar comportamento novo, atualize ou crie os testes antes da implementação.
 
-## 3. Operador
+### Operador
 
 Leia nesta ordem:
 
 1. `docs/governance.md`
 2. `docs/product-overview.md`
 3. `docs/current-state.md`
-4. `docs/modules/auth/runbook.md` quando o incidente ou a operação envolver auth
-5. `docs/modules/auth/current-state.md` quando o problema estiver no módulo auth
-6. `docs/changelog.md` quando precisar verificar o histórico recente
+4. `docs/changelog.md`
 
-Use ADR apenas quando a operação exigir entender uma decisão histórica.
+Se a operação envolver auth, leia também `docs/modules/auth/runbook.md` e `docs/modules/auth/current-state.md`.
 
-## 4. Revisor de arquitetura
+### Revisor de arquitetura
 
 Leia nesta ordem:
 
@@ -78,15 +87,12 @@ Leia nesta ordem:
 7. `docs/adr/current-state.md`
 8. `docs/current-state.md`
 9. `docs/roadmap.md`
-10. `docs/modules/README.md`
-11. `docs/modules/auth/README.md` quando auth estiver em análise
-12. `docs/modules/auth/adr/README.md` quando auth estiver em análise
 
-Concentre-se em decisões, fronteiras, riscos e trade-offs.
+Se a revisão tocar um módulo, abra também `docs/modules/README.md` e o `README.md` do módulo afetado.
 
 ## Resumo rápido
 
-- Novo contribuidor: visão geral primeiro, depois módulo conforme o trabalho.
-- Auth: documentação local do módulo + segurança + testes + runbook.
-- Operador: estado vigente + runbook + histórico recente.
+- Novo contribuidor: visão geral primeiro.
+- Auth: docs locais do módulo + segurança + testes + runbook.
+- Operador: estado vigente + histórico recente.
 - Arquitetura: arquitetura + stack + ADR + roadmap.
