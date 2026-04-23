@@ -370,9 +370,9 @@ func (s *Store) ensureStudyColumn(name, definition string) error {
 
 	for rows.Next() {
 		var (
-			cid, notNull, pk int
+			cid, notNull, pk       int
 			columnName, columnType string
-			defaultValue sql.NullString
+			defaultValue           sql.NullString
 		)
 		if err := rows.Scan(&cid, &columnName, &columnType, &notNull, &defaultValue, &pk); err != nil {
 			return err
@@ -391,11 +391,20 @@ func (s *Store) backfillStudyLocations() error {
 	if err != nil {
 		return err
 	}
-	defer rows.Close()
+
+	type locationBackfill struct {
+		id    string
+		city  string
+		state string
+		loc   string
+	}
+
+	var backfills []locationBackfill
 
 	for rows.Next() {
 		var id, city, state, location string
 		if err := rows.Scan(&id, &city, &state, &location); err != nil {
+			_ = rows.Close()
 			return err
 		}
 		if strings.TrimSpace(city) != "" && strings.TrimSpace(state) != "" {
@@ -407,12 +416,28 @@ func (s *Store) backfillStudyLocations() error {
 			continue
 		}
 
-		if _, err := s.db.Exec(`UPDATE studies SET city = COALESCE(NULLIF(city, ''), ?), state = COALESCE(NULLIF(state, ''), ?), location = COALESCE(NULLIF(location, ''), ?) WHERE id = ?`, parsedCity, parsedState, buildLocation(parsedCity, parsedState), id); err != nil {
+		backfills = append(backfills, locationBackfill{
+			id:    id,
+			city:  parsedCity,
+			state: parsedState,
+			loc:   buildLocation(parsedCity, parsedState),
+		})
+	}
+
+	if err := rows.Close(); err != nil {
+		return err
+	}
+	if err := rows.Err(); err != nil {
+		return err
+	}
+
+	for _, backfill := range backfills {
+		if _, err := s.db.Exec(`UPDATE studies SET city = COALESCE(NULLIF(city, ''), ?), state = COALESCE(NULLIF(state, ''), ?), location = COALESCE(NULLIF(location, ''), ?) WHERE id = ?`, backfill.city, backfill.state, backfill.loc, backfill.id); err != nil {
 			return err
 		}
 	}
 
-	return rows.Err()
+	return nil
 }
 
 func decodeAssessment(id, studyID, inputJSON, verdictJSON, createdAt string) (AssessmentRecord, error) {
