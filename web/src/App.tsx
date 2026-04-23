@@ -59,6 +59,7 @@ export function App() {
   const [workspace, setWorkspace] = useState<Workspace>(() => loadWorkspace());
   const [projects, setProjects] = useState<Project[]>([]);
   const [editingProjectId, setEditingProjectId] = useState('');
+  const [projectEditorOpen, setProjectEditorOpen] = useState(false);
   const [standards, setStandards] = useState<Standard[]>([]);
   const [hierarchy, setHierarchy] = useState<HierarchyLevel[]>([]);
   const [ibgeStates, setIbgeStates] = useState<IbgeState[]>([]);
@@ -154,6 +155,17 @@ export function App() {
     setActiveProjectSection(section);
   }
 
+  async function loadProjectDetail(id: string) {
+    const nextDetail = await getProject(id);
+    setDetail(nextDetail);
+    setProjectForm({
+      name: nextDetail.study.name,
+      city: nextDetail.study.city,
+      state: nextDetail.study.state,
+    });
+    return nextDetail;
+  }
+
   useEffect(() => {
     if (!session) {
       setProjects([]);
@@ -181,7 +193,8 @@ export function App() {
           setSelectedProjectId(nextSelected);
           const nextDetail = await getProject(nextSelected);
           setDetail(nextDetail);
-          setEditingProjectId(nextSelected);
+          setEditingProjectId('');
+          setProjectEditorOpen(false);
           setProjectForm({
             name: nextDetail.study.name,
             city: nextDetail.study.city,
@@ -190,6 +203,7 @@ export function App() {
         } else {
           setDetail(null);
           setEditingProjectId('');
+          setProjectEditorOpen(false);
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Falha ao carregar dados');
@@ -229,24 +243,44 @@ export function App() {
     setDetail(null);
     setSelectedProjectId('');
     setEditingProjectId('');
+    setProjectEditorOpen(false);
     setProjectForm(defaultProjectForm);
     setIbgeCities([]);
   }
 
   async function activateProject(id: string) {
     setSelectedProjectId(id);
-    setEditingProjectId(id);
+    setEditingProjectId('');
+    setProjectEditorOpen(false);
     try {
-      const nextDetail = await getProject(id);
-      setDetail(nextDetail);
-      setProjectForm({
-        name: nextDetail.study.name,
-        city: nextDetail.study.city,
-        state: nextDetail.study.state,
-      });
+      await loadProjectDetail(id);
       setActiveProjectSection('client');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Falha ao abrir projeto');
+    }
+  }
+
+  async function openProjectEditor(id?: string) {
+    setActiveTab('project');
+    setActiveProjectSection('client');
+    setProjectEditorOpen(true);
+    setError('');
+
+    if (!id) {
+      setSelectedProjectId('');
+      setEditingProjectId('');
+      setDetail(null);
+      setProjectForm(defaultProjectForm);
+      return;
+    }
+
+    setSelectedProjectId(id);
+    setEditingProjectId(id);
+
+    try {
+      await loadProjectDetail(id);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Falha ao abrir editor');
     }
   }
 
@@ -265,7 +299,7 @@ export function App() {
         : await createProject(input);
       setProjects(await listProjects());
       await activateProject(project.id);
-      openProjectSection('client');
+      setProjectEditorOpen(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : editingProjectId ? 'Falha ao atualizar cliente' : 'Falha ao criar cliente');
     } finally {
@@ -289,6 +323,7 @@ export function App() {
       setProjectForm(defaultProjectForm);
       setSelectedProjectId('');
       setDetail(null);
+      setProjectEditorOpen(false);
       setActiveProjectSection('client');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Falha ao excluir cliente');
@@ -298,11 +333,12 @@ export function App() {
   }
 
   function startNewProject() {
-    setEditingProjectId('');
-    setSelectedProjectId('');
-    setDetail(null);
-    setProjectForm(defaultProjectForm);
-    setActiveProjectSection('client');
+    void openProjectEditor();
+  }
+
+  function startEditProject() {
+    if (!selectedProjectId) return;
+    void openProjectEditor(selectedProjectId);
   }
 
   function updateSelectedProjectWorkspace(updater: (current: ProjectWorkspaceState) => ProjectWorkspaceState) {
@@ -447,23 +483,6 @@ export function App() {
         }
         onLogout={logout}
       >
-        <section className="hero-strip home-feature">
-          <div className="hero-metrics">
-            <div className="metric">
-              <strong>{projects.length}</strong>
-              <span>projetos</span>
-            </div>
-            <div className="metric">
-              <strong>{standards.length}</strong>
-              <span>normas</span>
-            </div>
-            <div className="metric">
-              <strong>{latestAssessment ? 1 : 0}</strong>
-              <span>último veredito</span>
-            </div>
-          </div>
-        </section>
-
         {error ? <div className="error">{error}</div> : null}
         {loading ? <div className="loading">Carregando dados iniciais...</div> : null}
 
@@ -472,10 +491,12 @@ export function App() {
             projects={projects}
             hierarchy={hierarchy}
             latestAssessment={latestAssessment}
+            projectCount={projects.length}
+            standardCount={standards.length}
+            verdictCount={latestAssessment ? 1 : 0}
             selectedProjectId={selectedProjectId}
             onSelectProject={activateProject}
             onOpenProjectSection={openProjectSection}
-            onOpenTab={openTab}
           />
         ) : null}
 
@@ -497,7 +518,9 @@ export function App() {
             loadingIbge={loadingIbge}
             geoError={geoError}
             activeSection={activeProjectSection}
+            editorOpen={projectEditorOpen}
             onSelectProject={activateProject}
+            onOpenEditor={startEditProject}
             onChangeForm={setProjectForm}
             onSubmitProject={onCreateProject}
             onDeleteProject={onDeleteProject}

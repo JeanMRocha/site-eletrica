@@ -1,18 +1,18 @@
 :root {
   color-scheme: dark;
-  --bg: #07111f;
-  --surface: rgba(10, 18, 33, 0.88);
-  --surface-strong: #101d35;
+  --bg: #09111d;
+  --surface: rgba(13, 20, 33, 0.9);
+  --surface-strong: #111c2f;
   --line: rgba(255, 255, 255, 0.08);
-  --line-strong: rgba(127, 226, 255, 0.28);
-  --text: #eef4ff;
-  --muted: #94a6c6;
+  --line-strong: rgba(127, 226, 255, 0.2);
+  --text: #ecf3ff;
+  --muted: #95a7c3;
   --accent: #7fe2ff;
-  --accent-soft: rgba(127, 226, 255, 0.12);
-  --ok: #38d68a;
-  --warn: #ffbe55;
-  --bad: #ff6b74;
-  --neutral: #8ea1c7;
+  --accent-soft: rgba(127, 226, 255, 0.1);
+  --ok: #6ddfa0;
+  --warn: #f0b85b;
+  --bad: #f28b93;
+  --neutral: #a3b1c7;
 }
 
 * {
@@ -28,10 +28,10 @@ body {
   min-height: 100vh;
   color: var(--text);
   background:
-    radial-gradient(circle at 0% 0%, rgba(127, 226, 255, 0.16), transparent 28%),
-    radial-gradient(circle at 100% 0%, rgba(255, 188, 104, 0.12), transparent 25%),
-    linear-gradient(180deg, #050d18 0%, #0b1322 100%);
-  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+    radial-gradient(circle at 0% 0%, rgba(127, 226, 255, 0.12), transparent 26%),
+    radial-gradient(circle at 100% 0%, rgba(255, 188, 104, 0.08), transparent 22%),
+    linear-gradient(180deg, #050c16 0%, #0b1321 100%);
+  font-family: "Segoe UI", "Inter", system-ui, sans-serif;
 }
 
 a {
@@ -66,7 +66,7 @@ button {
   margin-bottom: 14px;
   padding: 12px 14px;
   border-radius: 16px;
-  border: 1px solid rgba(255, 107, 116, 0.2);
-  background: rgba(255, 107, 116, 0.12);
-  color: #ffc5ca;
+  border: 1px solid rgba(242, 139, 147, 0.2);
+  background: rgba(242, 139, 147, 0.12);
+  color: #ffd1d5;
 }

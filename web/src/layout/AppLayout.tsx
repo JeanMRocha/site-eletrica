@@ -32,10 +32,11 @@ export function AppLayout({
   children,
 }: AppLayoutProps) {
   return (
-    <>
-      <header className="topbar">
+    <div className="app-shell">
+      <aside className="topbar app-rail">
         <div className="brand">
           <strong>Zé Faisca</strong>
+          <span className="brand-subtitle">Projeto elétrico e conformidade</span>
         </div>
 
         <nav className="tabbar" aria-label="Menu principal">
@@ -81,9 +82,9 @@ export function AppLayout({
             </div>
           ) : null}
         </div>
-      </header>
+      </aside>
 
       <main className="shell">{children}</main>
-    </>
+    </div>
   );
 }

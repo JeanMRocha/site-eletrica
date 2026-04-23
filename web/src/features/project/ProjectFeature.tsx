@@ -12,11 +12,13 @@ type ProjectTabProps = {
   form: ProjectForm;
   saving: boolean;
   editingProjectId: string;
+  editorOpen: boolean;
   states: IbgeState[];
   cities: IbgeCity[];
   loadingGeo: boolean;
   geoError: string;
   onSelectProject: (id: string) => void;
+  onOpenEditor: () => void;
   onChangeForm: (updater: (current: ProjectForm) => ProjectForm) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => Promise<void>;
   onDeleteProject: () => void;
@@ -30,11 +32,13 @@ export function ProjectTab({
   form,
   saving,
   editingProjectId,
+  editorOpen,
   states,
   cities,
   loadingGeo,
   geoError,
   onSelectProject,
+  onOpenEditor,
   onChangeForm,
   onSubmit,
   onDeleteProject,
@@ -46,17 +50,22 @@ export function ProjectTab({
         <div className="panel-head">
           <div>
             <p className="eyebrow">Clientes</p>
-            <h2>Cadastro básico</h2>
+            <h2>Cadastro e edição</h2>
           </div>
-          <button className="ghost" type="button" onClick={onStartNewProject}>
-            Novo cliente
-          </button>
+          <div className="popover-actions">
+            <button className="button" type="button" onClick={onStartNewProject}>
+              Novo cliente
+            </button>
+            <button className="ghost" type="button" onClick={onOpenEditor} disabled={!selectedProjectId}>
+              Editar cliente
+            </button>
+          </div>
         </div>
         <div className="list">
           {projects.length === 0 ? (
             <div className="item">
               <strong>Sem clientes cadastrados.</strong>
-              <p className="muted">Use o formulário ao lado para criar o primeiro.</p>
+              <p className="muted">Use o botão novo cliente para iniciar o cadastro.</p>
             </div>
           ) : (
             projects.map((project) => (
@@ -85,87 +94,89 @@ export function ProjectTab({
         </div>
       </article>
 
-      <article className="panel">
-        <div className="panel-head">
-          <div>
-            <p className="eyebrow">{editingProjectId ? 'Editar cliente' : 'Novo cliente'}</p>
-            <h2>{form.name || 'Cadastro básico'}</h2>
+      {editorOpen ? (
+        <article className="panel">
+          <div className="panel-head">
+            <div>
+              <p className="eyebrow">{editingProjectId ? 'Editar cliente' : 'Novo cliente'}</p>
+              <h2>{form.name || 'Cadastro do cliente'}</h2>
+            </div>
+            {editingProjectId ? (
+              <button className="ghost danger" type="button" onClick={onDeleteProject}>
+                Excluir
+              </button>
+            ) : null}
           </div>
-          {editingProjectId ? (
-            <button className="ghost danger" type="button" onClick={onDeleteProject}>
-              Excluir
-            </button>
-          ) : null}
-        </div>
-        <form onSubmit={onSubmit}>
-          <div className="form-grid">
+          <form onSubmit={onSubmit}>
+            <div className="form-grid">
+              <label>
+                Nome
+                <input value={form.name} onChange={(event) => onChangeForm((current) => ({ ...current, name: event.target.value }))} />
+              </label>
+              <label>
+                Estado
+                <select
+                  value={form.state}
+                  onChange={(event) =>
+                    onChangeForm((current) => ({
+                      ...current,
+                      state: event.target.value,
+                      city: '',
+                    }))
+                  }
+                >
+                  <option value="">Selecione</option>
+                  {states.map((state) => (
+                    <option key={state.sigla} value={state.sigla}>
+                      {state.nome} ({state.sigla})
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
             <label>
-              Nome
-              <input value={form.name} onChange={(event) => onChangeForm((current) => ({ ...current, name: event.target.value }))} />
-            </label>
-            <label>
-              Estado
+              Cidade
               <select
-                value={form.state}
-                onChange={(event) =>
-                  onChangeForm((current) => ({
-                    ...current,
-                    state: event.target.value,
-                    city: '',
-                  }))
-                }
+                value={form.city}
+                onChange={(event) => onChangeForm((current) => ({ ...current, city: event.target.value }))}
+                disabled={!form.state || loadingGeo}
               >
-                <option value="">Selecione</option>
-                {states.map((state) => (
-                  <option key={state.sigla} value={state.sigla}>
-                    {state.nome} ({state.sigla})
+                <option value="">{loadingGeo ? 'Carregando cidades...' : 'Selecione o estado primeiro'}</option>
+                {cities.map((city) => (
+                  <option key={city.id} value={city.nome}>
+                    {city.nome}
                   </option>
                 ))}
               </select>
             </label>
-          </div>
 
-          <label>
-            Cidade
-            <select
-              value={form.city}
-              onChange={(event) => onChangeForm((current) => ({ ...current, city: event.target.value }))}
-              disabled={!form.state || loadingGeo}
-            >
-              <option value="">{loadingGeo ? 'Carregando cidades...' : 'Selecione o estado primeiro'}</option>
-              {cities.map((city) => (
-                <option key={city.id} value={city.nome}>
-                  {city.nome}
-                </option>
-              ))}
-            </select>
-          </label>
+            {geoError ? <div className="error">{geoError}</div> : null}
 
-          {geoError ? <div className="error">{geoError}</div> : null}
-
-          <div className="popover-actions">
-            <button className="button" disabled={saving} type="submit">
-              {saving ? (editingProjectId ? 'Salvando...' : 'Criando...') : editingProjectId ? 'Salvar alterações' : 'Criar cliente'}
-            </button>
-            <button className="ghost" type="button" onClick={onStartNewProject}>
-              Limpar
-            </button>
-          </div>
-        </form>
-
-        {detail ? (
-          <div className="mini-card">
-            <strong>{detail.study.name}</strong>
-            <p className="muted">
-              {detail.study.city} / {detail.study.state}
-            </p>
-            <div className="meta">
-              <span>Criado em {formatDate(detail.study.created_at)}</span>
-              <span>Atualizado em {formatDate(detail.study.updated_at)}</span>
+            <div className="popover-actions">
+              <button className="button" disabled={saving} type="submit">
+                {saving ? (editingProjectId ? 'Salvando...' : 'Criando...') : editingProjectId ? 'Salvar alterações' : 'Criar cliente'}
+              </button>
+              <button className="ghost" type="button" onClick={onStartNewProject}>
+                Limpar
+              </button>
             </div>
-          </div>
-        ) : null}
-      </article>
+          </form>
+
+          {detail ? (
+            <div className="mini-card">
+              <strong>{detail.study.name}</strong>
+              <p className="muted">
+                {detail.study.city} / {detail.study.state}
+              </p>
+              <div className="meta">
+                <span>Criado em {formatDate(detail.study.created_at)}</span>
+                <span>Atualizado em {formatDate(detail.study.updated_at)}</span>
+              </div>
+            </div>
+          ) : null}
+        </article>
+      ) : null}
     </section>
   );
 }

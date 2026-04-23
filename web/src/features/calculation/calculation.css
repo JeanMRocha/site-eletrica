@@ -1,3 +1,17 @@
-.calculation-feature .summary-strip {
-  margin-top: 16px;
+.calculation-feature .wide-panel {
+  grid-column: 1 / -1;
+}
+
+.calculation-feature .metric-grid {
+  margin-top: 10px;
+}
+
+.calculation-feature .result-visual {
+  margin: 12px 0;
+}
+
+@media (max-width: 900px) {
+  .calculation-feature .metric-grid {
+    grid-template-columns: 1fr;
+  }
 }

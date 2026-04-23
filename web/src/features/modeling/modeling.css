@@ -1,3 +1,18 @@
 .modeling-feature .card-grid {
   align-items: start;
 }
+
+.modeling-feature .wide-panel {
+  grid-column: 1 / -1;
+}
+
+.modeling-feature .visual-card,
+.modeling-feature .visual-item {
+  min-height: 0;
+}
+
+@media (max-width: 900px) {
+  .modeling-feature .metric-grid {
+    grid-template-columns: 1fr;
+  }
+}

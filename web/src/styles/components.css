@@ -7,7 +7,7 @@
   min-width: 104px;
   min-height: 54px;
   padding: 0 16px;
-  border-radius: 18px;
+  border-radius: 16px;
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.03);
   color: var(--text);
@@ -44,7 +44,7 @@
   height: 54px;
   display: grid;
   place-items: center;
-  border-radius: 18px;
+  border-radius: 16px;
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.03);
   font-size: 1.4rem;
@@ -66,10 +66,10 @@
 .item,
 .mini-card,
 .verdict-card {
-  border-radius: 22px;
+  border-radius: 18px;
   border: 1px solid var(--line);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+  background: rgba(255, 255, 255, 0.028);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
 }
 
 .stack {
@@ -84,7 +84,7 @@
 .mini-card {
   display: grid;
   gap: 6px;
-  padding: 14px;
+  padding: 12px;
 }
 
 .mini-card.subtle {
@@ -105,13 +105,19 @@
   font-size: 0.9rem;
 }
 
+.metric-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .stage-row {
   width: 100%;
   display: grid;
   gap: 4px;
-  padding: 12px 14px;
+  padding: 11px 13px;
   text-align: left;
-  border-radius: 18px;
+  border-radius: 16px;
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.03);
   color: var(--text);
@@ -132,11 +138,11 @@ label {
 input,
 select {
   width: 100%;
-  padding: 12px 14px;
+  padding: 11px 13px;
   color: var(--text);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 14px;
-  background: rgba(4, 10, 18, 0.8);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(5, 11, 20, 0.82);
   outline: none;
 }
 
@@ -152,8 +158,8 @@ select:focus {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  min-height: 42px;
-  padding: 0 16px;
+  min-height: 40px;
+  padding: 0 15px;
   border-radius: 999px;
   border: 1px solid var(--line);
   transition:
@@ -164,9 +170,9 @@ select:focus {
 
 .button {
   border-color: transparent;
-  background: linear-gradient(135deg, #8ce6ff, #c6f1ff);
-  color: #05101c;
-  font-weight: 800;
+  background: linear-gradient(135deg, #7fe2ff, #b8efff);
+  color: #09111d;
+  font-weight: 700;
 }
 
 .ghost {
@@ -175,7 +181,7 @@ select:focus {
 }
 
 .ghost.danger {
-  color: #ffc5ca;
+  color: var(--bad);
 }
 
 .button:hover,
@@ -227,7 +233,7 @@ select:focus {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 10px;
+  padding: 5px 10px;
   border-radius: 999px;
   font-size: 0.78rem;
   border: 1px solid transparent;
@@ -235,22 +241,22 @@ select:focus {
 
 .badge.ok {
   background: rgba(56, 214, 138, 0.14);
-  color: #9ee8bd;
+  color: var(--ok);
 }
 
 .badge.warn {
   background: rgba(255, 190, 85, 0.14);
-  color: #ffd38a;
+  color: var(--warn);
 }
 
 .badge.bad {
   background: rgba(255, 107, 116, 0.14);
-  color: #ffb0b7;
+  color: var(--bad);
 }
 
 .badge.neutral {
   background: rgba(142, 161, 199, 0.14);
-  color: #d3def1;
+  color: var(--neutral);
 }
 
 .details-box {
@@ -262,6 +268,95 @@ select:focus {
   cursor: pointer;
   color: var(--accent);
   margin-bottom: 10px;
+}
+
+.compliance-hero,
+.result-visual,
+.calculation-slab {
+  display: grid;
+  gap: 14px;
+  align-items: center;
+}
+
+.compliance-hero,
+.result-visual {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+.calculation-slab {
+  grid-template-columns: minmax(0, 1fr) 160px;
+  padding: 16px;
+  margin: 14px 0;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.024);
+}
+
+.calculation-slab h3 {
+  margin: 4px 0 0;
+}
+
+.rule-stack {
+  display: grid;
+  gap: 10px;
+}
+
+.rule-item {
+  display: grid;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.rule-item-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.rule-track {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.rule-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(127, 226, 255, 0.95), rgba(184, 239, 255, 0.42));
+}
+
+.report-band {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 14px;
+}
+
+.report-chip {
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.024);
+}
+
+.report-chip strong {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.visual-card,
+.visual-item,
+.report-verdict {
+  display: grid;
+  gap: 10px;
 }
 
 .verdict-card {

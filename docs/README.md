@@ -13,6 +13,7 @@
 - [`product-overview.md`](product-overview.md): contexto de produto, domínio elétrico e áreas principais.
 - [`stack.md`](stack.md): stack escolhida e justificativa.
 - [`development-principles.md`](development-principles.md): princípios de trabalho, qualidade e segurança.
+- [`ui-design.md`](ui-design.md): regras de design, espaçamento, tipografia, cores e UX.
 - [`decoupling.md`](decoupling.md): regra de desacoplamento, responsabilidades e contratos mínimos.
 - [`agent-rules.md`](agent-rules.md): regras do agente, idioma e consistência.
 - [`governance.md`](governance.md): autoridade principal para navegação, escrita e arquivamento.

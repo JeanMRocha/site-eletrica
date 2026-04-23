@@ -1,5 +1,17 @@
-.conformity-feature .compliance-grid {
-  display: grid;
-  gap: 14px;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+.conformity-feature .metric-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.conformity-feature .wide-panel {
+  grid-column: 1 / -1;
+}
+
+.conformity-feature .compliance-hero {
+  margin: 14px 0;
+}
+
+@media (max-width: 900px) {
+  .conformity-feature .metric-grid {
+    grid-template-columns: 1fr;
+  }
 }

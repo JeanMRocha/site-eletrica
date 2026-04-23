@@ -20,12 +20,14 @@ type ProjectWorkspaceProps = {
   latestAssessment: AssessmentRecord | null;
   savingAssessment: boolean;
   editingProjectId: string;
+  editorOpen: boolean;
   ibgeStates: IbgeState[];
   ibgeCities: IbgeCity[];
   loadingIbge: boolean;
   geoError: string;
   activeSection: ProjectSectionKey;
   onSelectProject: (id: string) => void;
+  onOpenEditor: () => void;
   onChangeForm: (updater: (current: ProjectForm) => ProjectForm) => void;
   onSubmitProject: (event: FormEvent<HTMLFormElement>) => Promise<void>;
   onDeleteProject: () => void;
@@ -51,12 +53,14 @@ export function ProjectWorkspace({
   latestAssessment,
   savingAssessment,
   editingProjectId,
+  editorOpen,
   ibgeStates,
   ibgeCities,
   loadingIbge,
   geoError,
   activeSection,
   onSelectProject,
+  onOpenEditor,
   onChangeForm,
   onSubmitProject,
   onDeleteProject,
@@ -71,99 +75,103 @@ export function ProjectWorkspace({
 }: ProjectWorkspaceProps) {
   return (
     <section className="workspace project-workspace">
-      <aside className="sidebar">
-        <article className="panel compact">
-          <div className="panel-head slim">
-            <div>
-              <p className="eyebrow">Menu do projeto</p>
-              <h2>Etapas internas</h2>
-            </div>
-          </div>
+      <ProjectTab
+        projects={projects}
+        selectedProjectId={selectedProjectId}
+        detail={detail}
+        form={form}
+        saving={savingProject}
+        editingProjectId={editingProjectId}
+        editorOpen={editorOpen}
+        states={ibgeStates}
+        cities={ibgeCities}
+        loadingGeo={loadingIbge}
+        geoError={geoError}
+        onSelectProject={onSelectProject}
+        onOpenEditor={onOpenEditor}
+        onChangeForm={onChangeForm}
+        onSubmit={onSubmitProject}
+        onDeleteProject={onDeleteProject}
+        onStartNewProject={onStartNewProject}
+      />
 
-          <div className="stack tight">
-            {projectSections.map((section) => (
-              <button
-                key={section.key}
-                className={`stage-row ${activeSection === section.key ? 'active' : ''}`}
-                onClick={() => onSelectSection(section.key)}
-                type="button"
-              >
-                <div className="row">
+      {editorOpen ? (
+        <div className="workspace-open">
+          <aside className="sidebar">
+            <article className="panel compact">
+              <div className="panel-head slim">
+                <div>
+                  <p className="eyebrow">Menu do projeto</p>
+                  <h2>Etapas internas</h2>
+                </div>
+              </div>
+
+              <div className="stack tight">
+                {projectSections.map((section) => (
+                  <button
+                    key={section.key}
+                    className={`stage-row ${activeSection === section.key ? 'active' : ''}`}
+                    onClick={() => onSelectSection(section.key)}
+                    type="button"
+                  >
+                    <div className="row">
+                      <strong>
+                        <span aria-hidden="true">{section.icon}</span> {section.label}
+                      </strong>
+                    </div>
+                    <span className="muted">{section.hint}</span>
+                  </button>
+                ))}
+              </div>
+            </article>
+
+            <article className="panel compact">
+              <div className="panel-head slim">
+                <div>
+                  <p className="eyebrow">Projeto atual</p>
+                  <h3>{detail?.study.name ?? 'Nenhum selecionado'}</h3>
+                </div>
+              </div>
+              <div className="stack tight">
+                <div className="mini-card">
+                  <span>Cliente</span>
+                  <strong>{detail?.study.name ?? 'Selecione um cliente'}</strong>
+                </div>
+                <div className="mini-card">
+                  <span>Local</span>
                   <strong>
-                    <span aria-hidden="true">{section.icon}</span> {section.label}
+                    {detail ? `${detail.study.city} / ${detail.study.state}` : 'Sem local definido'}
                   </strong>
                 </div>
-                <span className="muted">{section.hint}</span>
-              </button>
-            ))}
+              </div>
+            </article>
+          </aside>
+
+          <div className="stage-area">
+            {activeSection === 'drawing' ? (
+              <DrawingStage projectWorkspace={projectWorkspace} onAddDrawing={onAddDrawing} />
+            ) : null}
+
+            {activeSection === 'area' || activeSection === 'modeling' ? (
+              <ModelingTab projectWorkspace={projectWorkspace} onAddEnvironment={onAddEnvironment} onAddLoad={onAddLoad} onAddCircuit={onAddCircuit} />
+            ) : null}
+
+            {activeSection === 'calculation' ? (
+              <CalculationTab
+                assessmentForm={assessmentForm}
+                standards={standards}
+                detail={detail}
+                latestAssessment={latestAssessment}
+                saving={savingAssessment}
+                onChangeAssessment={onChangeAssessment}
+                onSubmit={onSubmitAssessment}
+              />
+            ) : null}
+
+            {activeSection === 'conformity' ? <ConformityTab latestAssessment={latestAssessment} /> : null}
           </div>
-        </article>
-
-        <article className="panel compact">
-          <div className="panel-head slim">
-            <div>
-              <p className="eyebrow">Projeto atual</p>
-              <h3>{detail?.study.name ?? 'Nenhum selecionado'}</h3>
-            </div>
-          </div>
-          <div className="stack tight">
-            <div className="mini-card">
-              <span>Cliente</span>
-              <strong>{detail?.study.name ?? 'Selecione um cliente'}</strong>
-            </div>
-            <div className="mini-card">
-              <span>Local</span>
-              <strong>
-                {detail ? `${detail.study.city} / ${detail.study.state}` : 'Sem local definido'}
-              </strong>
-            </div>
-          </div>
-        </article>
-      </aside>
-
-      <div className="stage-area">
-        {activeSection === 'client' ? (
-          <ProjectTab
-            projects={projects}
-            selectedProjectId={selectedProjectId}
-            detail={detail}
-            form={form}
-            saving={savingProject}
-            editingProjectId={editingProjectId}
-            states={ibgeStates}
-            cities={ibgeCities}
-            loadingGeo={loadingIbge}
-            geoError={geoError}
-            onSelectProject={onSelectProject}
-            onChangeForm={onChangeForm}
-            onSubmit={onSubmitProject}
-            onDeleteProject={onDeleteProject}
-            onStartNewProject={onStartNewProject}
-          />
-        ) : null}
-
-        {activeSection === 'drawing' ? (
-          <DrawingStage projectWorkspace={projectWorkspace} onAddDrawing={onAddDrawing} />
-        ) : null}
-
-        {activeSection === 'area' || activeSection === 'modeling' ? (
-          <ModelingTab projectWorkspace={projectWorkspace} onAddEnvironment={onAddEnvironment} onAddLoad={onAddLoad} onAddCircuit={onAddCircuit} />
-        ) : null}
-
-        {activeSection === 'calculation' ? (
-          <CalculationTab
-            assessmentForm={assessmentForm}
-            standards={standards}
-            detail={detail}
-            latestAssessment={latestAssessment}
-            saving={savingAssessment}
-            onChangeAssessment={onChangeAssessment}
-            onSubmit={onSubmitAssessment}
-          />
-        ) : null}
-
-        {activeSection === 'conformity' ? <ConformityTab latestAssessment={latestAssessment} /> : null}
-      </div>
+        </div>
+      ) : null}
     </section>
   );
 }

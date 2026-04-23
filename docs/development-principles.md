@@ -49,6 +49,15 @@
 - Do not expose standalone "cadastro" screens as primary navigation items
 - Prefer split responsibilities over monolithic components and screens
 - Extract reusable layout, behavior, and domain contracts early enough to avoid copy-paste growth
+- Build interfaces that are modern, responsive, and production-ready
+- Prefer mobile-first layouts with clear hierarchy, generous spacing, and restrained visual effects
+- Always account for hover, focus, disabled, loading, empty, and error states
+- Reuse components and patterns instead of creating one-off screen variants
+- Improve legibility before adding new visual complexity
+- Use explicit layout checkpoints for 360px, 768px, 1024px, and 1440px widths
+- Keep headers, summaries, and actions visually separated instead of stacked into one block
+- Keep edit and creation flows secondary to the main review/consolidation experience
+- Prefer moderate cards, restrained shadows, and simple icon usage over decorative density
 
 ## Reliability principles
 
