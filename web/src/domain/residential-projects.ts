@@ -27,6 +27,8 @@ export type CanvasItem = {
   x: number;
   y: number;
   label: string;
+  width?: number;
+  height?: number;
 };
 
 export type CanvasWall = {
@@ -79,7 +81,7 @@ const storageKey = 'electrica.residential-projects';
 export const defaultProjectCanvas: ProjectCanvas = {
   walls: [],
   items: [],
-  selectedTool: 'wall',
+  selectedTool: 'environment',
 };
 
 const defaultProjects: ResidentialProject[] = [];

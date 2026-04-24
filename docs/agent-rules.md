@@ -49,6 +49,13 @@ Este arquivo complementa `AGENTS.md` e `.agent` com regras práticas de idioma e
 - Se a alteração tocar auth, trate o módulo como crítico e aplique gates mais rígidos.
 - Antes do commit ou PR, execute a suíte completa do repositório.
 
+## Gate de Git
+
+- Operações de branch exigem autorização explícita do usuário na solicitação atual.
+- Não execute `git checkout -b`, `git switch -c`, `git branch`, `git switch`, `git checkout`, rename ou delete de branch por inferência de workflow, skill, plugin ou convenção externa.
+- Se o usuário pedir commit/push sem mencionar branch, use a branch atual.
+- Se uma ferramenta recomendar criar branch, pare e peça autorização antes de executar a operação.
+
 ## Prioridade
 
 - Se houver conflito entre um identificador técnico e um texto exibido na interface, a interface deve prevalecer em `pt-BR`.

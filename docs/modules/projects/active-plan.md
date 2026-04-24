@@ -33,15 +33,15 @@ Plano de trabalho do módulo `projects` para a fase atual da interface web.
 
 1. Ler este plano e o `current-state.md` do módulo.
 2. Abrir o projetador em `/projetos/:id/projetador`.
-3. Confirmar o canvas 2D base com ferramenta ativa, clique para inserir e seleção simples.
+3. Confirmar o canvas 2D base com ferramenta ativa, clique para inserir, seleção, arraste e alças auxiliares.
 4. Ajustar o tamanho dos cards, toolbars e painéis para um layout mais compacto.
 5. Validar a responsividade em mobile, tablet e desktop.
 
 ## Next steps
 
-1. Finalizar a base do canvas 2D.
-2. Expor propriedades do item selecionado.
-3. Refinar a redução de densidade visual do módulo.
+1. Refinar criação de paredes com pontos inicial e final.
+2. Vincular paredes aos ambientes para medição mais confiável.
+3. Criar propriedades elétricas específicas por tipo de ponto.
 4. Revisar a persistência do estado do canvas quando o projeto for reaberto.
 
 ## Validation
@@ -49,4 +49,3 @@ Plano de trabalho do módulo `projects` para a fase atual da interface web.
 - `npm run build`
 - Conferir layout em quebra móvel, tablet e desktop.
 - Confirmar que o projetador continua navegável a partir da lista de projetos.
-

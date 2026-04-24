@@ -10,7 +10,8 @@
 - O módulo `projects` já está separado em lista, detalhe, criação, edição e projetador.
 - A tela principal de projetos virou ponto de entrada para a revisão técnica.
 - O projetador existe como base funcional e ainda está em evolução.
-- O canvas 2D inicial deve permanecer simples, clicável e fácil de retomar.
+- O canvas 2D inicial permite inserir, selecionar, arrastar e redimensionar ambientes com alças auxiliares.
+- O menu do projetador segue uma sequência lógica: ambientes, paredes, entrada, pontos e circuitos.
 - A persistência atual do módulo usa armazenamento local no front para o esqueleto funcional.
 
 ## Update rule

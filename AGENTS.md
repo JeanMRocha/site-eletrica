@@ -28,5 +28,6 @@ Read `docs/governance.md` first, then use the reusable skills:
 ## Rules
 
 - Do not introduce a new front-end stack without a documented decision.
+- Do not create, switch, rename, or delete Git branches unless the user explicitly asks for that branch operation in the current request.
 - Keep `docs/` as the repository truth.
 - Keep this file short and avoid repeating the full policy tree here.
