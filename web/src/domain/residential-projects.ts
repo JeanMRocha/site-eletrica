@@ -29,6 +29,7 @@ export type CanvasItem = {
   label: string;
   width?: number;
   height?: number;
+  rotation?: number;
 };
 
 export type CanvasWall = {

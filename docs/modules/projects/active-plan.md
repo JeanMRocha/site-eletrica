@@ -11,7 +11,7 @@ Plano de trabalho do módulo `projects` para a fase atual da interface web.
 
 - O sistema já tem rotas separadas para clientes, projetos, catálogo, normas e relatórios.
 - O módulo `projects` agora concentra listagem, detalhe, criação, edição e acesso ao projetador.
-- O projetador ainda é um esqueleto funcional e precisa evoluir em camadas pequenas.
+- O projetador usa Fabric.js como camada visual do canvas 2D.
 - A próxima entrega deve manter a UI compacta, clara e fácil de retomar depois.
 
 ## Scope
@@ -21,6 +21,8 @@ Plano de trabalho do módulo `projects` para a fase atual da interface web.
 - Manter ferramentas e painel de propriedades em layout estreito e legível.
 - Reduzir a densidade visual dos blocos do módulo para ganhar área útil.
 - Preservar a separação entre UI, armazenamento local, cálculo e validação.
+- Manter o canvas desacoplado em tela, controller, componentes de UI, modelo, mutações puras e adaptador visual Fabric.
+- Manter o controller dependente de uma porta de persistência do canvas, não diretamente das funções do domínio/localStorage.
 
 ## Out of scope
 
@@ -39,10 +41,12 @@ Plano de trabalho do módulo `projects` para a fase atual da interface web.
 
 ## Next steps
 
-1. Refinar criação de paredes com pontos inicial e final.
+1. Refinar criação de paredes com pontos inicial e final usando objetos Fabric.
 2. Vincular paredes aos ambientes para medição mais confiável.
-3. Criar propriedades elétricas específicas por tipo de ponto.
-4. Revisar a persistência do estado do canvas quando o projeto for reaberto.
+3. Criar propriedades elétricas específicas por tipo de ponto fora da camada visual do canvas.
+4. Revisar a persistência JSON do canvas quando o projeto for reaberto.
+5. Adicionar testes unitários para `canvasMutations` antes de ampliar regras de edição.
+6. Evoluir a porta `ProjectCanvasRepository` para backend/API quando a persistência sair do localStorage.
 
 ## Validation
 

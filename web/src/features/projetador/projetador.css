@@ -18,11 +18,11 @@
 
 .designer-tools,
 .designer-props,
-.designer-canvas {
+.fabric-canvas-shell {
   min-width: 0;
 }
 
-.designer-canvas {
+.fabric-canvas-shell {
   position: relative;
   min-height: 500px;
   border-radius: 10px;
@@ -34,6 +34,18 @@
   background-size: 36px 36px;
   overflow: hidden;
   padding: 12px;
+}
+
+.fabric-canvas-shell.loading {
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+}
+
+.fabric-canvas-shell .canvas-container,
+.fabric-canvas-shell canvas {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .canvas-empty {
@@ -196,6 +208,94 @@
   border-radius: 999px;
   cursor: ew-resize;
   transform: translateY(-50%);
+}
+
+.canvas-trash {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  z-index: 4;
+  display: grid;
+  gap: 2px;
+  min-width: 108px;
+  padding: 10px 12px;
+  border: 1px dashed rgba(255, 112, 112, 0.5);
+  border-radius: 8px;
+  background: rgba(48, 12, 16, 0.86);
+  color: var(--text);
+  pointer-events: none;
+}
+
+.canvas-zoom-controls {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(8, 13, 23, 0.86);
+}
+
+.canvas-zoom-controls button {
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+}
+
+.canvas-zoom-controls span {
+  min-width: 44px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.canvas-trash span {
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.canvas-context-menu {
+  position: fixed;
+  z-index: 20;
+  display: grid;
+  gap: 4px;
+  min-width: 150px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(8, 13, 23, 0.98);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.3);
+}
+
+.canvas-context-menu span {
+  padding: 6px 8px 2px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+
+.canvas-context-menu button {
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+}
+
+.canvas-context-menu button:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.canvas-context-menu .danger-action {
+  color: #ff9f9f;
 }
 
 .compact-action {
