@@ -1,113 +1,164 @@
-import type { FormEvent } from 'react';
+import { useState, type FormEvent } from 'react';
 import type { Project } from '../../types';
 import { formatDate } from '../../lib/presentation';
 import type { IbgeCity, IbgeState } from '../../domain/ibge';
 import type { ProjectForm } from '../../domain/workspace';
+import type { ProjectSectionKey } from '../../navigation';
+import { ModalShell } from '../shared/ModalShell';
 import './project.css';
 
+type ClientSectionKey = 'dados' | 'contato' | 'endereco';
+
+const clientSections: Array<{ key: ClientSectionKey; label: string; hint: string }> = [
+  { key: 'dados', label: 'Dados', hint: 'Nome e local do cliente.' },
+  { key: 'contato', label: 'Contato', hint: 'Telefone, e-mail e responsáveis.' },
+  { key: 'endereco', label: 'Endereço', hint: 'Referência de localização do projeto.' },
+];
+
 type ProjectTabProps = {
-  projects: Project[];
-  selectedProjectId: string;
   detail: { study: Project } | null;
   form: ProjectForm;
   saving: boolean;
   editingProjectId: string;
-  editorOpen: boolean;
+  modalSection: ProjectSectionKey | null;
   states: IbgeState[];
   cities: IbgeCity[];
   loadingGeo: boolean;
   geoError: string;
-  onSelectProject: (id: string) => void;
   onOpenEditor: () => void;
   onChangeForm: (updater: (current: ProjectForm) => ProjectForm) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => Promise<void>;
   onDeleteProject: () => void;
   onStartNewProject: () => void;
+  onCloseModal: () => void;
 };
 
 export function ProjectTab({
-  projects,
-  selectedProjectId,
   detail,
   form,
   saving,
   editingProjectId,
-  editorOpen,
+  modalSection,
   states,
   cities,
   loadingGeo,
   geoError,
-  onSelectProject,
   onOpenEditor,
   onChangeForm,
   onSubmit,
   onDeleteProject,
   onStartNewProject,
+  onCloseModal,
 }: ProjectTabProps) {
+  const [activeClientSection, setActiveClientSection] = useState<ClientSectionKey>('dados');
+  const activeClientSectionLabel = clientSections.find((section) => section.key === activeClientSection)?.label ?? 'Dados';
+  const activeClientSectionHint = clientSections.find((section) => section.key === activeClientSection)?.hint ?? '';
+  const clientModalOpen = modalSection === 'client';
+
   return (
-    <section className="dashboard-grid project-feature">
-      <article className="panel">
-        <div className="panel-head">
-          <div>
-            <p className="eyebrow">Clientes</p>
-            <h2>Cadastro e edição</h2>
-          </div>
-          <div className="popover-actions">
-            <button className="button" type="button" onClick={onStartNewProject}>
-              Novo cliente
-            </button>
-            <button className="ghost" type="button" onClick={onOpenEditor} disabled={!selectedProjectId}>
-              Editar cliente
-            </button>
-          </div>
-        </div>
-        <div className="list">
-          {projects.length === 0 ? (
-            <div className="item">
-              <strong>Sem clientes cadastrados.</strong>
-              <p className="muted">Use o botão novo cliente para iniciar o cadastro.</p>
-            </div>
-          ) : (
-            projects.map((project) => (
+    <section className="project-feature-shell">
+      <article className="panel client-context-panel-shell">
+        <div className="client-context-bar" role="tablist" aria-label="Menu contexto do cliente">
+          <div className="client-context-tabs">
+            {clientSections.map((section) => (
               <button
-                key={project.id}
-                className={`item selectable ${project.id === selectedProjectId ? 'selected' : ''}`}
-                onClick={() => onSelectProject(project.id)}
+                key={section.key}
+                aria-selected={activeClientSection === section.key}
+                className={`tab-chip context-tab ${activeClientSection === section.key ? 'active' : ''}`}
+                onClick={() => setActiveClientSection(section.key)}
+                role="tab"
                 type="button"
+                title={section.hint}
               >
-                <div className="row">
-                  <div>
-                    <strong>{project.name}</strong>
-                    <p className="muted">
-                      {project.city} / {project.state}
-                    </p>
-                  </div>
-                  <span className="badge neutral">Cliente</span>
-                </div>
-                <div className="meta">
-                  <span>{formatDate(project.created_at)}</span>
-                  <span>{formatDate(project.updated_at)}</span>
-                </div>
+                <span>{section.label}</span>
               </button>
-            ))
-          )}
+            ))}
+          </div>
+
+          <button className="button context-create" type="button" onClick={onStartNewProject}>
+            Criar
+          </button>
+        </div>
+
+        <div className="client-context-panel">
+          <div className="client-context-summary">
+            <div>
+              <p className="eyebrow">Seção ativa</p>
+              <h3>{activeClientSectionLabel}</h3>
+              <p className="muted">{activeClientSectionHint}</p>
+            </div>
+            {detail ? (
+              <div className="mini-card subtle">
+                <strong>{detail.study.name}</strong>
+                <p className="muted">
+                  {detail.study.city} / {detail.study.state}
+                </p>
+                <div className="meta">
+                  <span>Criado em {formatDate(detail.study.created_at)}</span>
+                  <span>Atualizado em {formatDate(detail.study.updated_at)}</span>
+                </div>
+              </div>
+            ) : (
+              <div className="client-empty-state">
+                <strong>Sem cliente selecionado</strong>
+                <p className="muted">Abra um cliente na busca da home para editar os dados.</p>
+              </div>
+            )}
+            <div className="popover-actions">
+              <button className="ghost" type="button" onClick={onOpenEditor} disabled={!detail}>
+                Editar cliente
+              </button>
+              <button className="button" type="button" onClick={onStartNewProject}>
+                Novo cliente
+              </button>
+            </div>
+          </div>
         </div>
       </article>
 
-      {editorOpen ? (
-        <article className="panel">
-          <div className="panel-head">
-            <div>
-              <p className="eyebrow">{editingProjectId ? 'Editar cliente' : 'Novo cliente'}</p>
-              <h2>{form.name || 'Cadastro do cliente'}</h2>
-            </div>
+      <ModalShell
+        open={clientModalOpen}
+        title={editingProjectId ? 'Editar cliente' : 'Novo cliente'}
+        subtitle={detail ? `${detail.study.city} / ${detail.study.state}` : 'Cadastro mínimo do cliente'}
+        className="compact"
+        onClose={onCloseModal}
+        footer={
+          <>
             {editingProjectId ? (
               <button className="ghost danger" type="button" onClick={onDeleteProject}>
                 Excluir
               </button>
             ) : null}
+            <button className="ghost" type="button" onClick={onStartNewProject}>
+              Novo cliente
+            </button>
+          </>
+        }
+      >
+        <div className="client-context-bar" role="tablist" aria-label="Menu contexto do cliente">
+          <div className="client-context-tabs">
+            {clientSections.map((section) => (
+              <button
+                key={section.key}
+                aria-selected={activeClientSection === section.key}
+                className={`tab-chip context-tab ${activeClientSection === section.key ? 'active' : ''}`}
+                onClick={() => setActiveClientSection(section.key)}
+                role="tab"
+                type="button"
+                title={section.hint}
+              >
+                <span>{section.label}</span>
+              </button>
+            ))}
           </div>
-          <form onSubmit={onSubmit}>
+
+          <button className="button context-create" type="button" onClick={onStartNewProject}>
+            Criar
+          </button>
+        </div>
+
+        {activeClientSection === 'dados' ? (
+          <form onSubmit={onSubmit} className="stack">
             <div className="form-grid">
               <label>
                 Nome
@@ -162,21 +213,17 @@ export function ProjectTab({
               </button>
             </div>
           </form>
-
-          {detail ? (
-            <div className="mini-card">
-              <strong>{detail.study.name}</strong>
-              <p className="muted">
-                {detail.study.city} / {detail.study.state}
-              </p>
-              <div className="meta">
-                <span>Criado em {formatDate(detail.study.created_at)}</span>
-                <span>Atualizado em {formatDate(detail.study.updated_at)}</span>
-              </div>
-            </div>
-          ) : null}
-        </article>
-      ) : null}
+        ) : (
+          <div className="client-empty-state">
+            <strong>{activeClientSectionLabel}</strong>
+            <p className="muted">
+              {activeClientSection === 'contato'
+                ? 'Os campos de contato ainda não foram modelados. Esta etapa seguirá em modal quando os dados existirem.'
+                : 'Os campos de endereço ainda não foram modelados. Esta etapa seguirá em modal quando os dados existirem.'}
+            </p>
+          </div>
+        )}
+      </ModalShell>
     </section>
   );
 }

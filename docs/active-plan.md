@@ -20,6 +20,7 @@ Use este documento para registrar trabalho em andamento no nível global do repo
 - A primeira base visual em `Vite + React` e de persistência local já foi iniciada no MVP.
 - A fase 1 está detalhada em `docs/phase-1-plan.md`.
 - O módulo `auth` continua sendo o primeiro incremento funcional.
+- O módulo `projects` agora possui plano vivo próprio em `docs/modules/projects/active-plan.md`.
 - Os próximos módulos de domínio passam a ser `projects`, `ambientes`, `cargas`, `circuitos`, `condutores`, `protecao`, `standards`, `calculations`, `conformidade` e `reports`.
 
 ## Scope
@@ -44,6 +45,7 @@ Use este documento para registrar trabalho em andamento no nível global do repo
 6. Ligar o fluxo de `calculations`.
 7. Conectar `conformidade` e `reports`.
 8. Expandir a interface web e a persistência local.
+9. Para o trabalho de projetador, seguir `docs/modules/projects/active-plan.md`.
 
 ## Blockers
 

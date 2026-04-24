@@ -1,4 +1,4 @@
-export type TabKey = 'home' | 'project' | 'standards' | 'reports';
+export type TabKey = 'dashboard' | 'clientes' | 'projetos' | 'catalogo' | 'normas' | 'relatorios';
 
 export type ProjectSectionKey = 'client' | 'drawing' | 'area' | 'modeling' | 'calculation' | 'conformity';
 
@@ -6,6 +6,7 @@ export type TabDefinition = {
   key: TabKey;
   label: string;
   icon: string;
+  path: string;
 };
 
 export type ProjectSectionDefinition = {
@@ -16,10 +17,12 @@ export type ProjectSectionDefinition = {
 };
 
 export const tabs: TabDefinition[] = [
-  { key: 'home', label: 'Início', icon: '⌂' },
-  { key: 'project', label: 'Cliente', icon: '◉' },
-  { key: 'standards', label: 'Normas', icon: '≋' },
-  { key: 'reports', label: 'Relatórios', icon: '▤' },
+  { key: 'dashboard', label: 'Dashboard', icon: '⌂', path: '/dashboard' },
+  { key: 'clientes', label: 'Clientes', icon: '◉', path: '/clientes' },
+  { key: 'projetos', label: 'Projetos', icon: '▦', path: '/projetos' },
+  { key: 'catalogo', label: 'Catálogo', icon: '◫', path: '/catalogo/materiais' },
+  { key: 'normas', label: 'Normas', icon: '≋', path: '/normas' },
+  { key: 'relatorios', label: 'Relatórios', icon: '▤', path: '/relatorios' },
 ];
 
 export const projectSections: ProjectSectionDefinition[] = [

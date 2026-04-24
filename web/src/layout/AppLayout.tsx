@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
+import { NavLink } from 'react-router-dom';
 import type { Session } from '../domain/workspace';
 import type { TabDefinition, TabKey } from '../navigation';
 import { initialsFromName } from '../lib/presentation';
@@ -11,7 +12,6 @@ type AppLayoutProps = {
   profileOpen: boolean;
   draft: Session;
   onToggleProfile: () => void;
-  onOpenTab: (tab: TabKey) => void;
   onDraftChange: Dispatch<SetStateAction<Session>>;
   onSaveProfile: () => void;
   onLogout: () => void;
@@ -25,15 +25,17 @@ export function AppLayout({
   profileOpen,
   draft,
   onToggleProfile,
-  onOpenTab,
   onDraftChange,
   onSaveProfile,
   onLogout,
   children,
 }: AppLayoutProps) {
+  const activeTabLabel = tabs.find((tab) => tab.key === activeTab)?.label ?? 'Painel';
+  const notificationCount = 3;
+
   return (
     <div className="app-shell">
-      <aside className="topbar app-rail">
+      <aside className="app-rail">
         <div className="brand">
           <strong>Zé Faisca</strong>
           <span className="brand-subtitle">Projeto elétrico e conformidade</span>
@@ -41,50 +43,69 @@ export function AppLayout({
 
         <nav className="tabbar" aria-label="Menu principal">
           {tabs.map((tab) => (
-            <button
+            <NavLink
               key={tab.key}
               className={`tab-chip ${activeTab === tab.key ? 'active' : ''}`}
-              onClick={() => onOpenTab(tab.key)}
+              to={tab.path}
               title={tab.label}
-              type="button"
             >
               <strong aria-hidden="true">{tab.icon}</strong>
               <span>{tab.label}</span>
-            </button>
+            </NavLink>
           ))}
         </nav>
-
-        <div className="user-zone">
-          <button className="user-chip" onClick={onToggleProfile} title={session.name} type="button">
-            <span className="avatar">
-              {session.image ? <img src={session.image} alt={session.name} /> : initialsFromName(session.name)}
-            </span>
-          </button>
-
-          {profileOpen ? (
-            <div className="popover">
-              <label>
-                Nome
-                <input value={draft.name} onChange={(event) => onDraftChange((current) => ({ ...current, name: event.target.value }))} />
-              </label>
-              <label>
-                Imagem
-                <input value={draft.image} onChange={(event) => onDraftChange((current) => ({ ...current, image: event.target.value }))} />
-              </label>
-              <div className="popover-actions">
-                <button className="button" onClick={onSaveProfile} type="button">
-                  Salvar
-                </button>
-                <button className="ghost danger" onClick={onLogout} type="button">
-                  Sair
-                </button>
-              </div>
-            </div>
-          ) : null}
-        </div>
       </aside>
 
-      <main className="shell">{children}</main>
+      <section className="app-content">
+        <header className="app-topbar">
+          <div className="topbar-copy">
+            <span className="topbar-eyebrow">Navegação global</span>
+            <strong>{activeTabLabel}</strong>
+          </div>
+
+          <div className="topbar-actions">
+            <button className="notification-chip" type="button" aria-label={`Notificações (${notificationCount})`}>
+              <span aria-hidden="true">⟡</span>
+              <span className="notification-count">{notificationCount}</span>
+            </button>
+
+            <div className="user-zone">
+              <button className="user-chip" onClick={onToggleProfile} title={session.name} type="button">
+                <span className="avatar">
+                  {session.image ? <img src={session.image} alt={session.name} /> : initialsFromName(session.name)}
+                </span>
+                <span className="user-meta">
+                  <strong>{session.name}</strong>
+                  <span>Usuário ativo</span>
+                </span>
+              </button>
+
+              {profileOpen ? (
+                <div className="popover">
+                  <label>
+                    Nome
+                    <input value={draft.name} onChange={(event) => onDraftChange((current) => ({ ...current, name: event.target.value }))} />
+                  </label>
+                  <label>
+                    Imagem
+                    <input value={draft.image} onChange={(event) => onDraftChange((current) => ({ ...current, image: event.target.value }))} />
+                  </label>
+                  <div className="popover-actions">
+                    <button className="button" onClick={onSaveProfile} type="button">
+                      Salvar
+                    </button>
+                    <button className="ghost danger" onClick={onLogout} type="button">
+                      Sair
+                    </button>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          </div>
+        </header>
+
+        <main className="shell">{children}</main>
+      </section>
     </div>
   );
 }

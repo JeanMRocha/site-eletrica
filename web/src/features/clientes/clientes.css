@@ -1,0 +1,166 @@
+.clients-page {
+  display: grid;
+  gap: 16px;
+  width: 100%;
+}
+
+.clients-panel {
+  display: grid;
+  gap: 16px;
+  width: min(1040px, 100%);
+  margin: 0 auto;
+}
+
+.clients-toolbar {
+  display: grid;
+  gap: 12px;
+}
+
+.clients-search {
+  display: grid;
+  gap: 8px;
+  max-width: 360px;
+}
+
+.clients-table-wrap {
+  overflow: auto;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+}
+
+.clients-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.clients-table th,
+.clients-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  text-align: left;
+  vertical-align: top;
+}
+
+.clients-table th {
+  color: var(--muted);
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.clients-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.empty-cell {
+  padding: 24px 16px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.row-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.detail-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.detail-card {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.form-panel {
+  gap: 14px;
+}
+
+.stepper {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.step-chip {
+  display: grid;
+  gap: 4px;
+  text-align: left;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text);
+}
+
+.step-chip.active {
+  border-color: rgba(127, 226, 255, 0.42);
+  background: rgba(127, 226, 255, 0.08);
+}
+
+.step-chip span {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.client-form {
+  display: grid;
+  gap: 14px;
+}
+
+.form-section {
+  display: grid;
+  gap: 12px;
+}
+
+.section-copy {
+  display: grid;
+  gap: 4px;
+}
+
+.form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-top: 4px;
+}
+
+.delete-link {
+  justify-self: end;
+}
+
+@media (max-width: 960px) {
+  .detail-grid,
+  .stepper {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .clients-panel {
+    width: 100%;
+  }
+
+  .clients-table th,
+  .clients-table td {
+    padding: 12px;
+  }
+
+  .form-footer {
+    justify-content: stretch;
+  }
+
+  .form-footer .button,
+  .form-footer .ghost {
+    flex: 1 1 0;
+  }
+}
