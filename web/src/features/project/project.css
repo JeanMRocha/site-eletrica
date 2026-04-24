@@ -1,3 +1,117 @@
 .project-feature .details-box {
   margin-top: 4px;
 }
+
+.project-feature-shell {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: minmax(0, 1fr);
+  grid-column: 1 / -1;
+  width: 100%;
+  min-width: 0;
+}
+
+.client-context-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  margin: 14px 0 16px;
+  padding: 12px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.client-context-tabs {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.context-tab {
+  min-height: 44px;
+  width: 100%;
+  justify-content: center;
+  padding: 0 14px;
+}
+
+.context-tab strong {
+  opacity: 0.72;
+}
+
+.context-create {
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.client-context-panel {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.client-context-summary {
+  display: grid;
+  gap: 14px;
+}
+
+.client-context-panel h3 {
+  margin: 4px 0 0;
+}
+
+.client-context-panel-shell {
+  width: 100%;
+}
+
+.project-client-editor {
+  min-width: 0;
+}
+
+.client-empty-state {
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px dashed var(--line);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.stage-summary {
+  display: grid;
+  gap: 16px;
+}
+
+.grid-two {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.soft-panel {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+}
+
+.quick-step {
+  text-align: left;
+  min-height: 120px;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  padding: 16px;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+}
+
+.quick-step strong {
+  font-size: 1.02rem;
+}
+
+.quick-step span {
+  color: var(--muted);
+}

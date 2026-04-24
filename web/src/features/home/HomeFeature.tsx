@@ -1,7 +1,7 @@
+import { useMemo, useState } from 'react';
 import type { AssessmentRecord, HierarchyLevel, Project } from '../../types';
-import { sortHierarchy, statusClass, statusLabel } from '../../lib/presentation';
-import type { ProjectSectionKey } from '../../navigation';
-import { EmptyDash, MetricCard, MiniBars, MiniRing, MiniSpark } from '../shared/MiniVisuals';
+import { formatDate, sortHierarchy, statusClass, statusLabel } from '../../lib/presentation';
+import { EmptyDash, MetricCard, MiniBars, MiniRing } from '../shared/MiniVisuals';
 import './home.css';
 
 type HomeDashboardProps = {
@@ -13,7 +13,7 @@ type HomeDashboardProps = {
   verdictCount: number;
   selectedProjectId: string;
   onSelectProject: (id: string) => void;
-  onOpenProjectSection: (section: ProjectSectionKey) => void;
+  onEditProject: (id: string) => void;
 };
 
 export function HomeDashboard({
@@ -25,25 +25,51 @@ export function HomeDashboard({
   verdictCount,
   selectedProjectId,
   onSelectProject,
-  onOpenProjectSection,
+  onEditProject,
 }: HomeDashboardProps) {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [stateFilter, setStateFilter] = useState('all');
+
   const orderedHierarchy = sortHierarchy(hierarchy);
   const latestProjects = projects.slice(0, 4);
   const hierarchyValues = orderedHierarchy.map((level) => level.weight);
   const projectValues = latestProjects.map((_, index) => Math.max(2, latestProjects.length - index));
   const verdictScore = latestAssessment ? scoreVerdict(latestAssessment.verdict.severity) : 0;
   const maxHierarchy = Math.max(...hierarchyValues, 1);
+  const availableStates = useMemo(
+    () =>
+      Array.from(new Set(projects.map((project) => project.state).filter(Boolean))).sort((left, right) =>
+        left.localeCompare(right),
+      ),
+    [projects],
+  );
+  const filteredProjects = useMemo(() => {
+    const query = normalize(searchTerm);
+
+    return projects.filter((project) => {
+      const matchesQuery =
+        query.length === 0 ||
+        [project.name, project.city, project.state, project.location]
+          .filter(Boolean)
+          .some((value) => normalize(String(value)).includes(query));
+      const matchesState = stateFilter === 'all' || project.state === stateFilter;
+      return matchesQuery && matchesState;
+    });
+  }, [projects, searchTerm, stateFilter]);
+
+  function resetFilters() {
+    setSearchTerm('');
+    setStateFilter('all');
+  }
 
   return (
     <section className="dashboard-grid home-feature">
       <article className="panel hero-panel">
         <div>
           <p className="eyebrow">Painel inicial</p>
-          <h1>Dashboard elétrico</h1>
+          <h1>Busca de clientes</h1>
+          <p className="muted">Encontre clientes por nome, cidade ou estado. Cadastro e edição ficam na tela específica do cliente.</p>
         </div>
-        <button className="button" type="button" onClick={() => onOpenProjectSection('client')}>
-          Abrir cliente
-        </button>
       </article>
 
       <article className="panel metric-panel">
@@ -63,39 +89,81 @@ export function HomeDashboard({
         />
       </article>
 
-      <article className="panel wide-panel">
+      <article className="panel wide-panel home-search-panel">
         <div className="panel-head">
           <div>
-            <p className="eyebrow">Projetos recentes</p>
-            <h2>Últimos clientes</h2>
+            <p className="eyebrow">Clientes</p>
+            <h2>Pesquisar e filtrar</h2>
           </div>
         </div>
-        <div className="chart-shell">
-          {latestProjects.length === 0 ? (
-            <EmptyDash label="Sem clientes recentes" />
+        <div className="home-searchbar">
+          <label className="search-field">
+            <span>Buscar cliente</span>
+            <input
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              placeholder="Nome, cidade ou estado"
+              type="search"
+            />
+          </label>
+
+          <label className="search-field state-field">
+            <span>Estado</span>
+            <select value={stateFilter} onChange={(event) => setStateFilter(event.target.value)}>
+              <option value="all">Todos os estados</option>
+              {availableStates.map((state) => (
+                <option key={state} value={state}>
+                  {state}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <button className="ghost" type="button" onClick={resetFilters}>
+            Limpar
+          </button>
+        </div>
+
+        <div className="home-results-meta">
+          <span>
+            {filteredProjects.length} de {projects.length} clientes
+          </span>
+        </div>
+
+        <div className="home-results">
+          {projects.length === 0 ? (
+            <EmptyDash label="Sem clientes cadastrados" />
+          ) : filteredProjects.length === 0 ? (
+            <EmptyDash label="Nenhum cliente encontrado" />
           ) : (
-            latestProjects.map((project) => (
-              <button
+            filteredProjects.map((project) => (
+              <article
                 key={project.id}
-                className={`dash-row selectable ${project.id === selectedProjectId ? 'selected' : ''}`}
-                onClick={() => {
-                  onSelectProject(project.id);
-                  onOpenProjectSection('client');
-                }}
-                type="button"
+                className={`client-result ${project.id === selectedProjectId ? 'selected' : ''}`}
                 title={project.name}
               >
-                <div className="dash-row-top">
-                  <strong>{project.name}</strong>
-                  <span className="badge neutral">Cliente</span>
+                <div className="client-result-main">
+                  <div>
+                    <strong>{project.name}</strong>
+                    <span className="muted">
+                      {project.city} / {project.state}
+                    </span>
+                  </div>
+                  <span className="badge neutral">Abrir ficha</span>
                 </div>
-                <MiniSpark values={[2, 4, 3, 5, 4, 6]} />
-                <div className="dash-row-bottom">
-                  <span className="muted">
-                    {project.city} / {project.state}
-                  </span>
+                <div className="client-result-meta">
+                  <span>Criado {formatDate(project.created_at)}</span>
+                  <span>Atualizado {formatDate(project.updated_at)}</span>
                 </div>
-              </button>
+                <div className="row-actions">
+                  <button className="ghost" type="button" onClick={() => onSelectProject(project.id)}>
+                    Ver
+                  </button>
+                  <button className="button" type="button" onClick={() => onEditProject(project.id)}>
+                    Editar
+                  </button>
+                </div>
+              </article>
             ))
           )}
         </div>
@@ -168,4 +236,11 @@ function scoreVerdict(severity: string) {
     default:
       return 50;
   }
+}
+
+function normalize(value: string) {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
 }

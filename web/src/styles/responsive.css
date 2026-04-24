@@ -10,15 +10,24 @@
     grid-template-columns: 1fr;
   }
 
-  .topbar {
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    grid-template-rows: auto;
+  .app-rail {
+    min-height: auto;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 16px 20px;
+  }
+
+  .app-content {
+    min-height: 0;
+  }
+
+  .app-topbar {
     align-items: center;
     gap: 16px;
     padding: 16px 24px;
-    border-bottom: 1px solid var(--line);
-    border-right: 0;
-    flex-direction: unset;
   }
 
   .tabbar,
@@ -35,9 +44,25 @@
   .dashboard-grid {
     grid-template-columns: 1fr;
   }
+
+  .client-context-bar {
+    align-items: start;
+  }
 }
 
 @media (max-width: 900px) {
+  .app-topbar {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .topbar-actions {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-left: 0;
+  }
+
   .hero-strip,
   .panel-head,
   .row {
@@ -69,12 +94,42 @@
   .dashboard-grid {
     grid-template-columns: 1fr;
   }
+
+  .grid-two {
+    grid-template-columns: 1fr;
+  }
+
+  .client-context-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .client-context-tabs {
+    width: 100%;
+  }
+
+  .client-context-tabs .context-tab {
+    flex: 1 1 0;
+    justify-content: center;
+  }
+
+  .context-create {
+    width: 100%;
+  }
 }
 
 @media (max-width: 640px) {
   .shell {
     width: 100%;
     padding: 16px 12px 40px;
+  }
+
+  .app-topbar {
+    padding: 14px 12px;
+  }
+
+  .app-rail {
+    padding: 14px 12px;
   }
 
   .auth-card,
@@ -90,6 +145,11 @@
 
   .user-chip {
     width: 100%;
+  }
+
+  .notification-chip {
+    width: 100%;
+    justify-content: center;
   }
 
   .popover {

@@ -16,6 +16,7 @@ Resumo vigente do sistema como um todo.
 - O núcleo do sistema é o modelo elétrico da instalação; a conformidade valida o modelo, mas não manda no projeto inteiro.
 - A primeira camada visual do MVP já roda em `Vite + React`.
 - A persistência local inicial usa SQLite em arquivo.
+- O módulo `projects` já tem plano vivo próprio para o projetador e o canvas 2D inicial.
 - Mudanças locais devem ler somente o contexto necessário.
 - O estado vigente do sistema deve ser resumido aqui, não espalhado em ADRs.
 

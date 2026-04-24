@@ -5,12 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "check:governance": "node ./scripts/check-governance.mjs",
+    "build": "npm run check:governance && tsc -b && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.14.2"
   },
   "devDependencies": {
     "@types/react": "^19.1.12",

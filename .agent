@@ -2,4 +2,6 @@ Read `AGENTS.md` and `docs/governance.md` first.
 
 Use the reusable skills for documentation governance, ADR decisions, module bootstrap, and plan/current-state lifecycle.
 
+Do not create, switch, rename, or delete Git branches without explicit user authorization in the current request.
+
 Keep repository-specific truth in `docs/` and avoid repeating the rules here.

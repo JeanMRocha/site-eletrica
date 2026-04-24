@@ -48,5 +48,6 @@
 - If the change creates a durable decision, use ADR.
 - If the current file no longer reflects the live scope, move the useful content to the relevant archive.
 - If you are starting a new module, follow `docs/modules/new-module-process.md` before implementation.
+- Git branch operations are gated: do not create, switch, rename, or delete branches unless the user explicitly asks for that branch operation in the current request.
 - Secrets, credentials, and environment-specific values should stay outside the repository and be injected at runtime.
 - The `.env` must contain only non-secret local configuration or references to externally managed secrets when applicable.
