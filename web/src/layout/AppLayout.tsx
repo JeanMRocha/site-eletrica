@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import type { Session } from '../domain/workspace';
 import type { TabDefinition, TabKey } from '../navigation';
@@ -30,7 +30,25 @@ export function AppLayout({
   const [profileOpen, setProfileOpen] = useState(false);
   const [notifsOpen, setNotifsOpen] = useState(false);
   const [history, setHistory] = useState<AppNotification[]>([]);
+  
+  const userRef = useRef<HTMLDivElement>(null);
+  const notifRef = useRef<HTMLDivElement>(null);
+
   const activeTabLabel = tabs.find((tab) => tab.key === activeTab)?.label ?? 'Cockpit';
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (userRef.current && !userRef.current.contains(event.target as Node)) {
+        setProfileOpen(false);
+      }
+      if (notifRef.current && !notifRef.current.contains(event.target as Node)) {
+        setNotifsOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     const unsub = eventBus.on('notification:added', (n) => {
@@ -66,7 +84,7 @@ export function AppLayout({
 
           <div className="topbar-actions row">
             {/* Central de Notificações */}
-            <div className="action-zone">
+            <div className="action-zone" ref={notifRef}>
               <button 
                 className={`action-btn ${notifsOpen ? 'active' : ''}`} 
                 onClick={() => { setNotifsOpen(!notifsOpen); setProfileOpen(false); }}
@@ -103,7 +121,7 @@ export function AppLayout({
             </div>
 
             {/* Módulo de Usuário */}
-            <div className="user-zone">
+            <div className="user-zone" ref={userRef}>
               <button 
                 className={`user-chip-modern ${profileOpen ? 'active' : ''}`} 
                 onClick={() => { setProfileOpen(!profileOpen); setNotifsOpen(false); }} 
