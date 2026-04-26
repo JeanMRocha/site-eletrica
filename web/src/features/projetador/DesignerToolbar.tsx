@@ -10,23 +10,33 @@ type Props = {
 
 export function DesignerToolbar({ stage, tools, selectedTool, onChooseTool }: Props) {
   return (
-    <aside className="designer-tools">
-      <div className="tool-stage">
-        <span>Etapa</span>
+    <aside className="designer-tools-modern glass-panel">
+      <header className="toolbar-header">
+        <p className="eyebrow">Etapa Atual</p>
         <strong>{stage}</strong>
-      </div>
-      {groupTools(tools).map((group) => (
-        <div className="tool-group" key={group.name}>
-          <span>{group.name}</span>
-          <div className="tool-grid">
-            {group.items.map((tool) => (
-              <button key={tool.key} className={`tool-chip ${selectedTool === tool.key ? 'active' : ''}`} type="button" onClick={() => onChooseTool(tool.key)} title={tool.label}>
-                {tool.label}
-              </button>
-            ))}
+      </header>
+      
+      <div className="tool-groups-container scroll-thin">
+        {groupTools(tools).map((group) => (
+          <div className="tool-group-modern" key={group.name}>
+            <span className="group-label">{group.name}</span>
+            <div className="tool-grid-modern">
+              {group.items.map((tool) => (
+                <button 
+                  key={tool.key} 
+                  className={`tool-button ${selectedTool === tool.key ? 'active' : ''}`} 
+                  type="button" 
+                  onClick={() => onChooseTool(tool.key)}
+                  title={tool.label}
+                >
+                  <span className="tool-icon">{tool.icon}</span>
+                  <span className="tool-label-text">{tool.label}</span>
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </aside>
   );
 }

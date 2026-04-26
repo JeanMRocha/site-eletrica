@@ -7,7 +7,7 @@ import './projetador.css';
 
 const FabricProjectCanvas = lazy(() => import('./FabricProjectCanvas').then((module) => ({ default: module.FabricProjectCanvas })));
 
-export function ProjetadorFeature() {
+export function ProjetadorFeature({ hideHeader = false }: { hideHeader?: boolean }) {
   const navigate = useNavigate();
   const params = useParams();
   const projectId = params.id ?? '';
@@ -16,35 +16,43 @@ export function ProjetadorFeature() {
 
   if (!project) {
     return (
-      <section className="designer-page">
-        <article className="panel designer-shell">
-          <div className="canvas-empty">
-            <strong>Projeto não encontrado.</strong>
-          </div>
-        </article>
+      <section className="designer-page page-transition">
+        <div className="panel center">
+          <strong>Projeto não encontrado para edição.</strong>
+          <button className="button" onClick={() => navigate('/projetos')}>Voltar</button>
+        </div>
       </section>
     );
   }
 
   return (
-    <section className="designer-page">
-      <article className="panel designer-shell">
-        <div className="panel-head designer-head">
-          <div>
-            <p className="eyebrow">Projetador</p>
-            <h1>{project.name}</h1>
-          </div>
-          <div className="row-actions">
-            <button className="ghost" type="button" onClick={() => navigate(`/projetos/${project.id}`)}>
-              Voltar
-            </button>
-            <button className="button" type="button" onClick={() => controller.createCanvasObject(controller.selectedTool, 240, 180)}>
-              Inserir
-            </button>
-          </div>
-        </div>
+    <section className="designer-page page-transition">
+      <div className="designer-layout-container">
+        {!hideHeader && (
+          <header className="designer-topbar glass-panel">
+            <div className="topbar-left">
+              <button className="ghost circle-btn" onClick={() => navigate(`/projetos/${project.id}`)} title="Voltar">
+                ←
+              </button>
+              <div className="project-id-block">
+                <p className="eyebrow">Terminal Projetador</p>
+                <h1>{project.name}</h1>
+              </div>
+            </div>
+            
+            <div className="topbar-right">
+              <div className="meta-info size-xs muted">
+                  <span>{project.voltage}</span>
+                  <span>{project.source}</span>
+              </div>
+              <button className="button" onClick={() => controller.createCanvasObject(controller.selectedTool, 240, 180)}>
+                  Inserir {controller.selectedTool}
+              </button>
+            </div>
+          </header>
+        )}
 
-        <div className="designer-grid">
+        <main className="designer-workspace">
           <DesignerToolbar
             stage={controller.designerStage}
             tools={controller.availableTools}
@@ -52,21 +60,23 @@ export function ProjetadorFeature() {
             onChooseTool={controller.chooseTool}
           />
 
-          <Suspense fallback={<div className="fabric-canvas-shell loading">Carregando canvas...</div>}>
-            <FabricProjectCanvas
-              items={project.canvas.items}
-              walls={project.canvas.walls}
-              selectedTool={controller.selectedTool}
-              selection={controller.selection}
-              onCreateItem={controller.createCanvasObject}
-              onSelect={controller.setSelection}
-              onUpdateItem={controller.updateItem}
-              onUpdateWall={controller.updateWall}
-              onRotate={controller.rotateSelection}
-              onResize={controller.resizeSelection}
-              onDelete={controller.deleteCanvasObject}
-            />
-          </Suspense>
+          <section className="canvas-wrapper-modern glass-panel">
+            <Suspense fallback={<div className="canvas-loading-state center">Sincronizando Canvas...</div>}>
+              <FabricProjectCanvas
+                items={project.canvas.items}
+                walls={project.canvas.walls}
+                selectedTool={controller.selectedTool}
+                selection={controller.selection}
+                onCreateItem={controller.createCanvasObject}
+                onSelect={controller.setSelection}
+                onUpdateItem={controller.updateItem}
+                onUpdateWall={controller.updateWall}
+                onRotate={controller.rotateSelection}
+                onResize={controller.resizeSelection}
+                onDelete={controller.deleteCanvasObject}
+              />
+            </Suspense>
+          </section>
 
           <DesignerPropertiesPanel
             selectedTool={controller.selectedTool}
@@ -79,8 +89,8 @@ export function ProjetadorFeature() {
             onUpdateWall={controller.updateWall}
             onDelete={controller.deleteCanvasObject}
           />
-        </div>
-      </article>
+        </main>
+      </div>
     </section>
   );
 }

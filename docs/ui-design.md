@@ -26,8 +26,9 @@ Referência visual e de UX para telas do projeto.
 
 - Frontend: `React + TypeScript + Vite`
 - Estilo: CSS organizado no repositório com componentes reutilizáveis
-- Ícones: consistentes e funcionais, só quando ajudam a leitura
-- Direção visual: moderna, sóbria, legível e pronta para produção
+- Ícones: consistentes e funcionais, preferencialmente sem texto quando o contexto permitir
+- Direção visual: Cyber Engineering - moderna, sóbria, tons escuros com acentos neon/glow
+- Design: Modern & Rounded (Bordas generosas e campos profundos)
 
 ## Princípios
 
@@ -35,7 +36,8 @@ Referência visual e de UX para telas do projeto.
 - Hierarquia clara.
 - Espaço suficiente entre blocos.
 - Uma ação principal por bloco.
-- Informações longas devem ser divididas.
+- Empilhamento Vertical: Rótulos (Labels) sempre ACIMA dos campos de entrada.
+- Informações longas devem ser divididas em fases ou abas.
 - A tela deve ser fácil de escanear em poucos segundos.
 
 ## Breakpoints
@@ -77,11 +79,12 @@ Referência visual e de UX para telas do projeto.
 
 ## Tokens visuais
 
-- Card com canto suave.
+- Card com canto generoso (20px a 24px).
+- Inputs com cantos modernos (12px).
 - Sombra leve, sem exagero.
-- Borda discreta.
-- Botão primário evidente.
-- Botão secundário contido.
+- Borda discreta com transparência (Glassmorphism).
+- Botão primário evidente com brilho (Glow).
+- Botão secundário circular e icônico para ferramentas.
 - Badge simples e legível.
 - Modal limpo, com foco claro.
 
@@ -101,7 +104,8 @@ Referência visual e de UX para telas do projeto.
 - Cabeçalho com título, subtítulo e ações separados.
 - Grid com colunas progressivas por breakpoint.
 - Seções longas devem ser quebradas em blocos claros.
-- Formulários longos devem ser agrupados por blocos.
+- Formulários complexos: Usar o padrão **Wizard com Abas estilo Chrome**.
+- Navegação Instrumental: Ações de fluxo (Salvar, Voltar, Avançar) agrupadas no topo à direita.
 - Painéis de edição devem ser secundários ao resumo principal.
 
 ## Padrões de UX

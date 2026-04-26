@@ -1,13 +1,12 @@
-import { Link } from 'react-router-dom';
 import { formatDate } from '../../lib/presentation';
-import { SkeletonCard, SkeletonRow } from '../shared/Skeleton';
+import { SkeletonRow } from '../shared/Skeleton';
 import { useClientes, type ClienteStep } from './useClientes';
 import './clientes.css';
 
 const clientSteps: Array<{ key: ClienteStep; label: string; hint: string }> = [
-  { key: 'dados', label: 'Dados básicos', hint: 'Nome, estado e cidade.' },
-  { key: 'contato', label: 'Contato', hint: 'Telefone, e-mail e responsável.' },
-  { key: 'endereco', label: 'Endereço', hint: 'Rua, bairro e complemento.' },
+  { key: 'dados', label: 'Dados Básicos', hint: 'Identificação e Local' },
+  { key: 'contato', label: 'Contato', hint: 'E-mail e Telefones' },
+  { key: 'endereco', label: 'Endereço', hint: 'Logradouro completo' },
 ];
 
 export function ClientesFeature() {
@@ -18,6 +17,8 @@ export function ClientesFeature() {
     saving,
     search,
     setSearch,
+    isSearchVisible,
+    setIsSearchVisible,
     draft,
     activeStep,
     setActiveStep,
@@ -34,339 +35,279 @@ export function ClientesFeature() {
 
   const pageTitle = titleByMode(mode);
 
-  function renderList() {
+  if (mode === 'create' || mode === 'edit') {
     return (
-      <section className="clients-page">
-        <article className="panel clients-panel">
-          <div className="panel-head">
-            <div>
-              <p className="eyebrow">Cadastro</p>
-              <h1>Clientes</h1>
-            </div>
-            <button className="button" type="button" onClick={() => navigate('/clientes/novo')}>
-              Novo cliente
-            </button>
-          </div>
-
-          <div className="clients-toolbar">
-            <label className="clients-search">
-              <span>Buscar</span>
-              <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Nome, cidade ou estado" />
-            </label>
-          </div>
-
-          {loading ? (
-            <div className="card-grid">
-              <SkeletonCard />
-              <SkeletonCard />
-              <SkeletonCard />
-            </div>
-          ) : null}
-
-          <div className="clients-table-wrap">
-            <table className="clients-table">
-              <thead>
-                <tr>
-                  <th>Cliente</th>
-                  <th>Local</th>
-                  <th>Atualizado</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                {visibleProjects.length === 0 ? (
-                  <tr>
-                    <td colSpan={4} className="empty-cell">
-                      Nenhum cliente encontrado.
-                    </td>
-                  </tr>
-                ) : (
-                  visibleProjects.map((project) => (
-                    <tr key={project.id}>
-                      <td>
-                        <strong>{project.name}</strong>
-                        <div className="muted">{project.location}</div>
-                      </td>
-                      <td>
-                        {project.city} / {project.state}
-                      </td>
-                      <td>{formatDate(project.updated_at)}</td>
-                      <td>
-                        <div className="row-actions">
-                          <button className="ghost" type="button" onClick={() => navigate(`/clientes/${project.id}`)}>
-                            Ver
-                          </button>
-                          <button className="button" type="button" onClick={() => navigate(`/clientes/${project.id}/editar`)}>
-                            Editar
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </article>
-      </section>
-    );
-  }
-
-  function renderDetail() {
-    const current = detail?.study ?? visibleProjects.find((p) => p.id === clientId) ?? null;
-
-    return (
-      <section className="clients-page">
-        <article className="panel clients-panel">
-          <div className="panel-head">
-            <div>
-              <p className="eyebrow">Ficha</p>
-              <h1>{current?.name ?? pageTitle}</h1>
-            </div>
-            <div className="row-actions">
-              <button className="ghost" type="button" onClick={() => navigate('/clientes')}>
-                Voltar
-              </button>
-              <button className="button" type="button" onClick={() => navigate(`/clientes/${clientId}/editar`)}>
-                Editar
-              </button>
-            </div>
-          </div>
-
-          {loading ? (
-            <div className="detail-grid">
-              <div className="detail-card"><SkeletonRow count={3} /></div>
-              <div className="detail-card"><SkeletonRow count={2} /></div>
-              <div className="detail-card"><SkeletonRow count={2} /></div>
-            </div>
-          ) : null}
-
-          {current ? (
-            <div className="detail-grid">
-              <article className="detail-card">
-                <span>Dados básicos</span>
-                <strong>{current.name}</strong>
-                <p className="muted">
-                  {current.zip ? `CEP: ${current.zip} - ` : ''}{current.city} / {current.state}
-                </p>
-              </article>
-              <article className="detail-card">
-                <span>Criado em</span>
-                <strong>{formatDate(current.created_at)}</strong>
-              </article>
-              <article className="detail-card">
-                <span>Atualizado em</span>
-                <strong>{formatDate(current.updated_at)}</strong>
-              </article>
-            </div>
-          ) : null}
-        </article>
-      </section>
-    );
-  }
-
-  function renderForm() {
-    return (
-      <section className="clients-page">
-        <article className="panel clients-panel form-panel">
-          <div className="panel-head">
-            <div>
-              <p className="eyebrow">{mode === 'edit' ? 'Edição' : 'Cadastro'}</p>
-              <h1>{pageTitle}</h1>
-            </div>
-            <Link className="ghost" to={mode === 'edit' && clientId ? `/clientes/${clientId}` : '/clientes'}>
-              Cancelar
-            </Link>
-          </div>
-
-          <div className="stepper" role="tablist" aria-label="Etapas do cliente">
+      <section className="clients-page page-transition">
+        <div className="chrome-tabs-row row spread">
+          <div className="chrome-tabs-container">
             {clientSteps.map((step) => (
               <button
                 key={step.key}
-                className={`step-chip ${activeStep === step.key ? 'active' : ''}`}
+                className={`chrome-tab ${activeStep === step.key ? 'active' : ''}`}
                 type="button"
                 onClick={() => setActiveStep(step.key)}
               >
-                <strong>{step.label}</strong>
-                <span>{step.hint}</span>
+                {step.label}
               </button>
             ))}
           </div>
 
-          <form className="client-form" onSubmit={handleSubmit}>
-            {activeStep === 'dados' ? (
-              <section className="form-section">
-                <div className="section-copy">
-                  <p className="eyebrow">Dados básicos</p>
-                  <h2>Identificação do cliente</h2>
-                </div>
-                <div className="form-grid">
-                  <label>
-                    <span>Nome</span>
+          <div className="wizard-quick-actions row">
+            {activeStep !== 'dados' && (
+              <button className="action-btn-wizard" type="button" onClick={() => setActiveStep(previousStep(activeStep))} title="Anterior">
+                ←
+              </button>
+            )}
+            
+            <button 
+              className="action-btn-wizard primary" 
+              type="button" 
+              onClick={() => handleSubmit()}
+              disabled={saving}
+              title="Salvar Cliente"
+            >
+              {saving ? '...' : '💾'}
+            </button>
+
+            {mode === 'edit' && clientId && (
+              <button 
+                className="action-btn-wizard danger-btn" 
+                type="button" 
+                onClick={handleDelete}
+                disabled={saving}
+                title="Excluir Cliente"
+              >
+                🗑️
+              </button>
+            )}
+
+            <button className="action-btn-wizard" type="button" onClick={() => navigate('/clientes')} title="Cancelar">
+              ✕
+            </button>
+
+            {activeStep !== 'endereco' && (
+              <button className="action-btn-wizard accent-btn" type="button" onClick={() => setActiveStep(nextStep(activeStep))} title="Próximo">
+                →
+              </button>
+            )}
+          </div>
+        </div>
+
+        <article className="clients-panel-wizard glass-panel">
+          <header className="panel-head-wizard">
+            <p className="eyebrow">{mode === 'edit' ? 'Gestão de Cadastro' : 'Novo Registro'}</p>
+            <h1>{activeStep === 'dados' ? 'Identificação do Cliente' : activeStep === 'contato' ? 'Dados de Contato' : 'Localização do Cliente'}</h1>
+          </header>
+
+          <form className="client-form-body" onSubmit={handleSubmit}>
+            {activeStep === 'dados' && (
+              <div className="stack lg animate-fade-in">
+                <div className="form-group-rounded">
+                  <div className="input-block">
+                    <label>Nome do Cliente / Razão Social</label>
                     <input 
+                      className="modern-input"
                       value={draft.name} 
-                      onChange={(event) => handleDraftChange((current) => ({ ...current, name: event.target.value }))} 
-                      placeholder="Ex: João Silva" 
+                      onChange={(e) => handleDraftChange((curr) => ({ ...curr, name: e.target.value }))} 
+                      placeholder="Ex: João Silva ou Empresa Ltda"
+                      required
                     />
-                  </label>
-                  <label>
-                    <span>CEP</span>
+                  </div>
+                  <div className="input-block">
+                    <label>CEP</label>
                     <input 
-                      value={draft.zip} 
-                      onChange={(event) => {
-                        const masked = maskCep(event.target.value);
-                        handleDraftChange((current) => ({ ...current, zip: masked }));
-                      }} 
+                      className="modern-input"
+                      value={draft.zip || ''} 
+                      onChange={(e) => handleDraftChange((curr) => ({ ...curr, zip: maskCep(e.target.value) }))} 
                       placeholder="00000-000"
                       maxLength={9}
                     />
-                  </label>
+                  </div>
                 </div>
-                <div className="form-grid">
-                  <label>
-                    <span>Estado</span>
+                <div className="form-group-rounded">
+                  <div className="input-block">
+                    <label>Estado (UF)</label>
                     <select
+                      className="modern-select"
                       value={draft.state}
-                      onChange={(event) =>
-                        handleDraftChange((current) => ({
-                          ...current,
-                          state: event.target.value,
-                          city: '',
-                        }))
-                      }
+                      onChange={(e) => handleDraftChange((curr) => ({ ...curr, state: e.target.value, city: '' }))}
                     >
                       <option value="">Selecione</option>
-                      {states.map((state) => (
-                        <option key={state.sigla} value={state.sigla}>
-                          {state.nome} ({state.sigla})
-                        </option>
-                      ))}
+                      {states.map((s: any) => <option key={s.sigla} value={s.sigla}>{s.nome} ({s.sigla})</option>)}
                     </select>
-                  </label>
-                  <label>
-                    <span>Cidade</span>
+                  </div>
+                  <div className="input-block">
+                    <label>Cidade</label>
                     <select 
+                      className="modern-select"
                       value={draft.city} 
-                      onChange={(event) => handleDraftChange((current) => ({ ...current, city: event.target.value }))} 
+                      onChange={(e) => handleDraftChange((curr) => ({ ...curr, city: e.target.value }))} 
                       disabled={!draft.state || loadingGeo}
                     >
-                      <option value="">{loadingGeo ? 'Carregando cidades...' : 'Selecione o estado primeiro'}</option>
-                      {cities.map((city) => (
-                        <option key={city.id} value={city.nome}>
-                          {city.nome}
-                        </option>
-                      ))}
+                      <option value="">{loadingGeo ? 'Buscando...' : 'Selecione o estado'}</option>
+                      {cities.map((c: any) => <option key={c.id} value={c.nome}>{c.nome}</option>)}
                     </select>
-                  </label>
+                  </div>
                 </div>
-              </section>
-            ) : null}
+              </div>
+            )}
 
-            {activeStep === 'contato' ? (
-              <section className="form-section">
-                <div className="section-copy">
-                  <p className="eyebrow">Contato</p>
-                  <h2>Dados de contato</h2>
+            {activeStep === 'contato' && (
+              <div className="stack lg animate-fade-in">
+                <div className="form-group-rounded">
+                  <div className="input-block">
+                    <label>Nome do Responsável</label>
+                    <input className="modern-input" value={draft.contact_name || ''} onChange={(e) => handleDraftChange((curr) => ({ ...curr, contact_name: e.target.value }))} />
+                  </div>
+                  <div className="input-block">
+                    <label>E-mail Principal</label>
+                    <input className="modern-input" value={draft.contact_email || ''} onChange={(e) => handleDraftChange((curr) => ({ ...curr, contact_email: e.target.value }))} />
+                  </div>
                 </div>
-                <div className="form-grid">
-                  <label>
-                    <span>Responsável</span>
-                    <input value={draft.contact_name} onChange={(event) => handleDraftChange((current) => ({ ...current, contact_name: event.target.value }))} />
-                  </label>
-                  <label>
-                    <span>E-mail</span>
-                    <input value={draft.contact_email} onChange={(event) => handleDraftChange((current) => ({ ...current, contact_email: event.target.value }))} />
-                  </label>
+                <div className="input-block">
+                  <label>Telefone / WhatsApp</label>
+                  <input className="modern-input" value={draft.contact_phone || ''} onChange={(e) => handleDraftChange((curr) => ({ ...curr, contact_phone: e.target.value }))} />
                 </div>
-                <label>
-                  <span>Telefone</span>
-                  <input value={draft.contact_phone} onChange={(event) => handleDraftChange((current) => ({ ...current, contact_phone: event.target.value }))} />
-                </label>
-              </section>
-            ) : null}
+              </div>
+            )}
 
-            {activeStep === 'endereco' ? (
-              <section className="form-section">
-                <div className="section-copy">
-                  <p className="eyebrow">Endereço</p>
-                  <h2>Localização do cliente</h2>
+            {activeStep === 'endereco' && (
+              <div className="stack lg animate-fade-in">
+                <div className="form-group-rounded" style={{ gridTemplateColumns: '2fr 1fr 1fr' }}>
+                  <div className="input-block">
+                    <label>Logradouro / Rua</label>
+                    <input className="modern-input" value={draft.street || ''} onChange={(e) => handleDraftChange((curr) => ({ ...curr, street: e.target.value }))} />
+                  </div>
+                  <div className="input-block">
+                    <label>Número</label>
+                    <input className="modern-input" value={draft.number || ''} onChange={(e) => handleDraftChange((curr) => ({ ...curr, number: e.target.value }))} />
+                  </div>
+                  <div className="input-block">
+                    <label>Bairro</label>
+                    <input className="modern-input" value={draft.district || ''} onChange={(e) => handleDraftChange((curr) => ({ ...curr, district: e.target.value }))} />
+                  </div>
                 </div>
-                <div className="form-grid three">
-                  <label>
-                    <span>Rua</span>
-                    <input value={draft.street} onChange={(event) => handleDraftChange((current) => ({ ...current, street: event.target.value }))} />
-                  </label>
-                  <label>
-                    <span>Número</span>
-                    <input value={draft.number} onChange={(event) => handleDraftChange((current) => ({ ...current, number: event.target.value }))} />
-                  </label>
-                  <label>
-                    <span>Bairro</span>
-                    <input value={draft.district} onChange={(event) => handleDraftChange((current) => ({ ...current, district: event.target.value }))} />
-                  </label>
+                <div className="input-block">
+                  <label>Complemento / Referência</label>
+                  <input className="modern-input" value={draft.complement || ''} onChange={(e) => handleDraftChange((curr) => ({ ...curr, complement: e.target.value }))} />
                 </div>
-                <div className="form-grid">
-                  <label>
-                    <span>CEP</span>
-                    <input 
-                      value={draft.zip} 
-                      onChange={(event) => {
-                        const masked = maskCep(event.target.value);
-                        handleDraftChange((current) => ({ ...current, zip: masked }));
-                      }} 
-                    />
-                  </label>
-                  <label>
-                    <span>Complemento</span>
-                    <input value={draft.complement} onChange={(event) => handleDraftChange((current) => ({ ...current, complement: event.target.value }))} />
-                  </label>
-                </div>
-              </section>
-            ) : null}
-
-            <footer className="form-footer">
-              <button
-                className="ghost"
-                type="button"
-                onClick={() => setActiveStep((current) => previousStep(current))}
-                disabled={activeStep === 'dados'}
-              >
-                Anterior
-              </button>
-              <button
-                className="ghost"
-                type="button"
-                onClick={() => setActiveStep((current) => nextStep(current))}
-                disabled={activeStep === 'endereco'}
-              >
-                Próximo
-              </button>
-              <button className="button" disabled={saving} type="submit">
-                {saving ? 'Salvando...' : 'Salvar cliente'}
-              </button>
-            </footer>
+              </div>
+            )}
           </form>
-
-          {mode === 'edit' && clientId ? (
-            <button className="ghost danger delete-link" type="button" onClick={handleDelete} disabled={saving}>
-              Excluir cliente
-            </button>
-          ) : null}
         </article>
       </section>
     );
   }
 
-  if (mode === 'create' || mode === 'edit') {
-    return renderForm();
-  }
-
   if (mode === 'detail') {
-    return renderDetail();
+    const current = detail?.study ?? visibleProjects.find((p) => p.id === clientId) ?? null;
+    return (
+      <section className="clients-page page-transition">
+        <article className="panel clients-panel glass-panel">
+          <div className="panel-head row spread middle">
+            <div>
+              <p className="eyebrow">Ficha Cadastral</p>
+              <h1>{current?.name ?? pageTitle}</h1>
+            </div>
+            <div className="row">
+              <button className="ghost" onClick={() => navigate('/clientes')}>Voltar</button>
+              <button className="button" onClick={() => navigate(`/clientes/${clientId}/editar`)}>Editar</button>
+            </div>
+          </div>
+
+          <div className="detail-grid">
+            <article className="detail-card">
+              <span>Localização Principal</span>
+              <strong>{current?.city} / {current?.state}</strong>
+              {current?.zip && <p className="muted size-xs">CEP: {current.zip}</p>}
+            </article>
+            <article className="detail-card">
+              <span>Contato Direto</span>
+              <strong>{current?.contact_name || 'N/A'}</strong>
+              <p className="muted size-xs">{current?.contact_email}</p>
+            </article>
+            <article className="detail-card">
+              <span>Registro</span>
+              <strong>{formatDate(current?.created_at || '')}</strong>
+              <p className="muted size-xs">Atualizado em {formatDate(current?.updated_at || '')}</p>
+            </article>
+          </div>
+        </article>
+      </section>
+    );
   }
 
-  return renderList();
+  return (
+    <section className="clients-page page-transition">
+      <article className="panel clients-panel glass-panel">
+        <div className="panel-head row middle gap-md">
+          <h1 style={{ whiteSpace: 'nowrap' }}>Base de Clientes</h1>
+          
+          <div className="row middle flex-1" style={{ justifyContent: 'flex-end', gap: '12px' }}>
+            {isSearchVisible && (
+              <input 
+                className="modern-input animate-slide-left"
+                style={{ maxWidth: '300px', height: '36px' }}
+                autoFocus
+                value={search} 
+                onChange={(e) => setSearch(e.target.value)} 
+                placeholder="Pesquisar clientes..." 
+              />
+            )}
+
+            <button 
+              className={`action-btn-wizard ${isSearchVisible ? 'active' : ''}`} 
+              onClick={() => setIsSearchVisible(!isSearchVisible)}
+              title="Pesquisar"
+            >
+              🔍
+            </button>
+            <button className="button" onClick={() => navigate('/clientes/novo')}>
+              Novo Cliente
+            </button>
+          </div>
+        </div>
+
+        <div className="clients-table-wrap">
+          <table className="clients-table">
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Localização</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr><td colSpan={4}><SkeletonRow count={5} /></td></tr>
+              ) : visibleProjects.length === 0 ? (
+                <tr><td colSpan={4} className="center muted" style={{ padding: '40px' }}>Nenhum cliente registrado.</td></tr>
+              ) : (
+                visibleProjects.map((p) => (
+                  <tr key={p.id}>
+                    <td>
+                      <strong>{p.name}</strong>
+                      <div className="muted size-xs">{p.contact_name || 'Sem responsável'}</div>
+                    </td>
+                    <td>{p.city} / {p.state}</td>
+                    <td><span className="badge success">Ativo</span></td>
+                    <td className="right">
+                      <button className="ghost size-xs" onClick={() => navigate(`/clientes/${p.id}`)}>Ver</button>
+                      <button className="button size-xs" onClick={() => navigate(`/clientes/${p.id}/editar`)}>Editar</button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+  );
 }
+
+// --- Helpers ---
 
 function previousStep(step: ClienteStep): ClienteStep {
   if (step === 'contato') return 'dados';
@@ -381,9 +322,9 @@ function nextStep(step: ClienteStep): ClienteStep {
 }
 
 function titleByMode(mode: string) {
-  if (mode === 'create') return 'Novo cliente';
-  if (mode === 'edit') return 'Editar cliente';
-  if (mode === 'detail') return 'Detalhe do cliente';
+  if (mode === 'create') return 'Novo Cliente';
+  if (mode === 'edit') return 'Editar Cliente';
+  if (mode === 'detail') return 'Detalhe do Cliente';
   return 'Clientes';
 }
 

@@ -8,6 +8,7 @@ export type CanvasSelection =
 export type ToolDefinition = {
   key: CanvasTool;
   label: string;
+  icon: string;
   group: 'Ambientes' | 'Estrutura' | 'Entrada' | 'Pontos' | 'Circuitos';
 };
 
@@ -15,17 +16,17 @@ export const gridSize = 24;
 export const minimumEnvironmentSize = { width: 120, height: 84 };
 
 export const tools: ToolDefinition[] = [
-  { key: 'environment', label: 'Ambiente', group: 'Ambientes' },
-  { key: 'wall', label: 'Parede', group: 'Estrutura' },
-  { key: 'network-source', label: 'Origem', group: 'Entrada' },
-  { key: 'qdc', label: 'QDC', group: 'Entrada' },
-  { key: 'socket', label: 'Tomada', group: 'Pontos' },
-  { key: 'switch', label: 'Interruptor', group: 'Pontos' },
-  { key: 'luminaire', label: 'Luminária', group: 'Pontos' },
-  { key: 'shower', label: 'Chuveiro', group: 'Pontos' },
-  { key: 'air-conditioner', label: 'Ar-condicionado', group: 'Pontos' },
-  { key: 'special-load', label: 'Carga especial', group: 'Pontos' },
-  { key: 'circuit-line', label: 'Circuito', group: 'Circuitos' },
+  { key: 'environment', label: 'Ambiente', icon: '▦', group: 'Ambientes' },
+  { key: 'wall', label: 'Parede', icon: '│', group: 'Estrutura' },
+  { key: 'network-source', label: 'Origem', icon: '⚡', group: 'Entrada' },
+  { key: 'qdc', label: 'QDC', icon: '▣', group: 'Entrada' },
+  { key: 'socket', label: 'Tomada', icon: '◬', group: 'Pontos' },
+  { key: 'switch', label: 'Interruptor', icon: '◓', group: 'Pontos' },
+  { key: 'luminaire', label: 'Luminária', icon: '☼', group: 'Pontos' },
+  { key: 'shower', label: 'Chuveiro', icon: '🚿', group: 'Pontos' },
+  { key: 'air-conditioner', label: 'Ar-condicionado', icon: '❅', group: 'Pontos' },
+  { key: 'special-load', label: 'Carga especial', icon: '◈', group: 'Pontos' },
+  { key: 'circuit-line', label: 'Circuito', icon: '〜', group: 'Circuitos' },
 ];
 
 export const canvasLabels: Record<CanvasTool, string> = {

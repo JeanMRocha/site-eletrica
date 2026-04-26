@@ -1,7 +1,7 @@
-import { useState, useEffect, useMemo, type FormEvent } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import type { IbgeCity, IbgeState } from '../../types';
-import type { Project, ProjectDetail, ProjectInput } from '../../types';
+import type { Project, ProjectDetail, ProjectInput } from '../../domain/projects';
 import { createProject, deleteProject, getProject, listProjects, updateProject } from '../../domain/projects';
 import { listIbgeCities, listIbgeStates, fetchAddressByCep } from '../../domain/geo';
 import { useAsync } from '../../hooks/useAsync';
@@ -10,16 +10,7 @@ import { eventBus, notify } from '../../lib/events';
 export type ClienteStep = 'dados' | 'contato' | 'endereco';
 export type ClienteMode = 'list' | 'detail' | 'create' | 'edit';
 
-export type ClienteDraft = ProjectInput & {
-  contact_name: string;
-  contact_email: string;
-  contact_phone: string;
-  street: string;
-  number: string;
-  district: string;
-  zip: string;
-  complement: string;
-};
+export type ClienteDraft = ProjectInput;
 
 const emptyDraft: ClienteDraft = {
   name: '',
@@ -48,6 +39,7 @@ export function useClientes() {
   const statesAsync = useAsync<IbgeState[]>();
 
   const [search, setSearch] = useState('');
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [draft, setDraft] = useState<ClienteDraft>(emptyDraft);
   const [activeStep, setActiveStep] = useState<ClienteStep>('dados');
   const [isDirty, setIsDirty] = useState(false);
@@ -72,13 +64,19 @@ export function useClientes() {
       try {
         const nextDetail = await detailAsync.execute(getProject(clientId));
         if (!cancelled && nextDetail) {
-          setDraft((current) => ({
-            ...current,
+          setDraft({
             name: nextDetail.study.name,
             city: nextDetail.study.city,
             state: nextDetail.study.state,
             zip: nextDetail.study.zip || '',
-          }));
+            contact_name: nextDetail.study.contact_name || '',
+            contact_email: nextDetail.study.contact_email || '',
+            contact_phone: nextDetail.study.contact_phone || '',
+            street: nextDetail.study.street || '',
+            number: nextDetail.study.number || '',
+            district: nextDetail.study.district || '',
+            complement: nextDetail.study.complement || '',
+          });
         }
       } catch (err) {
         // useAsync already handles error state
@@ -97,7 +95,7 @@ export function useClientes() {
   // CEP Lookup
   useEffect(() => {
     let cancelled = false;
-    const cep = draft.zip.replace(/\D/g, '');
+    const cep = draft.zip?.replace(/\D/g, '') || '';
     async function lookupCep() {
       if (cep.length !== 8) return;
       try {
@@ -156,9 +154,9 @@ export function useClientes() {
     setIsDirty(true);
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const cepDigits = draft.zip.replace(/\D/g, '');
+  async function handleSubmit(e?: any) {
+    if (e?.preventDefault) e.preventDefault();
+    const cepDigits = draft.zip?.replace(/\D/g, '') || '';
     if (cepDigits && cepDigits.length !== 8) {
       notify({
         type: 'warning',
@@ -170,10 +168,10 @@ export function useClientes() {
 
     try {
       const payload: ProjectInput = {
+        ...draft,
         name: draft.name.trim(),
         city: draft.city.trim(),
         state: draft.state.trim().toUpperCase(),
-        zip: draft.zip.trim(),
       };
       
       let next: Project;
@@ -229,6 +227,8 @@ export function useClientes() {
     saving: savingAsync.loading,
     search,
     setSearch,
+    isSearchVisible,
+    setIsSearchVisible,
     draft,
     activeStep,
     setActiveStep,

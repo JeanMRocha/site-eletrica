@@ -9,6 +9,13 @@ export type Project = {
   state: string;
   zip?: string;
   location: string;
+  contact_name?: string;
+  contact_email?: string;
+  contact_phone?: string;
+  street?: string;
+  number?: string;
+  district?: string;
+  complement?: string;
   created_at: string;
   updated_at: string;
 };
@@ -18,6 +25,13 @@ export type ProjectInput = {
   city: string;
   state: string;
   zip?: string;
+  contact_name?: string;
+  contact_email?: string;
+  contact_phone?: string;
+  street?: string;
+  number?: string;
+  district?: string;
+  complement?: string;
 };
 
 export type ProjectUpdateInput = ProjectInput;

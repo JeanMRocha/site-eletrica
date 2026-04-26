@@ -11,7 +11,6 @@ import { AuthScreen } from './features/auth/AuthScreen';
 import { HomeDashboard } from './features/home/HomeFeature';
 import { ClientesFeature } from './features/clientes/ClientesFeature';
 import { ProjetosFeature } from './features/projetos/ProjetosFeature';
-import { ProjetadorFeature } from './features/projetador/ProjetadorFeature';
 import { CatalogoMateriaisFeature } from './features/catalogo/CatalogoMateriaisFeature';
 import { NotificationSystem } from './features/shared/NotificationSystem';
 import { StandardsFeature } from './features/standards/StandardsFeature';
@@ -178,7 +177,8 @@ export function App() {
           <Route index element={<ProjetosFeature />} />
           <Route path="novo" element={<ProjetosFeature />} />
           <Route path=":id" element={<ProjetosFeature />} />
-          <Route path=":id/projetador" element={<ProjetadorFeature />} />
+          <Route path=":id/editar" element={<ProjetosFeature />} />
+          <Route path=":id/projetador" element={<ProjetosFeature />} />
         </Route>
         <Route path="/catalogo/materiais" element={<CatalogoMateriaisFeature />} />
         <Route path="/normas" element={<StandardsFeature />} />
