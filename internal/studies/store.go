@@ -16,11 +16,23 @@ import (
 	_ "modernc.org/sqlite"
 )
 
-type Store struct {
+type Repository interface {
+	ListStudies(ctx context.Context) ([]Study, error)
+	CreateStudy(ctx context.Context, input CreateStudyInput) (Study, error)
+	UpdateStudy(ctx context.Context, id string, input UpdateStudyInput) (Study, error)
+	DeleteStudy(ctx context.Context, id string) error
+	GetStudy(ctx context.Context, id string) (Study, error)
+	ListAssessments(ctx context.Context, studyID string) ([]AssessmentRecord, error)
+	SaveAssessment(ctx context.Context, record AssessmentRecord) (AssessmentRecord, error)
+	UpsertStudy(ctx context.Context, study Study) error
+	Close() error
+}
+
+type SQLiteStore struct {
 	db *sql.DB
 }
 
-func NewSQLiteStore(path string) (*Store, error) {
+func NewSQLiteStore(path string) (*SQLiteStore, error) {
 	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
 		return nil, err
 	}
@@ -32,7 +44,7 @@ func NewSQLiteStore(path string) (*Store, error) {
 
 	db.SetMaxOpenConns(1)
 
-	store := &Store{db: db}
+	store := &SQLiteStore{db: db}
 	if err := store.migrate(); err != nil {
 		_ = db.Close()
 		return nil, err
@@ -41,11 +53,11 @@ func NewSQLiteStore(path string) (*Store, error) {
 	return store, nil
 }
 
-func (s *Store) Close() error {
+func (s *SQLiteStore) Close() error {
 	return s.db.Close()
 }
 
-func (s *Store) migrate() error {
+func (s *SQLiteStore) migrate() error {
 	stmts := []string{
 		`PRAGMA foreign_keys = ON;`,
 		`CREATE TABLE IF NOT EXISTS studies (
@@ -69,6 +81,14 @@ func (s *Store) migrate() error {
 			FOREIGN KEY(study_id) REFERENCES studies(id) ON DELETE CASCADE
 		);`,
 		`CREATE INDEX IF NOT EXISTS idx_assessments_study_created_at ON assessments(study_id, created_at DESC);`,
+		`CREATE TABLE IF NOT EXISTS sync_queue (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			action TEXT NOT NULL,
+			entity_type TEXT NOT NULL,
+			entity_id TEXT NOT NULL,
+			payload TEXT NOT NULL,
+			created_at TEXT NOT NULL
+		);`,
 	}
 
 	for _, stmt := range stmts {
@@ -91,7 +111,7 @@ func (s *Store) migrate() error {
 	return nil
 }
 
-func (s *Store) ListStudies(ctx context.Context) ([]Study, error) {
+func (s *SQLiteStore) ListStudies(ctx context.Context) ([]Study, error) {
 	rows, err := s.db.QueryContext(ctx, `
 		SELECT id, name, city, state, location, created_at, updated_at
 		FROM studies
@@ -114,7 +134,7 @@ func (s *Store) ListStudies(ctx context.Context) ([]Study, error) {
 	return studies, rows.Err()
 }
 
-func (s *Store) CreateStudy(ctx context.Context, input CreateStudyInput) (Study, error) {
+func (s *SQLiteStore) CreateStudy(ctx context.Context, input CreateStudyInput) (Study, error) {
 	if err := validateStudyInput(input); err != nil {
 		return Study{}, err
 	}
@@ -141,7 +161,7 @@ func (s *Store) CreateStudy(ctx context.Context, input CreateStudyInput) (Study,
 	return study, nil
 }
 
-func (s *Store) UpdateStudy(ctx context.Context, id string, input UpdateStudyInput) (Study, error) {
+func (s *SQLiteStore) UpdateStudy(ctx context.Context, id string, input UpdateStudyInput) (Study, error) {
 	if err := validateStudyInput(CreateStudyInput(input)); err != nil {
 		return Study{}, err
 	}
@@ -173,7 +193,7 @@ func (s *Store) UpdateStudy(ctx context.Context, id string, input UpdateStudyInp
 	return updated, nil
 }
 
-func (s *Store) DeleteStudy(ctx context.Context, id string) error {
+func (s *SQLiteStore) DeleteStudy(ctx context.Context, id string) error {
 	result, err := s.db.ExecContext(ctx, `DELETE FROM studies WHERE id = ?`, id)
 	if err != nil {
 		return err
@@ -190,7 +210,7 @@ func (s *Store) DeleteStudy(ctx context.Context, id string) error {
 	return nil
 }
 
-func (s *Store) GetStudy(ctx context.Context, id string) (Study, error) {
+func (s *SQLiteStore) GetStudy(ctx context.Context, id string) (Study, error) {
 	row := s.db.QueryRowContext(ctx, `
 		SELECT id, name, city, state, location, created_at, updated_at
 		FROM studies
@@ -208,7 +228,7 @@ func (s *Store) GetStudy(ctx context.Context, id string) (Study, error) {
 	return study, nil
 }
 
-func (s *Store) ListAssessments(ctx context.Context, studyID string) ([]AssessmentRecord, error) {
+func (s *SQLiteStore) ListAssessments(ctx context.Context, studyID string) ([]AssessmentRecord, error) {
 	rows, err := s.db.QueryContext(ctx, `
 		SELECT id, study_id, input_json, verdict_json, created_at
 		FROM assessments
@@ -239,7 +259,7 @@ func (s *Store) ListAssessments(ctx context.Context, studyID string) ([]Assessme
 	return assessments, rows.Err()
 }
 
-func (s *Store) SaveAssessment(ctx context.Context, record AssessmentRecord) (AssessmentRecord, error) {
+func (s *SQLiteStore) SaveAssessment(ctx context.Context, record AssessmentRecord) (AssessmentRecord, error) {
 	inputJSON, err := json.Marshal(record.Input)
 	if err != nil {
 		return AssessmentRecord{}, err
@@ -265,6 +285,20 @@ func (s *Store) SaveAssessment(ctx context.Context, record AssessmentRecord) (As
 	}
 
 	return record, nil
+}
+
+func (s *SQLiteStore) UpsertStudy(ctx context.Context, study Study) error {
+	_, err := s.db.ExecContext(ctx, `
+		INSERT INTO studies (id, name, city, state, location, created_at, updated_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?)
+		ON CONFLICT(id) DO UPDATE SET
+			name = excluded.name,
+			city = excluded.city,
+			state = excluded.state,
+			location = excluded.location,
+			updated_at = excluded.updated_at
+	`, study.ID, study.Name, study.City, study.State, study.Location, study.CreatedAt.Format(time.RFC3339Nano), study.UpdatedAt.Format(time.RFC3339Nano))
+	return err
 }
 
 func validateStudyInput(input CreateStudyInput) error {
@@ -361,7 +395,7 @@ func splitLocation(location string) (string, string) {
 	return location, ""
 }
 
-func (s *Store) ensureStudyColumn(name, definition string) error {
+func (s *SQLiteStore) ensureStudyColumn(name, definition string) error {
 	rows, err := s.db.Query(`PRAGMA table_info(studies)`)
 	if err != nil {
 		return err
@@ -386,7 +420,7 @@ func (s *Store) ensureStudyColumn(name, definition string) error {
 	return err
 }
 
-func (s *Store) backfillStudyLocations() error {
+func (s *SQLiteStore) backfillStudyLocations() error {
 	rows, err := s.db.Query(`SELECT id, city, state, location FROM studies`)
 	if err != nil {
 		return err

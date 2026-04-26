@@ -6,7 +6,7 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $root = Resolve-Path (Join-Path $PSScriptRoot '..')
-$apiPort = 8080
+$apiPort = 8081
 $webPort = 5173
 $apiLog = Join-Path $root 'data\api.out.log'
 $apiErr = Join-Path $root 'data\api.err.log'
@@ -98,6 +98,7 @@ New-Item -ItemType Directory -Force (Join-Path $root 'data') | Out-Null
 Stop-PortProcess -Port $webPort
 Stop-PortProcess -Port $apiPort
 
+$env:HTTP_ADDR = ":$apiPort"
 Start-HiddenProcess -FilePath 'go' -Arguments 'run ./cmd/api' -WorkingDirectory $root -StdOut $apiLog -StdErr $apiErr
 Start-HiddenProcess -FilePath 'npm.cmd' -Arguments 'run dev -- --host 127.0.0.1' -WorkingDirectory (Join-Path $root 'web') -StdOut $webLog -StdErr $webErr
 

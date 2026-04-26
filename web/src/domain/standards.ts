@@ -1,4 +1,7 @@
 import { request } from './http';
+import { getFromLocal, saveToLocal } from '../lib/storage';
+
+// --- Domain Types ---
 
 export type Standard = {
   code: string;
@@ -19,12 +22,43 @@ export type HierarchyLevel = {
   weight: number;
 };
 
-export async function listStandards() {
-  const payload = await request<{ standards: Standard[] }>('/v1/standards/catalog');
-  return payload.standards;
+// --- Repository Port ---
+
+export interface StandardRepository {
+  list(): Promise<Standard[]>;
+  listHierarchy(): Promise<HierarchyLevel[]>;
 }
 
-export async function listHierarchy() {
-  const payload = await request<{ hierarchy: HierarchyLevel[] }>('/v1/standards/hierarchy');
-  return payload.hierarchy;
+// --- Implementation (Hybrid/Local Cache) ---
+
+class ApiStandardRepository implements StandardRepository {
+  private CACHE_KEY = 'electrica:standards:cache';
+
+  async list(): Promise<Standard[]> {
+    try {
+      const payload = await request<{ standards: Standard[] }>('/v1/standards/catalog');
+      saveToLocal(this.CACHE_KEY, payload.standards);
+      return payload.standards;
+    } catch (err) {
+      console.warn('Falha ao buscar normas da API, tentando cache local:', err);
+      return getFromLocal<Standard[]>(this.CACHE_KEY) || [];
+    }
+  }
+
+  async listHierarchy(): Promise<HierarchyLevel[]> {
+    try {
+      const payload = await request<{ hierarchy: HierarchyLevel[] }>('/v1/standards/hierarchy');
+      return payload.hierarchy;
+    } catch (err) {
+      console.warn('Falha ao buscar hierarquia da API:', err);
+      return [];
+    }
+  }
 }
+
+export const standardRepository: StandardRepository = new ApiStandardRepository();
+
+// --- Backward Compatibility Exports ---
+
+export const listStandards = () => standardRepository.list();
+export const listHierarchy = () => standardRepository.listHierarchy();

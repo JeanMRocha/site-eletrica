@@ -95,7 +95,7 @@ func TestStudyCrud(t *testing.T) {
 	}
 }
 
-func newTestStore(t *testing.T) *Store {
+func newTestStore(t *testing.T) Repository {
 	t.Helper()
 
 	store, err := NewSQLiteStore(t.TempDir() + "/studies.db")

@@ -1,7 +1,7 @@
 import type { FormEvent } from 'react';
 import type { AssessmentInput, AssessmentRecord, ProjectDetail, Standard } from '../../types';
 import { assessmentsCount, formatDate, statusClass, statusLabel } from '../../lib/presentation';
-import type { IbgeCity, IbgeState } from '../../domain/ibge';
+import type { IbgeCity, IbgeState } from '../../types';
 import type { CircuitItem, EnvironmentItem, LoadItem, ProjectForm, ProjectWorkspace as ProjectWorkspaceData } from '../../domain/workspace';
 import { projectSections, type ProjectSectionKey } from '../../navigation';
 import { EmptyDash, MiniBars, MiniRing, MiniSpark, MetricCard } from '../shared/MiniVisuals';

@@ -11,11 +11,11 @@ type Assessor interface {
 }
 
 type Service struct {
-	store    *Store
+	store    Repository
 	assessor Assessor
 }
 
-func NewService(store *Store, assessor Assessor) *Service {
+func NewService(store Repository, assessor Assessor) *Service {
 	return &Service{store: store, assessor: assessor}
 }
 

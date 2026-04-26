@@ -1,56 +1,57 @@
-import type { ReactNode } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import type { Session } from '../domain/workspace';
 import type { TabDefinition, TabKey } from '../navigation';
-import { initialsFromName } from '../lib/presentation';
+import { initialsFromName, formatDate } from '../lib/presentation';
+import { eventBus, type AppNotification } from '../lib/events';
+import { NotificationSystem } from '../features/shared/NotificationSystem';
 
 type AppLayoutProps = {
   session: Session;
   activeTab: TabKey;
   tabs: TabDefinition[];
-  profileOpen: boolean;
   draft: Session;
-  onToggleProfile: () => void;
-  onDraftChange: Dispatch<SetStateAction<Session>>;
+  onDraftChange: (session: Session) => void;
   onSaveProfile: () => void;
   onLogout: () => void;
-  children: ReactNode;
+  children: React.ReactNode;
 };
 
 export function AppLayout({
   session,
   activeTab,
   tabs,
-  profileOpen,
   draft,
-  onToggleProfile,
   onDraftChange,
   onSaveProfile,
   onLogout,
   children,
 }: AppLayoutProps) {
-  const activeTabLabel = tabs.find((tab) => tab.key === activeTab)?.label ?? 'Painel';
-  const notificationCount = 3;
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [notifsOpen, setNotifsOpen] = useState(false);
+  const [history, setHistory] = useState<AppNotification[]>([]);
+  const activeTabLabel = tabs.find((tab) => tab.key === activeTab)?.label ?? 'Cockpit';
+
+  useEffect(() => {
+    const unsub = eventBus.on('notification:added', (n) => {
+      setHistory((prev) => [n, ...prev].slice(0, 20));
+    });
+    return unsub;
+  }, []);
 
   return (
     <div className="app-shell">
       <aside className="app-rail">
-        <div className="brand">
-          <strong>Zé Faisca</strong>
-          <span className="brand-subtitle">Projeto elétrico e conformidade</span>
-        </div>
-
+        <div className="brand"><strong>ZF</strong></div>
         <nav className="tabbar" aria-label="Menu principal">
           {tabs.map((tab) => (
             <NavLink
               key={tab.key}
-              className={`tab-chip ${activeTab === tab.key ? 'active' : ''}`}
+              className={({ isActive }) => `tab-chip ${isActive ? 'active' : ''}`}
               to={tab.path}
               title={tab.label}
             >
               <strong aria-hidden="true">{tab.icon}</strong>
-              <span>{tab.label}</span>
             </NavLink>
           ))}
         </nav>
@@ -59,52 +60,110 @@ export function AppLayout({
       <section className="app-content">
         <header className="app-topbar">
           <div className="topbar-copy">
-            <span className="topbar-eyebrow">Navegação global</span>
+            <span className="topbar-eyebrow">Terminal de Comando</span>
             <strong>{activeTabLabel}</strong>
           </div>
 
-          <div className="topbar-actions">
-            <button className="notification-chip" type="button" aria-label={`Notificações (${notificationCount})`}>
-              <span aria-hidden="true">⟡</span>
-              <span className="notification-count">{notificationCount}</span>
-            </button>
+          <div className="topbar-actions row">
+            {/* Central de Notificações */}
+            <div className="action-zone">
+              <button 
+                className={`action-btn ${notifsOpen ? 'active' : ''}`} 
+                onClick={() => { setNotifsOpen(!notifsOpen); setProfileOpen(false); }}
+                title="Notificações"
+              >
+                <strong aria-hidden="true">🔔</strong>
+                {history.length > 0 && <span className="notif-dot" />}
+              </button>
 
+              {notifsOpen && (
+                <div className="popover notif-popover glass-panel">
+                  <div className="popover-head">
+                    <p className="eyebrow">Notificações Recentes</p>
+                    {history.length > 0 && (
+                      <button className="text-btn size-xs" onClick={() => setHistory([])}>
+                        Limpar Tudo
+                      </button>
+                    )}
+                  </div>
+                  <div className="notif-list scroll-thin">
+                    {history.length === 0 ? (
+                      <p className="muted size-xs center">Sem notificações recentes</p>
+                    ) : (
+                      history.map((n) => (
+                        <div key={n.id} className={`notif-item ${n.type}`}>
+                          <strong>{n.title}</strong>
+                          <p>{n.message}</p>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Módulo de Usuário */}
             <div className="user-zone">
-              <button className="user-chip" onClick={onToggleProfile} title={session.name} type="button">
+              <button 
+                className={`user-chip-modern ${profileOpen ? 'active' : ''}`} 
+                onClick={() => { setProfileOpen(!profileOpen); setNotifsOpen(false); }} 
+                type="button"
+              >
                 <span className="avatar">
                   {session.image ? <img src={session.image} alt={session.name} /> : initialsFromName(session.name)}
                 </span>
-                <span className="user-meta">
+                <div className="user-meta-compact">
                   <strong>{session.name}</strong>
-                  <span>Usuário ativo</span>
-                </span>
+                  <span className="badge ok">Online</span>
+                </div>
               </button>
 
-              {profileOpen ? (
-                <div className="popover">
-                  <label>
-                    Nome
-                    <input value={draft.name} onChange={(event) => onDraftChange((current) => ({ ...current, name: event.target.value }))} />
-                  </label>
-                  <label>
-                    Imagem
-                    <input value={draft.image} onChange={(event) => onDraftChange((current) => ({ ...current, image: event.target.value }))} />
-                  </label>
+              {profileOpen && (
+                <div className="popover user-popover glass-panel">
+                  <div className="popover-head">
+                    <p className="eyebrow">Configurações de Acesso</p>
+                    <div className="status-compact row">
+                       <span className="badge ok">API Online</span>
+                       <span className="muted size-xs">V.1.0.4</span>
+                    </div>
+                  </div>
+                  
+                  <div className="popover-form stack tight">
+                    <label>
+                      <span>Nome do Engenheiro</span>
+                      <input 
+                        value={draft.name} 
+                        onChange={(e) => onDraftChange({ ...draft, name: e.target.value })} 
+                      />
+                    </label>
+                  </div>
+
+                  <div className="popover-info">
+                    <p className="eyebrow">Última Atividade</p>
+                    <p className="size-sm">{formatDate(new Date().toISOString())}</p>
+                    <span className="muted size-xs">Sincronização realizada com sucesso</span>
+                  </div>
+
                   <div className="popover-actions">
-                    <button className="button" onClick={onSaveProfile} type="button">
+                    <button 
+                      className="button" 
+                      onClick={() => { onSaveProfile(); setProfileOpen(false); }} 
+                      type="button"
+                    >
                       Salvar
                     </button>
-                    <button className="ghost danger" onClick={onLogout} type="button">
-                      Sair
-                    </button>
+                    <button className="ghost danger" onClick={onLogout} type="button">Sair</button>
                   </div>
                 </div>
-              ) : null}
+              )}
             </div>
           </div>
         </header>
 
-        <main className="shell">{children}</main>
+        <main key={activeTab} className="shell page-transition">
+          <NotificationSystem />
+          {children}
+        </main>
       </section>
     </div>
   );

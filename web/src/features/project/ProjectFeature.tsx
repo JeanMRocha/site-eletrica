@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import type { Project } from '../../types';
 import { formatDate } from '../../lib/presentation';
-import type { IbgeCity, IbgeState } from '../../domain/ibge';
+import type { IbgeCity, IbgeState } from '../../types';
 import type { ProjectForm } from '../../domain/workspace';
 import type { ProjectSectionKey } from '../../navigation';
 import { ModalShell } from '../shared/ModalShell';

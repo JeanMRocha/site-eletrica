@@ -1,44 +1,90 @@
 .auth-shell {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: 24px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at center, #0a121e 0%, #04080f 100%);
+  padding: var(--s-md);
 }
 
 .auth-card {
-  width: min(980px, 100%);
+  width: 100%;
+  max-width: 400px;
+  padding: var(--s-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-xl);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.auth-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-xs);
+}
+
+.logo-circ {
+  width: 48px;
+  height: 48px;
+  background: var(--accent);
+  color: #000;
   display: grid;
-  gap: 22px;
-  grid-template-columns: 1.2fr 0.8fr;
-  padding: 24px;
-  border-radius: 28px;
-  border: 1px solid var(--line);
-  background: linear-gradient(180deg, rgba(16, 29, 53, 0.92), rgba(8, 16, 30, 0.94));
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+  place-items: center;
+  border-radius: 50%;
+  font-weight: 900;
+  font-size: 1.25rem;
+  box-shadow: 0 0 20px var(--accent-glow);
 }
 
 .auth-copy {
-  display: grid;
-  align-content: space-between;
-  gap: 18px;
+  text-align: center;
 }
 
 .auth-copy h1 {
-  margin: 8px 0 0;
-  line-height: 0.95;
-  letter-spacing: -0.04em;
-  font-size: clamp(2rem, 4vw, 4rem);
-}
-
-.auth-copy p {
-  color: var(--muted);
+  font-size: 1.5rem;
+  margin: 0 0 8px;
+  letter-spacing: -0.02em;
 }
 
 .auth-form {
-  display: grid;
-  gap: 14px;
-  padding: 18px;
-  border-radius: 22px;
-  border: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-md);
+}
+
+.auth-form input {
+  width: 100%;
+  padding: var(--s-md);
   background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  color: var(--text);
+  font-size: 1rem;
+  transition: var(--t-normal);
+}
+
+.auth-form input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 0 4px var(--accent-soft);
+}
+
+.auth-footer {
+  margin-top: var(--s-xl);
+}
+
+.row.spread {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (max-width: 480px) {
+  .auth-card {
+    padding: var(--s-lg);
+  }
 }

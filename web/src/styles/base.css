@@ -1,72 +1,103 @@
 :root {
   color-scheme: dark;
-  --bg: #09111d;
-  --surface: rgba(13, 20, 33, 0.9);
-  --surface-strong: #111c2f;
-  --line: rgba(255, 255, 255, 0.08);
-  --line-strong: rgba(127, 226, 255, 0.2);
-  --text: #ecf3ff;
-  --muted: #95a7c3;
-  --accent: #7fe2ff;
-  --accent-soft: rgba(127, 226, 255, 0.1);
-  --ok: #6ddfa0;
-  --warn: #f0b85b;
-  --bad: #f28b93;
-  --neutral: #a3b1c7;
+  
+  /* Cores de Alta Fidelidade (Cyber Electric) */
+  --bg: #04080f;
+  --surface: rgba(10, 18, 30, 0.75);
+  --surface-strong: rgba(20, 30, 50, 0.9);
+  --line: rgba(255, 255, 255, 0.06);
+  --line-strong: rgba(0, 210, 255, 0.2);
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --accent: #00d2ff;
+  --accent-soft: rgba(0, 210, 255, 0.1);
+  --accent-glow: rgba(0, 210, 255, 0.3);
+  --ok: #00f281;
+  --warn: #ffb443;
+  --bad: #ff5f6d;
+  --neutral: #64748b;
+
+  /* Escala de Espaçamento Proporcional */
+  --s-3xs: 2px;
+  --s-2xs: 4px;
+  --s-xs: 8px;
+  --s-sm: 12px;
+  --s-md: 16px;
+  --s-lg: 24px;
+  --s-xl: 32px;
+  --s-2xl: 48px;
+
+  /* Escala de Bordas */
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --r-full: 9999px;
+
+  /* Efeitos */
+  --glass: blur(16px) saturate(180%);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 8px 16px -4px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 20px 40px -12px rgba(0, 0, 0, 0.5);
+
+  /* Tipografia Compacta */
+  --font-main: "Inter", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  
+  /* Transições */
+  --t-normal: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 * {
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
 body {
-  margin: 0;
-  min-height: 100vh;
   color: var(--text);
-  background:
-    radial-gradient(circle at 0% 0%, rgba(127, 226, 255, 0.12), transparent 26%),
-    radial-gradient(circle at 100% 0%, rgba(255, 188, 104, 0.08), transparent 22%),
-    linear-gradient(180deg, #050c16 0%, #0b1321 100%);
-  font-family: "Segoe UI", "Inter", system-ui, sans-serif;
+  background: #04080f;
+  font-family: var(--font-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  /* Remover scroll global para gerenciar no layout */
+  overflow: hidden; 
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-button,
-input,
-select {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-.muted,
-.loading {
-  color: var(--muted);
+.glass-panel {
+  background: var(--surface);
+  backdrop-filter: var(--glass);
+  -webkit-backdrop-filter: var(--glass);
+  border: 1px solid var(--line);
 }
 
 .eyebrow {
-  margin: 0;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  letter-spacing: 0.16em;
-  font-size: 0.78rem;
-  color: var(--accent);
+  color: var(--muted);
 }
 
-.error {
-  margin-bottom: 14px;
-  padding: 12px 14px;
-  border-radius: 16px;
-  border: 1px solid rgba(242, 139, 147, 0.2);
-  background: rgba(242, 139, 147, 0.12);
-  color: #ffd1d5;
+/* Utilitários de proporção */
+.size-xs { font-size: 0.75rem; }
+.size-sm { font-size: 0.875rem; }
+.size-md { font-size: 1rem; }
+.size-lg { font-size: 1.25rem; }
+.size-xl { font-size: 1.5rem; }
+
+.row { display: flex; align-items: center; gap: var(--s-md); }
+.center { text-align: center; }
+.scroll-thin::-webkit-scrollbar { width: 4px; }
+.scroll-thin::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 10px; }
+
+@media (max-width: 768px) {
+  :root {
+    --s-lg: 16px;
+    --s-xl: 24px;
+  }
 }

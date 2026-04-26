@@ -25,10 +25,23 @@ func main() {
 	})
 	standardsService := standards.NewInMemoryService(standards.DefaultCatalog())
 	conformidadeService := conformidade.NewService(standardsService)
-	studiesStore, err := studies.NewSQLiteStore(getenv("DATABASE_PATH", "./data/eletrica.db"))
+	sqliteStore, err := studies.NewSQLiteStore(getenv("DATABASE_PATH", "./data/eletrica.db"))
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	var remoteStore studies.Repository
+	pgURL := os.Getenv("POSTGRES_URL")
+	if pgURL != "" {
+		pgStore, err := studies.NewPostgresStore(pgURL)
+		if err != nil {
+			log.Printf("warning: postgres connection failed, starting in offline-only mode: %v", err)
+		} else {
+			remoteStore = pgStore
+		}
+	}
+
+	studiesStore := studies.NewHybridStore(sqliteStore, remoteStore)
 	defer func() {
 		if err := studiesStore.Close(); err != nil {
 			log.Printf("close study store: %v", err)

@@ -1,31 +1,32 @@
 .clients-page {
   display: grid;
-  gap: 16px;
+  gap: var(--s-md);
   width: 100%;
 }
 
 .clients-panel {
   display: grid;
-  gap: 16px;
+  gap: var(--s-md);
   width: min(1040px, 100%);
   margin: 0 auto;
 }
 
 .clients-toolbar {
   display: grid;
-  gap: 12px;
+  gap: var(--s-sm);
 }
 
 .clients-search {
   display: grid;
-  gap: 8px;
+  gap: var(--s-2xs);
   max-width: 360px;
 }
 
 .clients-table-wrap {
   overflow: auto;
-  border-radius: 18px;
+  border-radius: var(--r-lg);
   border: 1px solid var(--line);
+  background: var(--surface);
 }
 
 .clients-table {
@@ -35,15 +36,16 @@
 
 .clients-table th,
 .clients-table td {
-  padding: 12px 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: var(--s-sm) var(--s-md);
+  border-bottom: 1px solid var(--line);
   text-align: left;
   vertical-align: top;
 }
 
 .clients-table th {
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size: 0.75rem;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -53,56 +55,59 @@
 }
 
 .empty-cell {
-  padding: 24px 16px;
+  padding: var(--s-xl) var(--s-md);
   color: var(--muted);
   text-align: center;
 }
 
 .row-actions {
   display: flex;
-  gap: 8px;
+  gap: var(--s-xs);
   flex-wrap: wrap;
 }
 
 .detail-grid {
   display: grid;
-  gap: 10px;
+  gap: var(--s-sm);
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .detail-card {
   display: grid;
-  gap: 8px;
-  padding: 12px;
-  border-radius: 14px;
+  gap: var(--s-xs);
+  padding: var(--s-sm);
+  border-radius: var(--r-md);
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.02);
+  box-shadow: var(--shadow-sm);
 }
 
 .form-panel {
-  gap: 14px;
+  gap: var(--s-sm);
 }
 
 .stepper {
   display: grid;
-  gap: 8px;
+  gap: var(--s-xs);
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .step-chip {
   display: grid;
-  gap: 4px;
+  gap: var(--s-3xs);
   text-align: left;
-  padding: 12px 14px;
-  border-radius: 16px;
+  padding: var(--s-sm) var(--s-md);
+  border-radius: var(--r-lg);
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.02);
   color: var(--text);
+  transition: var(--t-fast);
 }
 
 .step-chip.active {
-  border-color: rgba(127, 226, 255, 0.42);
+  border-color: var(--line-strong);
   background: rgba(127, 226, 255, 0.08);
+  box-shadow: var(--shadow-glow);
 }
 
 .step-chip span {
@@ -112,26 +117,31 @@
 
 .client-form {
   display: grid;
-  gap: 14px;
+  gap: var(--s-sm);
 }
 
 .form-section {
   display: grid;
-  gap: 12px;
+  gap: var(--s-sm);
+  padding: var(--s-md);
+  background: rgba(255, 255, 255, 0.015);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--line);
 }
 
 .section-copy {
   display: grid;
-  gap: 4px;
+  gap: var(--s-3xs);
+  margin-bottom: var(--s-xs);
 }
 
 .form-footer {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 10px;
+  gap: var(--s-sm);
   flex-wrap: wrap;
-  padding-top: 4px;
+  padding-top: var(--s-xs);
 }
 
 .delete-link {
@@ -152,7 +162,7 @@
 
   .clients-table th,
   .clients-table td {
-    padding: 12px;
+    padding: var(--s-sm);
   }
 
   .form-footer {

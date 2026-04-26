@@ -1,10 +1,10 @@
 .project-feature .details-box {
-  margin-top: 4px;
+  margin-top: var(--s-2xs);
 }
 
 .project-feature-shell {
   display: grid;
-  gap: 14px;
+  gap: var(--s-sm);
   grid-template-columns: minmax(0, 1fr);
   grid-column: 1 / -1;
   width: 100%;
@@ -15,18 +15,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--s-sm);
   width: 100%;
-  margin: 14px 0 16px;
-  padding: 12px;
-  border-radius: 18px;
+  margin: var(--s-sm) 0 var(--s-md);
+  padding: var(--s-sm);
+  border-radius: var(--r-lg);
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.025);
 }
 
 .client-context-tabs {
   display: grid;
-  gap: 8px;
+  gap: var(--s-2xs);
   grid-template-columns: repeat(3, minmax(0, 1fr));
   min-width: 0;
   flex: 1 1 auto;
@@ -36,7 +36,7 @@
   min-height: 44px;
   width: 100%;
   justify-content: center;
-  padding: 0 14px;
+  padding: 0 var(--s-sm);
 }
 
 .context-tab strong {
@@ -50,17 +50,17 @@
 
 .client-context-panel {
   display: grid;
-  gap: 14px;
-  margin-bottom: 16px;
+  gap: var(--s-sm);
+  margin-bottom: var(--s-md);
 }
 
 .client-context-summary {
   display: grid;
-  gap: 14px;
+  gap: var(--s-sm);
 }
 
 .client-context-panel h3 {
-  margin: 4px 0 0;
+  margin: var(--s-2xs) 0 0;
 }
 
 .client-context-panel-shell {
@@ -73,27 +73,27 @@
 
 .client-empty-state {
   display: grid;
-  gap: 8px;
-  padding: 16px;
-  border-radius: 16px;
+  gap: var(--s-xs);
+  padding: var(--s-md);
+  border-radius: var(--r-lg);
   border: 1px dashed var(--line);
   background: rgba(255, 255, 255, 0.02);
 }
 
 .stage-summary {
   display: grid;
-  gap: 16px;
+  gap: var(--s-md);
 }
 
 .grid-two {
   display: grid;
-  gap: 14px;
+  gap: var(--s-sm);
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .soft-panel {
   display: grid;
-  gap: 12px;
+  gap: var(--s-sm);
   margin: 0;
 }
 
@@ -101,17 +101,27 @@
   text-align: left;
   min-height: 120px;
   display: grid;
-  gap: 8px;
+  gap: var(--s-xs);
   align-content: start;
-  padding: 16px;
+  padding: var(--s-md);
+  border-radius: var(--r-lg);
   border: 1px solid var(--line);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+  transition: var(--t-fast);
+}
+
+.quick-step:hover:not(:disabled) {
+  border-color: var(--line-strong);
+  background: rgba(127, 226, 255, 0.08);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .quick-step strong {
-  font-size: 1.02rem;
+  font-size: 1rem;
 }
 
 .quick-step span {
   color: var(--muted);
+  font-size: 0.88rem;
 }
