@@ -157,16 +157,33 @@ export function ClientesFeature() {
                 <div className="form-group-rounded">
                   <div className="input-block">
                     <label>Nome do Responsável</label>
-                    <input className="modern-input" value={draft.contact_name || ''} onChange={(e) => handleDraftChange((curr) => ({ ...curr, contact_name: e.target.value }))} />
+                    <input 
+                      className="modern-input" 
+                      value={draft.contact_name || ''} 
+                      onChange={(e) => handleDraftChange((curr) => ({ ...curr, contact_name: e.target.value }))} 
+                      placeholder="Nome de quem atende"
+                    />
                   </div>
                   <div className="input-block">
                     <label>E-mail Principal</label>
-                    <input className="modern-input" value={draft.contact_email || ''} onChange={(e) => handleDraftChange((curr) => ({ ...curr, contact_email: e.target.value }))} />
+                    <input 
+                      className={`modern-input ${draft.contact_email && !validateEmail(draft.contact_email) ? 'invalid' : ''}`}
+                      value={draft.contact_email || ''} 
+                      onChange={(e) => handleDraftChange((curr) => ({ ...curr, contact_email: e.target.value }))} 
+                      placeholder="exemplo@email.com"
+                      type="email"
+                    />
                   </div>
                 </div>
                 <div className="input-block">
                   <label>Telefone / WhatsApp</label>
-                  <input className="modern-input" value={draft.contact_phone || ''} onChange={(e) => handleDraftChange((curr) => ({ ...curr, contact_phone: e.target.value }))} />
+                  <input 
+                    className="modern-input" 
+                    value={draft.contact_phone || ''} 
+                    onChange={(e) => handleDraftChange((curr) => ({ ...curr, contact_phone: maskPhone(e.target.value) }))} 
+                    placeholder="(00) 00000-0000"
+                    maxLength={15}
+                  />
                 </div>
               </div>
             )}
@@ -332,4 +349,16 @@ function maskCep(value: string): string {
   const digits = value.replace(/\D/g, '');
   if (digits.length <= 5) return digits;
   return `${digits.slice(0, 5)}-${digits.slice(5, 8)}`;
+}
+
+function maskPhone(value: string): string {
+  const digits = value.replace(/\D/g, '');
+  if (digits.length <= 2) return digits;
+  if (digits.length <= 6) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+  if (digits.length <= 10) return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+  return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7, 11)}`;
+}
+
+function validateEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }

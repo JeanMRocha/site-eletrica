@@ -302,15 +302,18 @@ export class ApiProjectRepository implements ProjectRepository {
   async list(): Promise<ResidentialProject[]> {
     const res = await fetch(this.baseUrl);
     if (!res.ok) return [];
-    const data = await res.json();
-    return data.map((p: any) => this.mapToResidential(p));
+    const text = await res.text();
+    const data = JSON.parse(text.trim());
+    const studies = data.studies || data;
+    return (studies || []).map((p: any) => this.mapToResidential(p));
   }
 
   async get(id: string): Promise<ResidentialProject | null> {
     const res = await fetch(`${this.baseUrl}/${id}`);
     if (!res.ok) return null;
-    const data = await res.json();
-    return this.mapToResidential(data.study);
+    const text = await res.text();
+    const data = JSON.parse(text.trim());
+    return this.mapToResidential(data.study || data);
   }
 
   async create(input: ResidentialProjectInput): Promise<ResidentialProject> {
@@ -325,7 +328,8 @@ export class ApiProjectRepository implements ProjectRepository {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    const data = await res.json();
+    const text = await res.text();
+    const data = JSON.parse(text.trim());
     return this.mapToResidential(data.study || data);
   }
 
@@ -341,7 +345,8 @@ export class ApiProjectRepository implements ProjectRepository {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    const data = await res.json();
+    const text = await res.text();
+    const data = JSON.parse(text.trim());
     return this.mapToResidential(data.study || data);
   }
 

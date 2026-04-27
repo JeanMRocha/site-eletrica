@@ -117,6 +117,37 @@ export function useClientes() {
     return () => { cancelled = true; clearTimeout(timer); };
   }, [draft.zip]);
 
+  // Auto-Save Logic
+  useEffect(() => {
+    if (!isDirty || (mode !== 'create' && mode !== 'edit')) return;
+    
+    const autoSave = async () => {
+      // Validate basic requirements before silent save
+      if (!draft.name || draft.name.length < 3) return;
+      
+      try {
+        const payload: ProjectInput = {
+          ...draft,
+          name: draft.name.trim(),
+          city: draft.city.trim(),
+          state: draft.state.trim().toUpperCase(),
+        };
+
+        if (mode === 'edit' && clientId) {
+          const next = await updateProject(clientId, payload);
+          listAsync.setData((current) => (current ? current.map((p) => (p.id === next.id ? next : p)) : [next]));
+          setIsDirty(false);
+          console.log('Auto-save successful');
+        }
+      } catch (err) {
+        console.warn('Auto-save deferred:', err);
+      }
+    };
+
+    const timer = setTimeout(autoSave, 1500);
+    return () => clearTimeout(timer);
+  }, [draft, isDirty, mode, clientId]);
+
   // Handle dirty state and navigation protection
   useEffect(() => {
     if (mode === 'create') {

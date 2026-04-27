@@ -6,6 +6,7 @@ Read `docs/governance.md` first, then use the reusable skills:
 - `adr-decision-workflow`
 - `module-bootstrap-workflow`
 - `plan-current-state-lifecycle`
+- `DATA_INTELLIGENT_COMPRESSION`
 
 ## Project Focus
 

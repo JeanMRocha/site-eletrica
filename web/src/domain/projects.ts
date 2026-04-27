@@ -107,13 +107,21 @@ class ApiProjectRepository implements ProjectRepository {
   async list(): Promise<Project[]> {
     const res = await fetch(this.baseUrl);
     if (!res.ok) return [];
-    return res.json();
+    const text = await res.text();
+    try {
+      const data = JSON.parse(text.trim());
+      return data.studies || data;
+    } catch (e) {
+      throw new Error(`Invalid server response: ${text.slice(0, 50)}`);
+    }
   }
 
   async get(id: string): Promise<ProjectDetail> {
     const res = await fetch(`${this.baseUrl}/${id}`);
     if (!res.ok) throw new Error('Not found');
-    return res.json();
+    const text = await res.text();
+    const data = JSON.parse(text.trim());
+    return data;
   }
 
   async create(input: ProjectInput): Promise<Project> {
@@ -122,7 +130,13 @@ class ApiProjectRepository implements ProjectRepository {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(input),
     });
-    return res.json();
+    const text = await res.text();
+    try {
+      const data = JSON.parse(text.trim());
+      return data.study || data;
+    } catch (e) {
+      throw new Error(`Invalid server response: ${text.slice(0, 50)}`);
+    }
   }
 
   async update(id: string, input: ProjectUpdateInput): Promise<Project> {
@@ -131,7 +145,13 @@ class ApiProjectRepository implements ProjectRepository {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(input),
     });
-    return res.json();
+    const text = await res.text();
+    try {
+      const data = JSON.parse(text.trim());
+      return data.study || data;
+    } catch (e) {
+      throw new Error(`Invalid server response: ${text.slice(0, 50)}`);
+    }
   }
 
   async delete(id: string): Promise<void> {

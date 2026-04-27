@@ -69,6 +69,11 @@
   width: 100%;
 }
 
+.modern-input.invalid {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 4px rgba(var(--danger-rgb), 0.1);
+}
+
 .modern-input:focus, .modern-select:focus {
   border-color: var(--accent);
   background: rgba(0, 0, 0, 0.3);

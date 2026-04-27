@@ -19,13 +19,13 @@ func NewHandler(service *Service) *Handler {
 
 func (h *Handler) Routes() http.Handler {
 	mux := http.NewServeMux()
-	mux.HandleFunc("GET /v1/studies", h.handleListStudies)
-	mux.HandleFunc("POST /v1/studies", h.handleCreateStudy)
-	mux.HandleFunc("GET /v1/studies/{id}", h.handleGetStudy)
-	mux.HandleFunc("PUT /v1/studies/{id}", h.handleUpdateStudy)
-	mux.HandleFunc("PATCH /v1/studies/{id}", h.handleUpdateStudy)
-	mux.HandleFunc("DELETE /v1/studies/{id}", h.handleDeleteStudy)
-	mux.HandleFunc("POST /v1/studies/{id}/assessments", h.handleAssessStudy)
+	mux.HandleFunc("GET /", h.handleListStudies)
+	mux.HandleFunc("POST /", h.handleCreateStudy)
+	mux.HandleFunc("GET /{id}", h.handleGetStudy)
+	mux.HandleFunc("PUT /{id}", h.handleUpdateStudy)
+	mux.HandleFunc("PATCH /{id}", h.handleUpdateStudy)
+	mux.HandleFunc("DELETE /{id}", h.handleDeleteStudy)
+	mux.HandleFunc("POST /{id}/assessments", h.handleAssessStudy)
 	return mux
 }
 

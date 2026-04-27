@@ -16,7 +16,6 @@ import (
 	"github.com/JeanMRocha/site-eletrica/internal/standards"
 	"github.com/JeanMRocha/site-eletrica/internal/studies"
 	"github.com/JeanMRocha/site-eletrica/internal/knowledge"
-	"github.com/JeanMRocha/site-eletrica/internal/compression/adapters"
 )
 
 //go:embed all:web/dist
@@ -77,15 +76,16 @@ func main() {
 		mux.Handle("/v1/auth/", auth.NewHandler(authService).Routes())
 		mux.Handle("/v1/standards/", standards.NewHandler(standardsService).Routes())
 		mux.Handle("/v1/conformidade/", conformidade.NewHandler(conformidadeService).Routes())
-		mux.Handle("/v1/studies/", studies.NewHandler(studiesService).Routes())
+		// Usamos StripPrefix para que o Handler interno veja rotas a partir da raiz
+		mux.Handle("/v1/studies/", http.StripPrefix("/v1/studies", studies.NewHandler(studiesService).Routes()))
 		mux.Handle("/v1/knowledge/", knowledge.NewHandler(knowledgeService).Routes())
 		mux.HandleFunc("/healthz", func(w http.ResponseWriter, _ *http.Request) {
 			w.WriteHeader(http.StatusOK)
 			_, _ = w.Write([]byte("ok"))
 		})
 
-		// Aplicamos CORS e Compressão Inteligente
-		handler := enableCORS(adapters.CompressionMiddleware(mux))
+		// Aplicamos CORS (Compressão desativada temporariamente para depuração de JSON)
+		handler := enableCORS(mux)
 
 		addr := ":8081" 
 		log.Printf("Desktop API listening on %s", addr)
