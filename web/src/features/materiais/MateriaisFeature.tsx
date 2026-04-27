@@ -1,11 +1,16 @@
 import { useState, useMemo } from 'react';
 import type { ResidentialProject } from '../../domain/residential-projects';
 import { deriveMaterials, calcTotal, groupByCategory, type MaterialItem } from './materialsEngine';
+import { LoadTreeFeature } from './LoadTreeFeature';
+import { buildStarterTree } from './loadTreeModel';
+import type { LoadTree } from './loadTreeModel';
 import './materiais.css';
 
 type Props = {
   project: ResidentialProject;
 };
+
+type Phase = 'tree' | 'bom';
 
 const CATEGORY_LABELS: Record<string, { label: string; icon: string }> = {
   'estrutura': { label: 'Estrutura e Fixação', icon: '🧱' },
@@ -17,6 +22,8 @@ const CATEGORY_LABELS: Record<string, { label: string; icon: string }> = {
 
 export function MateriaisFeature({ project }: Props) {
   const canvas = project.canvas;
+  const [phase, setPhase] = useState<Phase>('tree');
+  const [loadTree, setLoadTree] = useState<LoadTree>(() => buildStarterTree(project.name));
 
   const baseMaterials = useMemo(() =>
     deriveMaterials(canvas.items, canvas.links, canvas.nodes),
@@ -64,31 +71,53 @@ export function MateriaisFeature({ project }: Props) {
     setExtraItems(prev => prev.filter(m => m.id !== id));
   }
 
-  function handlePrint() {
-    window.print();
-  }
 
   return (
     <div className="materiais-page">
-      {/* Header */}
+      {/* Phase Tabs + Header Actions */}
       <header className="mat-header">
+        <div className="mat-phase-tabs">
+          <button
+            className={`mat-phase-tab ${phase === 'tree' ? 'active' : ''}`}
+            onClick={() => setPhase('tree')}
+          >
+            📊 Fase 1 — Árvore de Cargas
+          </button>
+          <button
+            className={`mat-phase-tab ${phase === 'bom' ? 'active' : ''}`}
+            onClick={() => setPhase('bom')}
+          >
+            📋 Fase 2 — Lista de Materiais
+          </button>
+        </div>
         <div className="mat-header-info">
-          <p className="eyebrow">Lista de Materiais</p>
-          <h2>{project.name}</h2>
-          <p className="mat-client-label">{project.clientName} · {project.city}/{project.state}</p>
+          <strong>{project.name}</strong>
+          <span className="mat-client-label">{project.clientName} · {project.city}/{project.state}</span>
         </div>
         <div className="mat-header-actions">
-          <button className="mat-btn secondary" onClick={addExtraItem}>
-            ＋ Adicionar Item Manual
-          </button>
-          <button className="mat-btn primary" onClick={handlePrint}>
-            🖨️ Imprimir / Exportar PDF
-          </button>
+          {phase === 'bom' && (
+            <button className="mat-btn secondary" onClick={addExtraItem}>＋ Item Manual</button>
+          )}
+          <button className="mat-btn primary" onClick={() => window.print()}>🖨️ Relatório PDF</button>
         </div>
       </header>
 
-      {/* Summary Cards */}
-      <div className="mat-summary-row">
+      {/* Phase 1: Load Tree */}
+      {phase === 'tree' && (
+        <div className="mat-tree-container">
+          <LoadTreeFeature
+            project={project}
+            tree={loadTree}
+            onTreeChange={setLoadTree}
+          />
+        </div>
+      )}
+
+      {/* Phase 2: Bill of Materials */}
+      {phase === 'bom' && (
+        <>
+          {/* Summary Cards */}
+          <div className="mat-summary-row">
         <div className="mat-card">
           <span className="mat-card-label">Total de Itens</span>
           <strong className="mat-card-value">{materials.length}</strong>
@@ -242,6 +271,8 @@ export function MateriaisFeature({ project }: Props) {
           </p>
         </div>
       </div>
-    </div>
+    </>
+  )}
+  </div>
   );
 }

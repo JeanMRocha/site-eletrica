@@ -313,3 +313,14 @@
   .mat-del-btn { display: none; }
   .mat-notes-input { border: 1px solid #ccc; color: #333; background: #fff; }
 }
+
+/* Phase Tabs */
+.mat-header { flex-wrap: wrap; gap: 10px; align-items: center; }
+.mat-phase-tabs { display: flex; gap: 4px; }
+.mat-phase-tab { background: #1e2e44; border: 1px solid #2a4060; color: #6b8fae; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-weight: 600; transition: all 0.15s; }
+.mat-phase-tab:hover { color: #b0d4e8; border-color: #4a7a9b; }
+.mat-phase-tab.active { background: #0d2137; border-color: #7fe2ff; color: #7fe2ff; }
+.mat-header-info { display: flex; flex-direction: column; gap: 2px; }
+.mat-header-info strong { font-size: 0.9rem; color: #e4f0fb; }
+.mat-tree-container { flex: 1; min-height: 0; overflow: hidden; border: 1px solid #1e2e44; border-radius: 8px; }
+.materiais-page { min-height: calc(100vh - 120px); }

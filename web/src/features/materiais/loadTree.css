@@ -1,0 +1,307 @@
+/* ============================================================
+   Load Tree Feature — Professional Electrical Planning CSS
+   ============================================================ */
+
+.load-tree-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  background: #080f1a;
+}
+
+/* ── Left: Tree panel ─────────────────────────────────────── */
+.load-tree-panel {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #1e2e44;
+  overflow: hidden;
+}
+
+.load-tree-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #0c1620;
+  border-bottom: 1px solid #1e2e44;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #7fe2ff;
+}
+
+.load-tree-subtitle {
+  font-size: 0.68rem;
+  font-weight: 400;
+  color: #6b8fae;
+}
+
+.load-tree-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+
+/* ── Tree nodes ───────────────────────────────────────────── */
+.tree-node-wrapper { display: flex; flex-direction: column; }
+
+.tree-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background 0.1s;
+  min-height: 30px;
+  user-select: none;
+}
+
+.tree-row:hover   { background: #0e1825; }
+.tree-row.selected { background: #0d2137; border-left: 2px solid #7fe2ff; }
+
+.tree-row.depth-0 { font-weight: 700; font-size: 0.82rem; }
+.tree-row.depth-1 { font-size: 0.79rem; }
+.tree-row.depth-2 { font-size: 0.76rem; color: #b0c8e0; }
+.tree-row.depth-3,
+.tree-row.depth-4,
+.tree-row.depth-5 { font-size: 0.72rem; color: #8aabcc; }
+
+.tree-toggle {
+  width: 14px; min-width: 14px;
+  font-size: 0.6rem;
+  color: #4a7a9b;
+  text-align: center;
+  cursor: pointer;
+}
+
+.tree-toggle:hover { color: #7fe2ff; }
+
+.tree-icon   { font-size: 0.9rem; }
+.tree-name   { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.tree-badges {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
+}
+
+.badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.badge-neutral { background: #1e2e44; color: #7fe2ff; }
+.badge-ok      { background: #0d3020; color: #4ecb71; border: 1px solid #2a6040; }
+.badge-warn    { background: #3a2c00; color: #ffc107; border: 1px solid #7a5c00; }
+.badge-error   { background: #3a0d0d; color: #ff6b6b; border: 1px solid #7a1a1a; }
+
+.tree-add-btn {
+  background: none;
+  border: 1px solid #2a4060;
+  color: #4a7a9b;
+  font-size: 0.6rem;
+  padding: 1px 5px;
+  border-radius: 3px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.tree-add-btn:hover {
+  border-color: #7fe2ff;
+  color: #7fe2ff;
+  background: #0d2137;
+}
+
+.tree-children { /* indent is handled by padding-left on row */ }
+
+/* ── Right: Properties panel ──────────────────────────────── */
+.load-tree-props {
+  display: flex;
+  flex-direction: column;
+  background: #0a1422;
+  overflow: hidden;
+}
+
+.node-props-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.props-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 10px;
+  color: #4a7a9b;
+  font-size: 0.78rem;
+  text-align: center;
+  padding: 24px;
+}
+
+.props-empty span { font-size: 2rem; }
+
+.node-props-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.node-type-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #7fe2ff;
+  background: #0d2137;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.props-delete-btn {
+  background: none;
+  border: 1px solid #3a1515;
+  color: #ff6b6b;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+
+.props-delete-btn:hover { opacity: 1; }
+
+/* ── Property groups ──────────────────────────────────────── */
+.prop-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #111d2e;
+}
+
+.prop-group:last-child { border-bottom: none; }
+
+.prop-section-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #4a7a9b;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.prop-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  align-items: center;
+}
+
+.prop-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.prop-field label {
+  font-size: 0.64rem;
+  color: #6b8fae;
+}
+
+.prop-input {
+  background: #0c1620;
+  border: 1px solid #1e2e44;
+  color: #e4f0fb;
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  font-family: inherit;
+  transition: border-color 0.15s;
+  width: 100%;
+}
+
+.prop-input:focus {
+  outline: none;
+  border-color: #7fe2ff44;
+}
+
+.prop-range {
+  accent-color: #7fe2ff;
+  width: 100%;
+  cursor: pointer;
+}
+
+.prop-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.74rem;
+  color: #b0c8e0;
+  cursor: pointer;
+}
+
+.prop-checkbox input { accent-color: #7fe2ff; }
+
+/* ── Computed results ─────────────────────────────────────── */
+.computed-section { background: #080f1a; border-radius: 6px; padding: 10px !important; }
+
+.computed-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.computed-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.74rem;
+}
+
+.computed-row span { color: #6b8fae; }
+.computed-row strong { color: #e4f0fb; }
+
+.text-ok    { color: #4ecb71 !important; }
+.text-warn  { color: #ffc107 !important; }
+.text-error { color: #ff6b6b !important; }
+
+/* ── Warnings ─────────────────────────────────────────────── */
+.prop-warning {
+  font-size: 0.72rem;
+  color: #ffc107;
+  background: #3a2c0030;
+  border: 1px solid #7a5c0050;
+  border-radius: 4px;
+  padding: 6px 8px;
+}
+
+/* ── Add child buttons ────────────────────────────────────── */
+.prop-add-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.prop-add-btn {
+  background: #0d2137;
+  border: 1px solid #2a4060;
+  color: #7fe2ff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.72rem;
+  transition: all 0.15s;
+}
+
+.prop-add-btn:hover {
+  background: #122840;
+  border-color: #7fe2ff;
+}
