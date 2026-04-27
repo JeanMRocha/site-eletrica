@@ -4,13 +4,14 @@ import { deriveMaterials, calcTotal, groupByCategory, type MaterialItem } from '
 import { LoadTreeFeature } from './LoadTreeFeature';
 import { buildStarterTree } from './loadTreeModel';
 import type { LoadTree } from './loadTreeModel';
+import { CircuitReportFeature } from './CircuitReportFeature';
 import './materiais.css';
 
 type Props = {
   project: ResidentialProject;
 };
 
-type Phase = 'tree' | 'bom';
+type Phase = 'tree' | 'report' | 'bom';
 
 const CATEGORY_LABELS: Record<string, { label: string; icon: string }> = {
   'estrutura': { label: 'Estrutura e Fixação', icon: '🧱' },
@@ -84,10 +85,16 @@ export function MateriaisFeature({ project }: Props) {
             📊 Fase 1 — Árvore de Cargas
           </button>
           <button
+            className={`mat-phase-tab ${phase === 'report' ? 'active' : ''}`}
+            onClick={() => setPhase('report')}
+          >
+            ⚡ Fase 2 — Circuitos NBR 5410
+          </button>
+          <button
             className={`mat-phase-tab ${phase === 'bom' ? 'active' : ''}`}
             onClick={() => setPhase('bom')}
           >
-            📋 Fase 2 — Lista de Materiais
+            📋 Fase 3 — Lista de Materiais
           </button>
         </div>
         <div className="mat-header-info">
@@ -106,14 +113,25 @@ export function MateriaisFeature({ project }: Props) {
       {phase === 'tree' && (
         <div className="mat-tree-container">
           <LoadTreeFeature
-            project={project}
             tree={loadTree}
             onTreeChange={setLoadTree}
+            onGenerateReport={() => setPhase('report')}
           />
         </div>
       )}
 
-      {/* Phase 2: Bill of Materials */}
+      {/* Phase 2: Circuit Report (NBR 5410) */}
+      {phase === 'report' && (
+        <div className="mat-tree-container">
+          <CircuitReportFeature
+            project={project}
+            tree={loadTree}
+            onBack={() => setPhase('tree')}
+          />
+        </div>
+      )}
+
+      {/* Phase 3: Bill of Materials */}
       {phase === 'bom' && (
         <>
           {/* Summary Cards */}

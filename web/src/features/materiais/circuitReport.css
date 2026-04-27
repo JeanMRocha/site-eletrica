@@ -1,0 +1,156 @@
+/* ============================================================
+   Circuit Report Feature CSS — NBR 5410 Professional Report
+   ============================================================ */
+
+.circuit-report {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-height: 100%;
+  background: #080f1a;
+  color: #e4f0fb;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+}
+
+/* Header */
+.cr-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: #0c1620;
+  border-bottom: 1px solid #1e2e44;
+  gap: 16px;
+}
+
+.cr-header-left { display: flex; align-items: center; gap: 14px; }
+.cr-back-btn { background: #1e2e44; border: 1px solid #2a4060; color: #7fe2ff; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; }
+.cr-back-btn:hover { background: #243650; }
+.cr-title { font-size: 1rem; font-weight: 700; color: #7fe2ff; margin: 0; }
+.cr-subtitle { font-size: 0.68rem; color: #6b8fae; margin: 2px 0 0; }
+.cr-print-btn { background: #7fe2ff; color: #06101d; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 0.78rem; }
+.cr-print-btn:hover { background: #a0eaff; }
+
+/* Warnings */
+.cr-warnings {
+  background: #1a0e00;
+  border-bottom: 1px solid #7a5c0060;
+  padding: 8px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cr-warning-item { font-size: 0.74rem; color: #ffc107; }
+
+/* KPIs */
+.cr-kpis {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  border-bottom: 1px solid #1e2e44;
+  background: #0a1422;
+}
+.cr-kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border-right: 1px solid #1e2e44;
+}
+.cr-kpi:last-child { border-right: none; }
+.cr-kpi span { font-size: 0.62rem; color: #6b8fae; text-transform: uppercase; letter-spacing: 0.04em; }
+.cr-kpi strong { font-size: 1rem; font-weight: 700; color: #e4f0fb; }
+.cr-kpi.accent strong { color: #7fe2ff; }
+
+/* Tabs */
+.cr-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid #1e2e44;
+  background: #0c1620;
+}
+.cr-tab { background: none; border: none; border-bottom: 2px solid transparent; color: #6b8fae; padding: 10px 18px; cursor: pointer; font-size: 0.78rem; font-weight: 600; transition: all 0.15s; }
+.cr-tab:hover { color: #b0d4e8; }
+.cr-tab.active { color: #7fe2ff; border-bottom-color: #7fe2ff; }
+
+/* Content */
+.cr-content { flex: 1; overflow: auto; padding: 16px 20px; display: flex; flex-direction: column; gap: 16px; }
+
+/* Tables */
+.cr-table { width: 100%; border-collapse: collapse; font-size: 0.74rem; }
+.cr-table thead th { background: #0c1620; color: #4a7a9b; text-transform: uppercase; font-size: 0.62rem; letter-spacing: 0.04em; padding: 7px 10px; text-align: left; border-bottom: 1px solid #1e2e44; }
+.cr-table th.num, .cr-table td.num { text-align: right; }
+.cr-table tbody tr { border-bottom: 1px solid #111d2e; transition: background 0.1s; }
+.cr-table tbody tr:hover { background: #0e1825; }
+.cr-table tbody td { padding: 6px 10px; vertical-align: middle; }
+.cr-table tbody tr.row-warn { background: #1a0e0060; }
+
+/* Circuit cells */
+.circuit-num   { font-family: monospace; font-weight: 700; color: #7fe2ff; white-space: nowrap; }
+.circuit-name  { font-weight: 500; max-width: 200px; }
+.conductor-cell { font-weight: 700; color: #7fe2ff; }
+.code-cell     { font-family: monospace; font-size: 0.7rem; color: #4a7a9b; }
+
+.type-badge { font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 3px; border: 1px solid; white-space: nowrap; }
+.dr-badge.required { color: #ff6b6b; font-size: 0.65rem; font-weight: 700; }
+.dr-badge.none     { color: #2a4060; font-size: 0.65rem; }
+
+.cell-ok    { color: #4ecb71; font-weight: 700; }
+.cell-warn  { color: #ffc107; font-weight: 700; }
+.cell-error { color: #ff6b6b; font-weight: 700; }
+.center     { text-align: center; }
+
+.loads-cell { max-width: 280px; }
+.load-chip { display: inline-block; font-size: 0.62rem; background: #1e2e44; color: #b0c8e0; padding: 1px 5px; border-radius: 3px; margin: 1px 2px; white-space: nowrap; }
+
+/* DR Section */
+.cr-dr-section h3 { font-size: 0.82rem; color: #ffc107; margin: 0 0 8px; }
+
+/* QDC View */
+.cr-qdc-view { display: grid; grid-template-columns: 1fr 320px; gap: 20px; }
+
+.qdc-box { background: #0c1620; border: 2px solid #1e2e44; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+.qdc-title { font-size: 0.78rem; font-weight: 700; color: #7fe2ff; text-align: center; padding-bottom: 8px; border-bottom: 1px solid #1e2e44; }
+
+.qdc-entry { display: flex; flex-direction: column; gap: 4px; align-items: center; }
+.qdc-bus-label { font-size: 0.62rem; color: #4a7a9b; text-transform: uppercase; letter-spacing: 0.08em; }
+
+.qdc-device { display: grid; grid-template-columns: 40px 1fr auto; gap: 8px; align-items: center; padding: 6px 10px; border-radius: 4px; border-left: 3px solid #2a4060; background: #111d2e; width: 100%; }
+.qdc-device.main-breaker { border-left-color: #4ecb71; background: #0d2518; }
+.qdc-device.dr-device    { border-left-color: #ff6b6b; background: #1a0d0d; }
+.qdc-device.circuit-device { border-left-color: #2a4060; }
+.qdc-device.dr-protected  { border-left-color: #ff6b6b40; margin-left: 16px; background: #110a0a; }
+
+.qdc-device-code { font-family: monospace; font-size: 0.68rem; font-weight: 700; color: #7fe2ff; }
+.qdc-device-name { font-size: 0.72rem; color: #b0c8e0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.qdc-device-spec { font-size: 0.65rem; color: #4a7a9b; white-space: nowrap; }
+
+.qdc-rows { display: flex; flex-direction: column; gap: 4px; }
+.qdc-dr-group { display: flex; flex-direction: column; gap: 3px; padding: 6px; background: #0a0808; border: 1px solid #3a1515; border-radius: 6px; }
+.qdc-dr-circuits { display: flex; flex-direction: column; gap: 2px; }
+
+.qdc-footer { font-size: 0.65rem; color: #4a7a9b; text-align: center; padding-top: 8px; border-top: 1px solid #1e2e44; }
+
+.qdc-entry-info h3 { font-size: 0.82rem; color: #7fe2ff; margin: 0 0 10px; }
+.qdc-entry-info .cr-table tbody td:first-child { color: #6b8fae; }
+.qdc-entry-info .cr-table tbody td:last-child { text-align: right; }
+
+/* BOM */
+.cr-bom-group { border: 1px solid #1e2e44; border-radius: 6px; overflow: hidden; }
+.cr-bom-group-header { padding: 8px 12px; background: #0c1620; font-size: 0.74rem; font-weight: 700; color: #b0d4e8; border-bottom: 1px solid #1e2e44; }
+.cr-bom-footer { font-size: 0.68rem; color: #4a7a9b; text-align: center; padding: 12px; }
+
+/* Print */
+@media print {
+  .circuit-report { background: #fff; color: #000; }
+  .cr-header-left .cr-back-btn { display: none; }
+  .cr-print-btn { display: none; }
+  .cr-kpi { border: 1px solid #ddd; background: #f9f9f9; }
+  .cr-kpi strong { color: #000; }
+  .cr-table thead th { background: #eee; color: #333; }
+  .cr-table tbody tr:hover { background: transparent; }
+  .qdc-device { background: #f5f5f5; border-left: 3px solid #999; }
+  .qdc-box { border: 2px solid #999; background: #fff; }
+  .cr-bom-group { border: 1px solid #ddd; }
+  .cr-bom-group-header { background: #eee; color: #333; }
+}

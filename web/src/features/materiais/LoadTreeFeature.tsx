@@ -1,14 +1,14 @@
 import { useState, useMemo, useCallback } from 'react';
-import type { LoadNode, LoadNodeType, LoadTree } from './loadTreeModel';
+import type { LoadNode, LoadNodeType, LoadTree, RoomType, LoadType } from './loadTreeModel';
 import { makeNode, DEFAULT_DEMAND_FACTORS } from './loadTreeModel';
 import { calcTree, getChildren, validateNode } from './loadTreeCalc';
-import type { ResidentialProject } from '../../domain/residential-projects';
 import './loadTree.css';
 
 type Props = {
-  project: ResidentialProject;
+  project?: any;
   tree: LoadTree;
   onTreeChange: (tree: LoadTree) => void;
+  onGenerateReport?: () => void;
 };
 
 const TYPE_ICONS: Record<LoadNodeType, string> = {
@@ -41,7 +41,7 @@ function conductorBadgeColor(drop: number): string {
   return 'badge-error';
 }
 
-export function LoadTreeFeature({ tree, onTreeChange }: Props) {
+export function LoadTreeFeature({ tree, onTreeChange, onGenerateReport }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   // Run calculation engine on every tree change
@@ -176,11 +176,18 @@ export function LoadTreeFeature({ tree, onTreeChange }: Props) {
       <div className="load-tree-panel">
         <div className="load-tree-header">
           <span>📊 Árvore de Cargas</span>
-          <span className="load-tree-subtitle">
-            {computed[0]?.computed
-              ? `${(computed[0].computed.demandPowerW / 1000).toFixed(2)}kW demanda · ${computed[0].computed.currentA}A total`
-              : ''}
-          </span>
+          <div className="load-tree-header-right">
+            <span className="load-tree-subtitle">
+              {computed[0]?.computed
+                ? `${(computed[0].computed.demandPowerW / 1000).toFixed(2)}kW · ${computed[0].computed.currentA}A`
+                : ''}
+            </span>
+            {onGenerateReport && (
+              <button className="generate-report-btn" onClick={onGenerateReport}>
+                ⚡ Gerar Relatório NBR 5410
+              </button>
+            )}
+          </div>
         </div>
         <div className="load-tree-content custom-scrollbar">
           {roots.map(r => renderNode(r, 0))}
@@ -275,20 +282,33 @@ function NodeProperties({ node, tree, onChange, onDelete, onAddChild }: NodeProp
         </div>
       )}
 
-      {(node.type === 'building' || node.type === 'room' || node.type === 'circuit') && (
+      {/* Room type — critical for DR requirements */}
+      {(node.type === 'room') && (
         <div className="prop-group">
-          <label className="prop-section-label">📏 Distâncias</label>
+          <label className="prop-section-label">🚿 Tipo de Ambiente (NBR 5410 §9.4.2.3)</label>
+          <div className="prop-row">
+            <div className="prop-field">
+              <label>Classificação</label>
+              <select className="prop-input" value={node.roomType ?? 'dry'}
+                onChange={e => onChange({ roomType: e.target.value as RoomType })}>
+                <option value="dry">🏠 Seco (sala, quarto, escritório)</option>
+                <option value="wet">🚿 Molhado — DR obrigatório (banheiro, cozinha, lavanderia)</option>
+                <option value="outdoor">🌳 Externo — DR obrigatório (garagem, área de serviço externa)</option>
+              </select>
+            </div>
+          </div>
           <div className="prop-field">
-            <label>Distância ao ponto pai (m)</label>
+            <label>Área (m²) — verificação de mínimo de tomadas</label>
+            <input type="number" className="prop-input" min={0} value={node.areaM2 ?? 0}
+              onChange={e => onChange({ areaM2: parseFloat(e.target.value) || 0 })} />
+          </div>
+          <div className="prop-field">
+            <label>Distância ao QDC (m)</label>
             <input type="number" className="prop-input" value={node.distanceToParentM ?? 0}
               onChange={e => onChange({ distanceToParentM: parseFloat(e.target.value) || 0 })} />
           </div>
-          {node.type === 'building' && (
-            <label className="prop-checkbox">
-              <input type="checkbox" checked={!!node.hasQDC}
-                onChange={e => onChange({ hasQDC: e.target.checked })} />
-              Possui Sub-QDC neste ponto
-            </label>
+          {(node.roomType === 'wet' || node.roomType === 'outdoor') && (
+            <div className="prop-warning">⚠️ Ambiente molhado/externo: DR 30mA obrigatório (NBR 5410 §9.4.2.3)</div>
           )}
         </div>
       )}
@@ -297,6 +317,23 @@ function NodeProperties({ node, tree, onChange, onDelete, onAddChild }: NodeProp
       {node.type === 'load' && (
         <div className="prop-group">
           <label className="prop-section-label">⚡ Dados da Carga</label>
+
+          <div className="prop-field">
+            <label>Tipo de Carga (NBR 5410 agrupamento)</label>
+            <select className="prop-input" value={node.loadType ?? 'outlet'}
+              onChange={e => onChange({ loadType: e.target.value as LoadType })}>
+              <option value="outlet">🔌 Tomada geral</option>
+              <option value="lighting">💡 Iluminação</option>
+              <option value="dedicated">⚡ Dedicado (circuito exclusivo)</option>
+            </select>
+          </div>
+
+          <div className="prop-field">
+            <label>Comprimento do circuito (m)</label>
+            <input type="number" className="prop-input" min={0} value={node.circuitLengthM ?? 0}
+              onChange={e => onChange({ circuitLengthM: parseFloat(e.target.value) || 0 })} />
+          </div>
+
           <div className="prop-row">
             <div className="prop-field">
               <label>Potência unitária (W)</label>

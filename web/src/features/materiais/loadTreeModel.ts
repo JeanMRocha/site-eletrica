@@ -20,6 +20,12 @@ export type VoltageLevel = 127 | 220;
 export type PhaseConfig = '1F' | '2F' | '3F';
 export type ConductorMaterial = 'Cu' | 'Al';
 
+/** Determines DR (RCD) requirement per NBR 5410 item 9.4.2.3 */
+export type RoomType = 'dry' | 'wet' | 'outdoor';
+
+/** Determines circuit grouping rules per NBR 5410 item 9.1 */
+export type LoadType = 'lighting' | 'outlet' | 'dedicated';
+
 // ── Computed properties derived from the engine ──────────────────────────────
 export type ComputedElectrical = {
   installedPowerW: number;   // Sum of all loads (raw)
@@ -45,6 +51,12 @@ export type LoadNode = {
   distancePoleToMeterM?: number;   // Distance from utility pole to energy meter
   distanceMeterToQDCM?: number;    // Distance from meter to main QDC
   distanceToParentM?: number;      // Sub-circuit distance (room / circuit level)
+
+  // ── Load classification (critical for circuit planning) ─────────────────
+  roomType?: RoomType;     // 'wet' → mandatory DR 30mA (NBR 5410 §9.4.2.3)
+  loadType?: LoadType;     // 'lighting' | 'outlet' | 'dedicated'
+  circuitLengthM?: number; // Physical wire run length for this circuit/load
+  areaM2?: number;         // Room area — used for minimum outlet count check
 
   // Load inputs (leaf nodes)
   powerW?: number;            // Rated power of one unit (W)

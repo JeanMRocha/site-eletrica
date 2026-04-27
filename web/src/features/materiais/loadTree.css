@@ -305,3 +305,8 @@
   background: #122840;
   border-color: #7fe2ff;
 }
+
+/* Generate Report Button */
+.load-tree-header-right { display: flex; align-items: center; gap: 10px; }
+.generate-report-btn { background: #7fe2ff; color: #06101d; border: none; padding: 5px 12px; border-radius: 5px; font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+.generate-report-btn:hover { background: #a0eaff; transform: translateY(-1px); }
