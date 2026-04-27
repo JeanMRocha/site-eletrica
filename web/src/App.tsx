@@ -21,9 +21,14 @@ import './styles.css';
 
 
 export function App() {
+  console.log('App: Initializing...');
   const location = useLocation();
   const navigate = useNavigate();
-  const [session, setSession] = useState<Session>(() => loadSession());
+  const [session, setSession] = useState<Session>(() => {
+    const s = loadSession();
+    console.log('App: Loaded session:', s);
+    return s;
+  });
   const [sessionDraft, setSessionDraft] = useState<Session>(session);
   const [projects, setProjects] = useState<Project[]>([]);
   const [selectedProjectId, setSelectedProjectId] = useState('');

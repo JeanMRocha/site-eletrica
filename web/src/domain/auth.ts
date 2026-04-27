@@ -52,7 +52,8 @@ export function loadSession(): Session {
   const raw = localStorage.getItem(CURRENT_USER_KEY);
   if (!raw) return defaultSession;
   try {
-    return JSON.parse(raw);
+    const data = JSON.parse(raw);
+    return (data && typeof data === 'object' && 'name' in data) ? data : defaultSession;
   } catch {
     return defaultSession;
   }

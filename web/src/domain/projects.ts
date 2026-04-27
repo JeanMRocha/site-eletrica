@@ -102,7 +102,7 @@ export interface ProjectRepository {
 // --- API Implementation ---
 
 class ApiProjectRepository implements ProjectRepository {
-  private baseUrl = 'http://localhost:8081/v1/studies';
+  private baseUrl = '/v1/studies';
 
   async list(): Promise<Project[]> {
     const res = await fetch(this.baseUrl);
@@ -110,9 +110,12 @@ class ApiProjectRepository implements ProjectRepository {
     const text = await res.text();
     try {
       const data = JSON.parse(text.trim());
-      return data.studies || data;
+      if (data && typeof data === 'object' && Array.isArray(data.studies)) {
+        return data.studies;
+      }
+      return Array.isArray(data) ? data : [];
     } catch (e) {
-      throw new Error(`Invalid server response: ${text.slice(0, 50)}`);
+      return [];
     }
   }
 

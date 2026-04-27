@@ -8,3 +8,12 @@ web/dist/
 web/.vite/
 web/*.log
 web/tsconfig.tsbuildinfo
+
+# Binaries
+*.exe
+*.dll
+*.so
+*.dylib
+build/bin/
+api-server
+api-local

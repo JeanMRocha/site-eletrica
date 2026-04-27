@@ -297,7 +297,7 @@ export class LocalProjectRepository implements ProjectRepository {
 // --- API Implementation (Wails/Go Backend) ---
 
 export class ApiProjectRepository implements ProjectRepository {
-  private baseUrl = 'http://localhost:8081/v1/studies';
+  private baseUrl = '/v1/studies';
 
   async list(): Promise<ResidentialProject[]> {
     const res = await fetch(this.baseUrl);
