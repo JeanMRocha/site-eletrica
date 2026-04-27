@@ -294,18 +294,113 @@ export class LocalProjectRepository implements ProjectRepository {
   }
 }
 
-// --- Online Connector (Stub) ---
+// --- API Implementation (Wails/Go Backend) ---
 
-export class OnlineProjectRepository implements ProjectRepository {
-  async list(): Promise<ResidentialProject[]> { return []; }
-  async get(_id: string): Promise<ResidentialProject | null> { return null; }
-  async create(_input: ResidentialProjectInput): Promise<ResidentialProject> { throw new Error('Offline mode only'); }
-  async update(_id: string, _input: ResidentialProjectInput): Promise<ResidentialProject> { throw new Error('Offline mode only'); }
-  async delete(_id: string): Promise<void> { throw new Error('Offline mode only'); }
-  async addEnvironment(_id: string, _input: ResidentialProjectEnvironmentInput): Promise<ResidentialProject> { throw new Error('Offline mode only'); }
-  async updateCanvas(_id: string, _updater: (canvas: ProjectCanvas) => ProjectCanvas): Promise<ResidentialProject> { throw new Error('Offline mode only'); }
+export class ApiProjectRepository implements ProjectRepository {
+  private baseUrl = 'http://localhost:8081/v1/studies';
+
+  async list(): Promise<ResidentialProject[]> {
+    const res = await fetch(this.baseUrl);
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data.map((p: any) => this.mapToResidential(p));
+  }
+
+  async get(id: string): Promise<ResidentialProject | null> {
+    const res = await fetch(`${this.baseUrl}/${id}`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    return this.mapToResidential(data.study);
+  }
+
+  async create(input: ResidentialProjectInput): Promise<ResidentialProject> {
+    const payload = {
+      name: input.name,
+      city: input.city,
+      state: input.state,
+      metadata: JSON.stringify(input)
+    };
+    const res = await fetch(this.baseUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    return this.mapToResidential(data.study || data);
+  }
+
+  async update(id: string, input: ResidentialProjectInput): Promise<ResidentialProject> {
+    const payload = {
+      name: input.name,
+      city: input.city,
+      state: input.state,
+      metadata: JSON.stringify(input)
+    };
+    const res = await fetch(`${this.baseUrl}/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    return this.mapToResidential(data.study || data);
+  }
+
+  async delete(id: string): Promise<void> {
+    await fetch(`${this.baseUrl}/${id}`, { method: 'DELETE' });
+  }
+
+  async addEnvironment(id: string, input: ResidentialProjectEnvironmentInput): Promise<ResidentialProject> {
+    // Para simplificar no MVP, salvamos ambientes como parte do 'update' ou mockamos se o backend for limitado
+    const project = await this.get(id);
+    if (!project) throw new Error('Not found');
+    
+    const env = { id: crypto.randomUUID(), ...input };
+    const updated = { ...project, environments: [env, ...project.environments] };
+    return this.update(id, updated as any);
+  }
+
+  async updateCanvas(id: string, updater: (canvas: ProjectCanvas) => ProjectCanvas): Promise<ResidentialProject> {
+    const project = await this.get(id);
+    if (!project) throw new Error('Not found');
+    const updated = { ...project, canvas: updater(project.canvas) };
+    return this.update(id, updated as any);
+  }
+
+  private mapToResidential(apiStudy: any): ResidentialProject {
+    let meta: any = {};
+    try {
+      if (apiStudy.metadata) {
+        meta = JSON.parse(apiStudy.metadata);
+      }
+    } catch (e) {
+      console.error('Failed to parse metadata', e);
+    }
+
+    return {
+      id: apiStudy.id,
+      clientId: meta.clientId || apiStudy.clientId || '',
+      clientName: meta.clientName || apiStudy.clientName || apiStudy.name,
+      name: apiStudy.name,
+      voltage: meta.voltage || apiStudy.voltage || '127/220V',
+      houseType: meta.houseType || apiStudy.houseType || 'padrao',
+      source: meta.source || apiStudy.source || ['rede'],
+      status: meta.status || apiStudy.status || 'draft',
+      environments: meta.environments || apiStudy.environments || [],
+      canvas: meta.canvas || apiStudy.canvas || { nodes: [], links: [], items: [], selectedTool: 'select' },
+      createdAt: apiStudy.created_at,
+      updatedAt: apiStudy.updated_at,
+      city: apiStudy.city,
+      state: apiStudy.state,
+      address: `${apiStudy.city} / ${apiStudy.state}`,
+      zipCode: meta.zipCode || apiStudy.zipCode || '',
+      street: meta.street || apiStudy.street || '',
+      number: meta.number || apiStudy.number || '',
+      district: meta.district || apiStudy.district || '',
+      complement: meta.complement || apiStudy.complement || '',
+    };
+  }
 }
 
 // --- Singleton Export ---
 
-export const projectsRepo: ProjectRepository = new LocalProjectRepository();
+export const projectsRepo: ProjectRepository = new ApiProjectRepository();

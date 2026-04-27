@@ -60,7 +60,7 @@ export function MetricCard({
   caption,
 }: {
   label: string;
-  value: number;
+  value: number | string;
   chart: ReactNode;
   caption?: string;
 }) {

@@ -12,20 +12,23 @@ type Study struct {
 	City      string    `json:"city"`
 	State     string    `json:"state"`
 	Location  string    `json:"location"`
+	Metadata  string    `json:"metadata"` // JSON blob for complex frontend state
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
 type CreateStudyInput struct {
-	Name  string `json:"name"`
-	City  string `json:"city"`
-	State string `json:"state"`
+	Name     string `json:"name"`
+	City     string `json:"city"`
+	State    string `json:"state"`
+	Metadata string `json:"metadata"`
 }
 
 type UpdateStudyInput struct {
-	Name  string `json:"name"`
-	City  string `json:"city"`
-	State string `json:"state"`
+	Name     string `json:"name"`
+	City     string `json:"city"`
+	State    string `json:"state"`
+	Metadata string `json:"metadata"`
 }
 
 type AssessmentRecord struct {

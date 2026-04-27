@@ -2,6 +2,9 @@ import { ProjetadorFeature } from '../../projetador/ProjetadorFeature';
 import { ProjectForm } from './ProjectForm';
 import { ProjectDisplay } from './ProjectDisplay';
 import { MateriaisFeature } from '../../materiais/MateriaisFeature';
+import { ModelingTab } from './ModelingTab';
+import { CalculationTab } from './CalculationTab';
+import { ConformityTab } from './ConformityTab';
 import type { ProjectStep } from '../useProjetos';
 
 type ProjectManagerProps = {
@@ -53,26 +56,35 @@ export function ProjectManager({
   return (
     <section className="projects-page page-transition">
       <div className="chrome-tabs-row row spread">
-        <div className="chrome-tabs-container">
+        <div className="chrome-tabs-container scroll-thin">
           <button className={`chrome-tab ${step === 1 ? 'active' : ''}`} onClick={() => setStep(1)} type="button">
             Identificação
           </button>
           <button className={`chrome-tab ${step === 2 ? 'active' : ''}`} onClick={() => setStep(2)} type="button">
             Localização
           </button>
-          {!isCreate && (
-            <>
-              <button className={`chrome-tab ${step === 3 ? 'active' : ''}`} onClick={() => setStep(3)} type="button">
-                Projeto Técnico
-              </button>
-              <button className={`chrome-tab ${step === 4 ? 'active' : ''}`} onClick={() => setStep(4)} type="button">
-                📋 Lista de Materiais
-              </button>
-            </>
-          )}
+          <button className={`chrome-tab ${step === 3 ? 'active' : ''}`} onClick={() => setStep(3)} type="button">
+            Projeto Técnico
+          </button>
+          <button className={`chrome-tab ${step === 4 ? 'active' : ''}`} onClick={() => setStep(4)} type="button">
+            Lista de Materiais
+          </button>
+          <button className={`chrome-tab ${step === 5 ? 'active' : ''}`} onClick={() => setStep(5)} type="button">
+            Modelagem
+          </button>
+          <button className={`chrome-tab ${step === 6 ? 'active' : ''}`} onClick={() => setStep(6)} type="button">
+            Dimensionamento
+          </button>
+          <button className={`chrome-tab ${step === 7 ? 'active' : ''}`} onClick={() => setStep(7)} type="button">
+            Conformidade
+          </button>
         </div>
 
         <div className="wizard-quick-actions row">
+          <div className={`sync-indicator ${saving ? 'syncing' : ''}`} title="Cache Local Inteligente Ativo">
+            {saving ? '⚡' : '💾'}
+          </div>
+
           {step > 1 && (
             <button className="action-btn-wizard" type="button" onClick={() => setStep((step - 1) as ProjectStep)} title="Voltar">
               ←
@@ -81,7 +93,7 @@ export function ProjectManager({
           
           {(isCreate || isEdit || isDesigner) ? (
              <button className="action-btn-wizard primary" type="button" onClick={() => onSubmit()} disabled={saving} title="Salvar Projeto">
-                {saving ? '...' : '💾'}
+                {saving ? '...' : '✔'}
              </button>
           ) : (
             <button className="action-btn-wizard accent-btn" type="button" onClick={() => navigate(`/projetos/${project?.id}/editar`)} title="Editar Dados">
@@ -99,7 +111,7 @@ export function ProjectManager({
             ✕
           </button>
 
-          {step < (isCreate ? 2 : 4) && (
+          {step < 7 && (
             <button className="action-btn-wizard accent-btn" type="button" onClick={() => setStep((step + 1) as ProjectStep)} title="Próximo">
               →
             </button>
@@ -113,11 +125,14 @@ export function ProjectManager({
         </div>
       </div>
 
-      <article className={`projects-panel-wizard glass-panel ${(isDesigner || step === 4) ? 'designer-tab-active' : ''}`}>
-        {!(isDesigner || step === 3 || step === 4) && (
-          <header className="panel-head-wizard">
-            <p className="eyebrow">{isCreate ? 'Novo Projeto' : isEdit ? 'Edição Técnica' : 'Consolidação'}</p>
-            <h1>{step === 1 ? 'Engenharia e Cliente' : 'Endereço da Instalação'}</h1>
+      <article className={`projects-panel-wizard glass-panel ${(isDesigner || step >= 3) ? 'designer-tab-active' : ''}`}>
+        {!(isDesigner || step >= 3) && (
+          <header className="panel-head-wizard row spread middle">
+            <div className="stack tight">
+              <p className="eyebrow">{isCreate ? 'Novo Projeto' : isEdit ? 'Edição Técnica' : 'Consolidação'}</p>
+              <h1>{step === 1 ? 'Engenharia e Cliente' : 'Endereço da Instalação'}</h1>
+            </div>
+            {saving && <span className="size-2xs muted animate-pulse">Otimizando dados...</span>}
           </header>
         )}
 
@@ -130,6 +145,12 @@ export function ProjectManager({
             <div className="materiais-embedded animate-fade-in">
               <MateriaisFeature project={project} />
             </div>
+          ) : step === 5 && project ? (
+            <ModelingTab project={project} />
+          ) : step === 6 && project ? (
+            <CalculationTab project={project} />
+          ) : step === 7 && project ? (
+            <ConformityTab project={project} />
           ) : (isCreate || isEdit) ? (
             <ProjectForm 
               step={step} 

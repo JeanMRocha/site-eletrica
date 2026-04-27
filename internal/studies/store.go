@@ -103,6 +103,9 @@ func (s *SQLiteStore) migrate() error {
 	if err := s.ensureStudyColumn("state", "TEXT NOT NULL DEFAULT ''"); err != nil {
 		return err
 	}
+	if err := s.ensureStudyColumn("metadata", "TEXT NOT NULL DEFAULT ''"); err != nil {
+		return err
+	}
 
 	if err := s.backfillStudyLocations(); err != nil {
 		return err
@@ -113,7 +116,7 @@ func (s *SQLiteStore) migrate() error {
 
 func (s *SQLiteStore) ListStudies(ctx context.Context) ([]Study, error) {
 	rows, err := s.db.QueryContext(ctx, `
-		SELECT id, name, city, state, location, created_at, updated_at
+		SELECT id, name, city, state, location, metadata, created_at, updated_at
 		FROM studies
 		ORDER BY created_at DESC
 	`)
@@ -146,14 +149,15 @@ func (s *SQLiteStore) CreateStudy(ctx context.Context, input CreateStudyInput) (
 		City:      strings.TrimSpace(input.City),
 		State:     strings.ToUpper(strings.TrimSpace(input.State)),
 		Location:  buildLocation(input.City, input.State),
+		Metadata:  input.Metadata,
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
 
 	_, err := s.db.ExecContext(ctx, `
-		INSERT INTO studies (id, name, city, state, location, created_at, updated_at)
-		VALUES (?, ?, ?, ?, ?, ?, ?)
-	`, study.ID, study.Name, study.City, study.State, study.Location, study.CreatedAt.Format(time.RFC3339Nano), study.UpdatedAt.Format(time.RFC3339Nano))
+		INSERT INTO studies (id, name, city, state, location, metadata, created_at, updated_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+	`, study.ID, study.Name, study.City, study.State, study.Location, study.Metadata, study.CreatedAt.Format(time.RFC3339Nano), study.UpdatedAt.Format(time.RFC3339Nano))
 	if err != nil {
 		return Study{}, err
 	}
@@ -177,15 +181,16 @@ func (s *SQLiteStore) UpdateStudy(ctx context.Context, id string, input UpdateSt
 		City:      strings.TrimSpace(input.City),
 		State:     strings.ToUpper(strings.TrimSpace(input.State)),
 		Location:  buildLocation(input.City, input.State),
+		Metadata:  input.Metadata,
 		CreatedAt: current.CreatedAt,
 		UpdatedAt: time.Now().UTC(),
 	}
 
 	_, err = s.db.ExecContext(ctx, `
 		UPDATE studies
-		SET name = ?, city = ?, state = ?, location = ?, updated_at = ?
+		SET name = ?, city = ?, state = ?, location = ?, metadata = ?, updated_at = ?
 		WHERE id = ?
-	`, updated.Name, updated.City, updated.State, updated.Location, updated.UpdatedAt.Format(time.RFC3339Nano), id)
+	`, updated.Name, updated.City, updated.State, updated.Location, updated.Metadata, updated.UpdatedAt.Format(time.RFC3339Nano), id)
 	if err != nil {
 		return Study{}, err
 	}
@@ -212,7 +217,7 @@ func (s *SQLiteStore) DeleteStudy(ctx context.Context, id string) error {
 
 func (s *SQLiteStore) GetStudy(ctx context.Context, id string) (Study, error) {
 	row := s.db.QueryRowContext(ctx, `
-		SELECT id, name, city, state, location, created_at, updated_at
+		SELECT id, name, city, state, location, metadata, created_at, updated_at
 		FROM studies
 		WHERE id = ?
 	`, id)
@@ -289,15 +294,16 @@ func (s *SQLiteStore) SaveAssessment(ctx context.Context, record AssessmentRecor
 
 func (s *SQLiteStore) UpsertStudy(ctx context.Context, study Study) error {
 	_, err := s.db.ExecContext(ctx, `
-		INSERT INTO studies (id, name, city, state, location, created_at, updated_at)
-		VALUES (?, ?, ?, ?, ?, ?, ?)
+		INSERT INTO studies (id, name, city, state, location, metadata, created_at, updated_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 		ON CONFLICT(id) DO UPDATE SET
 			name = excluded.name,
 			city = excluded.city,
 			state = excluded.state,
 			location = excluded.location,
+			metadata = excluded.metadata,
 			updated_at = excluded.updated_at
-	`, study.ID, study.Name, study.City, study.State, study.Location, study.CreatedAt.Format(time.RFC3339Nano), study.UpdatedAt.Format(time.RFC3339Nano))
+	`, study.ID, study.Name, study.City, study.State, study.Location, study.Metadata, study.CreatedAt.Format(time.RFC3339Nano), study.UpdatedAt.Format(time.RFC3339Nano))
 	return err
 }
 
@@ -311,27 +317,27 @@ func validateStudyInput(input CreateStudyInput) error {
 
 func scanStudy(rows *sql.Rows) (Study, error) {
 	var (
-		id, name, city, state, location, createdAt, updatedAt string
+		id, name, city, state, location, metadata, createdAt, updatedAt string
 	)
-	if err := rows.Scan(&id, &name, &city, &state, &location, &createdAt, &updatedAt); err != nil {
+	if err := rows.Scan(&id, &name, &city, &state, &location, &metadata, &createdAt, &updatedAt); err != nil {
 		return Study{}, err
 	}
 
-	return buildStudy(id, name, city, state, location, createdAt, updatedAt)
+	return buildStudy(id, name, city, state, location, metadata, createdAt, updatedAt)
 }
 
 func scanStudyRow(row *sql.Row) (Study, error) {
 	var (
-		id, name, city, state, location, createdAt, updatedAt string
+		id, name, city, state, location, metadata, createdAt, updatedAt string
 	)
-	if err := row.Scan(&id, &name, &city, &state, &location, &createdAt, &updatedAt); err != nil {
+	if err := row.Scan(&id, &name, &city, &state, &location, &metadata, &createdAt, &updatedAt); err != nil {
 		return Study{}, err
 	}
 
-	return buildStudy(id, name, city, state, location, createdAt, updatedAt)
+	return buildStudy(id, name, city, state, location, metadata, createdAt, updatedAt)
 }
 
-func buildStudy(id, name, city, state, location, createdAt, updatedAt string) (Study, error) {
+func buildStudy(id, name, city, state, location, metadata, createdAt, updatedAt string) (Study, error) {
 	created, err := time.Parse(time.RFC3339Nano, createdAt)
 	if err != nil {
 		return Study{}, err
@@ -359,6 +365,7 @@ func buildStudy(id, name, city, state, location, createdAt, updatedAt string) (S
 		City:      city,
 		State:     state,
 		Location:  location,
+		Metadata:  metadata,
 		CreatedAt: created,
 		UpdatedAt: updated,
 	}, nil

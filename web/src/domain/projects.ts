@@ -1,4 +1,4 @@
-import { getFromLocal, saveToLocal } from '../lib/storage';
+
 
 // --- Domain Types ---
 
@@ -99,100 +99,58 @@ export interface ProjectRepository {
 
 // --- Local Storage Adapter (Offline Implementation) ---
 
-class LocalStorageProjectRepository implements ProjectRepository {
-  private STORAGE_KEY = 'electrica:projects';
-  private ASSESSMENT_KEY_PREFIX = 'electrica:assessments:';
+// --- API Implementation ---
 
-  private getProjects(): Project[] {
-    return getFromLocal<Project[]>(this.STORAGE_KEY) || [];
-  }
+class ApiProjectRepository implements ProjectRepository {
+  private baseUrl = 'http://localhost:8081/v1/studies';
 
   async list(): Promise<Project[]> {
-    return this.getProjects();
-  }
-
-  async create(input: ProjectInput): Promise<Project> {
-    const projects = this.getProjects();
-    const now = new Date().toISOString();
-    const newProject: Project = {
-      id: Math.random().toString(36).substring(2, 10),
-      ...input,
-      location: `${input.city}/${input.state}`,
-      created_at: now,
-      updated_at: now,
-    };
-
-    saveToLocal(this.STORAGE_KEY, [newProject, ...projects]);
-    return newProject;
-  }
-
-  async update(id: string, input: ProjectUpdateInput): Promise<Project> {
-    const projects = this.getProjects();
-    const index = projects.findIndex((p) => p.id === id);
-    if (index === -1) throw new Error('Projeto não encontrado');
-
-    const current = projects[index]!;
-    const updated: Project = {
-      ...current,
-      ...input,
-      location: `${input.city}/${input.state}`,
-      updated_at: new Date().toISOString(),
-      id: current.id,
-      created_at: current.created_at,
-    };
-
-    projects[index] = updated;
-    saveToLocal(this.STORAGE_KEY, projects);
-    return updated;
-  }
-
-  async delete(id: string): Promise<void> {
-    const projects = this.getProjects();
-    const filtered = projects.filter((p) => p.id !== id);
-    saveToLocal(this.STORAGE_KEY, filtered);
-    localStorage.removeItem(`${this.ASSESSMENT_KEY_PREFIX}${id}`);
+    const res = await fetch(this.baseUrl);
+    if (!res.ok) return [];
+    return res.json();
   }
 
   async get(id: string): Promise<ProjectDetail> {
-    const projects = this.getProjects();
-    const project = projects.find((p) => p.id === id);
-    if (!project) throw new Error('Projeto não encontrado');
+    const res = await fetch(`${this.baseUrl}/${id}`);
+    if (!res.ok) throw new Error('Not found');
+    return res.json();
+  }
 
-    const assessments = getFromLocal<AssessmentRecord[]>(`${this.ASSESSMENT_KEY_PREFIX}${id}`) || [];
-    return { study: project, assessments };
+  async create(input: ProjectInput): Promise<Project> {
+    const res = await fetch(this.baseUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(input),
+    });
+    return res.json();
+  }
+
+  async update(id: string, input: ProjectUpdateInput): Promise<Project> {
+    const res = await fetch(`${this.baseUrl}/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(input),
+    });
+    return res.json();
+  }
+
+  async delete(id: string): Promise<void> {
+    await fetch(`${this.baseUrl}/${id}`, { method: 'DELETE' });
   }
 
   async assess(id: string, input: AssessmentInput): Promise<AssessmentRecord> {
-    const now = new Date().toISOString();
-    const record: AssessmentRecord = {
-      id: Math.random().toString(36).substring(2, 10),
-      study_id: id,
-      input,
-      verdict: {
-        study_id: id,
-        circuit_id: input.circuit_id,
-        status: 'CONFORME',
-        severity: 'LOW',
-        standard_code: input.standard_code,
-        standard_name: 'NBR 5410',
-        standard_version: '2004',
-        standard_hierarchy: 1,
-        rules_applied: [],
-        messages: ['Calculado localmente'],
-        requires_human_review: false,
-      },
-      created_at: now,
-    };
-
-    const assessments = getFromLocal<AssessmentRecord[]>(`${this.ASSESSMENT_KEY_PREFIX}${id}`) || [];
-    saveToLocal(`${this.ASSESSMENT_KEY_PREFIX}${id}`, [record, ...assessments]);
-    return record;
+    const res = await fetch(`${this.baseUrl}/${id}/assess`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(input),
+    });
+    return res.json();
   }
 }
 
 // --- Factory/Singleton ---
 
-export const projectRepository: ProjectRepository = new LocalStorageProjectRepository();
+export const projectRepository: ProjectRepository = new ApiProjectRepository();
 
 // --- Export individual functions for backward compatibility with UI ---
 // These now simply delegate to the repository instance.

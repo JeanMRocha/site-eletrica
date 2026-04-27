@@ -4,6 +4,7 @@ import (
 	"embed"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -15,10 +16,24 @@ import (
 	"github.com/JeanMRocha/site-eletrica/internal/standards"
 	"github.com/JeanMRocha/site-eletrica/internal/studies"
 	"github.com/JeanMRocha/site-eletrica/internal/knowledge"
+	"github.com/JeanMRocha/site-eletrica/internal/compression/adapters"
 )
 
 //go:embed all:web/dist
 var assets embed.FS
+
+func enableCORS(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
+}
 
 func main() {
 	// Inicialização dos serviços (mesma lógica do cmd/api/main.go)
@@ -38,7 +53,17 @@ func main() {
 	knowledgeService := knowledge.NewService("./.mom")
 	conformidadeService := conformidade.NewService(standardsService)
 	
-	sqliteStore, err := studies.NewSQLiteStore("./data/eletrica.db")
+	// Descoberta dinâmica do caminho do banco de dados
+	dbPath := "./data/eletrica.db"
+	if _, err := os.Stat(dbPath); os.IsNotExist(err) {
+		// Tenta subir níveis (caso esteja rodando de build/bin)
+		if _, err := os.Stat("../../data/eletrica.db"); err == nil {
+			dbPath = "../../data/eletrica.db"
+		}
+	}
+	log.Printf("Using database at: %s", dbPath)
+
+	sqliteStore, err := studies.NewSQLiteStore(dbPath)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -59,9 +84,12 @@ func main() {
 			_, _ = w.Write([]byte("ok"))
 		})
 
-		addr := ":8081" // Porta padrão usada no dev.ps1
+		// Aplicamos CORS e Compressão Inteligente
+		handler := enableCORS(adapters.CompressionMiddleware(mux))
+
+		addr := ":8081" 
 		log.Printf("Desktop API listening on %s", addr)
-		if err := http.ListenAndServe(addr, mux); err != nil {
+		if err := http.ListenAndServe(addr, handler); err != nil {
 			log.Printf("API error: %v", err)
 		}
 	}()

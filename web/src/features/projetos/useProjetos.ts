@@ -12,7 +12,7 @@ import { fetchAddressByCep } from '../../lib/geo';
 import { notify } from '../../lib/events';
 
 type Mode = 'list' | 'create' | 'detail' | 'edit' | 'designer';
-export type ProjectStep = 1 | 2 | 3 | 4;
+export type ProjectStep = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 const defaultForm: ResidentialProjectInput = {
   clientId: '',
@@ -233,9 +233,8 @@ export function useProjetos() {
 
     if (nextStep === 3) {
       navigate(`/projetos/${projectId}/projetador`);
-    } else if (nextStep === 4) {
-      // Stay in current route (edit or designer) but change step
-      setStep(4);
+    } else if (nextStep >= 4) {
+      setStep(nextStep);
     } else if (nextStep === 1 || nextStep === 2) {
       navigate(`/projetos/${projectId}/editar`);
       setStep(nextStep);

@@ -142,7 +142,7 @@ export function AppLayout({
                     <p className="eyebrow">Configurações de Acesso</p>
                     <div className="status-compact row">
                        <span className="badge ok">API Online</span>
-                       <span className="muted size-xs">V.1.0.4</span>
+                       <span className="muted size-xs">V.1.2.0 (Crompressor-AI)</span>
                     </div>
                   </div>
                   
