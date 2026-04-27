@@ -1,6 +1,7 @@
 import { ProjetadorFeature } from '../../projetador/ProjetadorFeature';
 import { ProjectForm } from './ProjectForm';
 import { ProjectDisplay } from './ProjectDisplay';
+import { MateriaisFeature } from '../../materiais/MateriaisFeature';
 import type { ProjectStep } from '../useProjetos';
 
 type ProjectManagerProps = {
@@ -60,9 +61,14 @@ export function ProjectManager({
             Localização
           </button>
           {!isCreate && (
-             <button className={`chrome-tab ${step === 3 ? 'active' : ''}`} onClick={() => setStep(3)} type="button">
-               Projeto Técnico
-             </button>
+            <>
+              <button className={`chrome-tab ${step === 3 ? 'active' : ''}`} onClick={() => setStep(3)} type="button">
+                Projeto Técnico
+              </button>
+              <button className={`chrome-tab ${step === 4 ? 'active' : ''}`} onClick={() => setStep(4)} type="button">
+                📋 Lista de Materiais
+              </button>
+            </>
           )}
         </div>
 
@@ -93,7 +99,7 @@ export function ProjectManager({
             ✕
           </button>
 
-          {step < (isCreate ? 2 : 3) && (
+          {step < (isCreate ? 2 : 4) && (
             <button className="action-btn-wizard accent-btn" type="button" onClick={() => setStep((step + 1) as ProjectStep)} title="Próximo">
               →
             </button>
@@ -107,8 +113,8 @@ export function ProjectManager({
         </div>
       </div>
 
-      <article className={`projects-panel-wizard glass-panel ${isDesigner ? 'designer-tab-active' : ''}`}>
-        {!(isDesigner || step === 3) && (
+      <article className={`projects-panel-wizard glass-panel ${(isDesigner || step === 4) ? 'designer-tab-active' : ''}`}>
+        {!(isDesigner || step === 3 || step === 4) && (
           <header className="panel-head-wizard">
             <p className="eyebrow">{isCreate ? 'Novo Projeto' : isEdit ? 'Edição Técnica' : 'Consolidação'}</p>
             <h1>{step === 1 ? 'Engenharia e Cliente' : 'Endereço da Instalação'}</h1>
@@ -119,6 +125,10 @@ export function ProjectManager({
           {step === 3 ? (
             <div className="designer-embedded animate-fade-in">
                <ProjetadorFeature hideHeader />
+            </div>
+          ) : step === 4 && project ? (
+            <div className="materiais-embedded animate-fade-in">
+              <MateriaisFeature project={project} />
             </div>
           ) : (isCreate || isEdit) ? (
             <ProjectForm 

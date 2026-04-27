@@ -4,9 +4,9 @@ import { minimumEnvironmentSize, normalizeRotation, shortLabel, snap, formatMete
 import type { CanvasSelection } from './canvasModel';
 
 export type FabricMeta = {
-  kind: 'item' | 'node' | 'link' | 'vertex-handle';
+  kind: 'item' | 'node' | 'link' | 'vertex-handle' | 'vertex-midpoint';
   id: string;
-  index?: number; // For vertex handle
+  index?: number; // For vertex handle or segment index
 };
 
 type FabricEntity = FabricObject & {
@@ -345,7 +345,14 @@ function decorateFabricObject(object: FabricObject, data: FabricMeta) {
     cornerStrokeColor: '#06101d',
     borderColor: '#7fe2ff',
     transparentCorners: false,
+    rotatingPointOffset: 30, // Move rotation handle further away
   });
+  
+  // Custom controls styling
+  if (object.controls?.mtr) {
+    object.controls.mtr.withConnection = true;
+    object.controls.mtr.cursorStyle = 'crosshair';
+  }
 }
 
 function findFabricObject(canvas: Canvas, selection: Exclude<CanvasSelection, null>) {
@@ -365,41 +372,70 @@ function isCompatibleItemObject(object: FabricObject, item: CanvasItem) {
 function syncVertexHandles(canvas: Canvas, existing: Map<string, FabricObject>, desired: Set<string>, item: CanvasItem) {
   if (!item.points) return;
   
-  item.points.forEach((p, idx) => {
-    const key = `vertex-handle:${item.id}:${idx}`;
-    desired.add(key);
-    const object = existing.get(key);
+  const points = item.points;
+
+  points.forEach((p, idx) => {
+    // 1. CORNER HANDLE (MOVE)
+    const cornerKey = `vertex-handle:${item.id}:${idx}`;
+    desired.add(cornerKey);
+    const cornerObj = existing.get(cornerKey);
+    const hX = item.x + p.x;
+    const hY = item.y + p.y;
     
-    const handleX = item.x + p.x;
-    const handleY = item.y + p.y;
-    
-    if (object && object.type === 'circle') {
-      object.set({ left: handleX, top: handleY });
-      object.setCoords();
-      return;
+    if (cornerObj && cornerObj.type === 'group') {
+      cornerObj.set({ left: hX, top: hY });
+      (cornerObj as Group).item(1).set({ text: `V${idx + 1}` });
+      cornerObj.setCoords();
+    } else {
+      if (cornerObj) canvas.remove(cornerObj);
+      const dot = new Circle({
+        radius: 6, fill: '#ffab00', stroke: '#06101d', strokeWidth: 2,
+        originX: 'center', originY: 'center',
+      });
+      const label = new Textbox(`V${idx + 1}`, {
+        fontSize: 10, fill: '#fff', backgroundColor: 'rgba(0,0,0,0.6)',
+        originX: 'center', originY: 'center', top: -14, hasControls: false,
+      });
+      const group = new Group([dot, label], { hasControls: false, selectable: true });
+      decorateFabricObject(group, { kind: 'vertex-handle', id: item.id, index: idx });
+      group.set({ left: hX, top: hY });
+      canvas.add(group);
     }
+
+    // 2. MIDPOINT HANDLE (ADD)
+    const midIdx = idx;
+    const midKey = `vertex-midpoint:${item.id}:${midIdx}`;
+    desired.add(midKey);
+    const midObj = existing.get(midKey);
     
-    if (object) canvas.remove(object);
+    const nextP = points[(idx + 1) % points.length];
+    if (!nextP) return;
     
-    const handle = new Circle({
-      radius: 5,
-      fill: '#ffab00',
-      stroke: '#06101d',
-      strokeWidth: 2,
-      originX: 'center',
-      originY: 'center',
-      hasControls: false,
-      hasBorders: false,
-      selectable: true,
-    });
-    
-    decorateFabricObject(handle, { kind: 'vertex-handle', id: item.id, index: idx });
-    handle.set({ left: handleX, top: handleY });
-    canvas.add(handle);
+    const mX = item.x + (p.x + nextP.x) / 2;
+    const mY = item.y + (p.y + nextP.y) / 2;
+
+    if (midObj) {
+      midObj.set({ left: mX, top: mY });
+      midObj.setCoords();
+    } else {
+      const bg = new Circle({
+        radius: 5, fill: '#06101d', stroke: '#7fe2ff', strokeWidth: 1.5,
+        originX: 'center', originY: 'center',
+      });
+      const plus = new Textbox('+', {
+        fontSize: 12, fill: '#7fe2ff', fontWeight: 'bold',
+        originX: 'center', originY: 'center', top: -1,
+      });
+      const midGroup = new Group([bg, plus], { hasControls: false, selectable: true });
+      decorateFabricObject(midGroup, { kind: 'vertex-midpoint', id: item.id, index: midIdx });
+      midGroup.set({ left: mX, top: mY });
+      canvas.add(midGroup);
+    }
   });
 }
 
 function objectKey(meta: FabricMeta) {
   if (meta.kind === 'vertex-handle') return `vertex-handle:${meta.id}:${meta.index}`;
+  if (meta.kind === 'vertex-midpoint') return `vertex-midpoint:${meta.id}:${meta.index}`;
   return `${meta.kind}:${meta.id}`;
 }

@@ -27,6 +27,7 @@ type Callbacks = {
   onMouseMoveCoords?: (x: number, y: number) => void;
   onUpdateItem: (id: string, patch: Partial<CanvasItem>) => void;
   onUpdateSitePoint?: (id: string, index: number, patch: any) => void;
+  onAddVertex?: (id: string, index: number, x: number, y: number) => void;
   setContextMenu: (state: any) => void;
   snap: (val: number) => number;
 };
@@ -82,6 +83,15 @@ export function useCanvasEvents(
         lastPanPointRef.current = point;
         canvas!.selection = false;
         return;
+      }
+
+      if (event.target) {
+        const meta = readMeta(event.target);
+        if (meta?.kind === 'vertex-midpoint') {
+          const point = canvas!.getScenePoint(event.e);
+          callbacksRef.current.onAddVertex?.(meta.id, meta.index!, point.x, point.y);
+          return;
+        }
       }
 
       if (!event.target && button === 0) {

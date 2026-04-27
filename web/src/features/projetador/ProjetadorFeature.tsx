@@ -214,8 +214,7 @@ export function ProjetadorFeature({ hideHeader: _hideHeader = false }: { hideHea
             onSelect={controller.setSelection}
             onConvertToPolygon={controller.convertToPolygon}
             onUpdateSitePoint={controller.updateSitePoint}
-            onAddVertex={controller.addVertex}
-            canvasSettings={controller.canvasSettings}
+            canvasSettings={project.canvas.settings || { visualGrid: true, snapToGrid: true, unit: 'm', scale: 1, precision: 2, angleFormat: 'DD' }}
           />
         </main>
 

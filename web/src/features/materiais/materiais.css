@@ -1,0 +1,315 @@
+/* ===================================================
+   Lista de Materiais — Materiais Feature CSS
+   Blender-dark aesthetic, print-ready
+   =================================================== */
+
+.materiais-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 24px;
+  min-height: 100%;
+  background: #0c121f;
+  color: #e4f0fb;
+  font-family: 'Inter', sans-serif;
+}
+
+/* --- Header --- */
+.mat-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e2e44;
+}
+
+.mat-header-info h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #7fe2ff;
+  margin: 4px 0 2px;
+}
+
+.mat-client-label {
+  font-size: 0.75rem;
+  color: #6b8fae;
+}
+
+.mat-header-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.mat-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+}
+
+.mat-btn.primary {
+  background: #7fe2ff;
+  color: #06101d;
+}
+
+.mat-btn.primary:hover {
+  background: #a0eaff;
+  transform: translateY(-1px);
+}
+
+.mat-btn.secondary {
+  background: #1e2e44;
+  color: #7fe2ff;
+  border: 1px solid #2a4060;
+}
+
+.mat-btn.secondary:hover {
+  background: #243650;
+}
+
+/* --- Summary Cards --- */
+.mat-summary-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.mat-card {
+  background: #0e1825;
+  border: 1px solid #1e2e44;
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+
+.mat-card.accent {
+  border-color: #7fe2ff44;
+  background: #0a1826;
+}
+
+.mat-card-label {
+  font-size: 0.68rem;
+  color: #6b8fae;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.mat-card-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #e4f0fb;
+}
+
+.mat-card.accent .mat-card-value {
+  color: #7fe2ff;
+}
+
+/* --- Content Area --- */
+.mat-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* --- Material Groups --- */
+.mat-group {
+  border: 1px solid #1e2e44;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.mat-group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: #111d2e;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #b0d4e8;
+  border-bottom: 1px solid #1e2e44;
+}
+
+.mat-group-total {
+  color: #7fe2ff;
+  font-weight: 700;
+}
+
+/* --- Table --- */
+.mat-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+
+.mat-table thead th {
+  background: #0c1620;
+  color: #4a7a9b;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  padding: 8px 10px;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 1px solid #1e2e44;
+}
+
+.mat-table th.num,
+.mat-table td.num {
+  text-align: right;
+}
+
+.mat-table tbody tr {
+  border-bottom: 1px solid #111d2e;
+  transition: background 0.1s;
+}
+
+.mat-table tbody tr:hover {
+  background: #0e1825;
+}
+
+.mat-table tbody tr.manual-row {
+  background: rgba(127, 226, 255, 0.03);
+}
+
+.mat-table tbody td {
+  padding: 6px 10px;
+  vertical-align: middle;
+}
+
+.mat-input {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #e4f0fb;
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  width: 100%;
+  transition: border-color 0.15s, background 0.15s;
+  font-family: inherit;
+}
+
+.mat-input:hover {
+  border-color: #2a4060;
+  background: #0c1620;
+}
+
+.mat-input:focus {
+  outline: none;
+  border-color: #7fe2ff;
+  background: #0c1620;
+}
+
+.mat-input.code-input { width: 120px; font-family: monospace; font-size: 0.72rem; }
+.mat-input.desc-input { min-width: 220px; }
+.mat-input.unit-input { width: 60px; }
+.mat-input.num-input  { width: 80px; text-align: right; }
+
+.total-cell {
+  color: #7fe2ff;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.action-col { width: 32px; }
+
+.mat-del-btn {
+  background: none;
+  border: none;
+  color: #ff6b6b;
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  opacity: 0.6;
+  transition: opacity 0.15s;
+}
+
+.mat-del-btn:hover { opacity: 1; }
+
+/* --- Notes --- */
+.mat-notes-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mat-notes-label {
+  font-size: 0.72rem;
+  color: #6b8fae;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.mat-notes-input {
+  background: #0e1825;
+  border: 1px solid #1e2e44;
+  border-radius: 8px;
+  color: #e4f0fb;
+  padding: 12px 14px;
+  font-size: 0.82rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.15s;
+}
+
+.mat-notes-input:focus {
+  outline: none;
+  border-color: #7fe2ff44;
+}
+
+/* --- Grand Total Footer --- */
+.mat-total-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  padding: 20px 24px;
+  background: #080f1a;
+  border: 1px solid #1e2e44;
+  border-radius: 8px;
+}
+
+.mat-total-label {
+  font-size: 0.68rem;
+  color: #4a7a9b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.mat-total-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #7fe2ff;
+}
+
+.mat-disclaimer {
+  font-size: 0.65rem;
+  color: #4a7a9b;
+  text-align: right;
+  max-width: 420px;
+}
+
+/* --- Print Styles --- */
+@media print {
+  .materiais-page { background: #fff; color: #000; padding: 0; }
+  .mat-header-actions { display: none; }
+  .mat-btn { display: none; }
+  .mat-card { border: 1px solid #ddd; background: #f9f9f9; }
+  .mat-card-value { color: #000; }
+  .mat-group { border: 1px solid #ddd; }
+  .mat-group-header { background: #f2f2f2; color: #333; }
+  .mat-table { font-size: 10pt; }
+  .mat-table thead th { background: #eee; color: #555; }
+  .mat-input { border: none; background: transparent; color: #000; padding: 2px 4px; }
+  .mat-total-footer { background: #f2f2f2; border: 1px solid #ddd; }
+  .mat-total-value { color: #000; }
+  .mat-del-btn { display: none; }
+  .mat-notes-input { border: 1px solid #ccc; color: #333; background: #fff; }
+}

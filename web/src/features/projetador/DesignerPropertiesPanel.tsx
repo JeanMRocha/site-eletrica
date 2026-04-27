@@ -19,10 +19,43 @@ type Props = {
   onToggleCollapse: () => void;
   onSelect: (selection: CanvasSelection) => void;
   onConvertToPolygon?: (id: string) => void;
-  onUpdateSitePoint?: (id: string, index: number, patch: { x?: number, y?: number, curvature?: number }) => void;
-  onAddVertex?: (id: string, index: number, x: number, y: number) => void;
+  onUpdateSitePoint?: (id: string, index: number, patch: any) => void;
   canvasSettings: CanvasSettings;
 };
+
+/**
+ * Normalizes vertex list: starts from the point closest to (0,0) 
+ * and ensures clockwise order.
+ */
+function normalizeVertices(points: {x: number, y: number, curvature?: number}[]) {
+  if (points.length < 3) return points;
+  
+  // Find point closest to 0,0
+  let startIndex = 0;
+  let minDist = Infinity;
+  points.forEach((p, i) => {
+    const d = Math.sqrt(p.x * p.x + p.y * p.y);
+    if (d < minDist) {
+      minDist = d;
+      startIndex = i;
+    }
+  });
+
+  // Reorder starting from startIndex
+  const reordered = [...points.slice(startIndex), ...points.slice(0, startIndex)];
+  
+  // Check if clockwise using signed area
+  let area = 0;
+  for (let i = 0; i < reordered.length; i++) {
+    const p1 = reordered[i];
+    const p2 = reordered[(i + 1) % reordered.length];
+    if (p1 && p2) {
+      area += (p2.x - p1.x) * (p2.y + p1.y);
+    }
+  }
+  
+  return area > 0 ? reordered : [...reordered.slice(0, 1), ...reordered.slice(1).reverse()];
+}
 
 export function DesignerPropertiesPanel({
   items,
@@ -41,11 +74,9 @@ export function DesignerPropertiesPanel({
   onSelect,
   onConvertToPolygon,
   onUpdateSitePoint,
-  onAddVertex,
   canvasSettings,
 }: Props) {
   const [activeTab, setActiveTab] = useState<'object' | 'settings' | 'vertices' | 'technical'>('object');
-  const [isVertexModalOpen, setIsVertexModalOpen] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set(['TERRENO', 'ALVENARIA', 'ELÉTRICA']));
 
   const selectedItem = items.find(i => selection?.kind === 'item' && i.id === selection.id);
@@ -201,15 +232,6 @@ export function DesignerPropertiesPanel({
           >
             📦
           </div>
-          {selectedItem?.tool === 'site-area' && selectedItem.points && (
-            <div 
-              className={`v-tab-btn ${activeTab === 'vertices' ? 'active' : ''}`}
-              onClick={() => setActiveTab('vertices')}
-              title="Vértices"
-            >
-              📐
-            </div>
-          )}
           <div 
             className={`v-tab-btn ${activeTab === 'technical' ? 'active' : ''}`}
             onClick={() => setActiveTab('technical')}
@@ -296,11 +318,40 @@ export function DesignerPropertiesPanel({
                   )}
 
                   {selectedItem.tool === 'site-area' && selectedItem.points && (
-                    <div className="stack gap-sm">
-                       <p className="hint-text">Terreno em modo Polígono</p>
-                       <button className="blender-btn accent" onClick={() => setIsVertexModalOpen(true)}>
-                         📝 ABRIR LISTA DE VÉRTICES
-                       </button>
+                    <div className="stack gap-md">
+                       <div className="divider-h-blender">Vértices (Horário)</div>
+                       <div className="vertex-list-integrated stack gap-xs">
+                          {normalizeVertices(selectedItem.points).map((p, idx) => (
+                             <div key={idx} className="vertex-row stack gap-xs">
+                                <div className="row spread middle">
+                                   <span className="tiny-badge">V{idx + 1}</span>
+                                   <span className="muted size-xs">Canto {idx + 1}</span>
+                                </div>
+                                <div className="row gap-sm">
+                                  <div className="prop-field mini flex-1">
+                                    <span>X (m)</span>
+                                    <input 
+                                      className="blender-input mini"
+                                      type="number"
+                                      step={0.001}
+                                      value={pixelsToMeters(p.x, canvasSettings.scale)}
+                                      onChange={(e) => onUpdateSitePoint?.(selectedItem.id, idx, { x: metersToPixels(parseFloat(e.target.value) || 0, canvasSettings.scale) })}
+                                    />
+                                  </div>
+                                  <div className="prop-field mini flex-1">
+                                    <span>Y (m)</span>
+                                    <input 
+                                      className="blender-input mini"
+                                      type="number"
+                                      step={0.001}
+                                      value={pixelsToMeters(p.y, canvasSettings.scale)}
+                                      onChange={(e) => onUpdateSitePoint?.(selectedItem.id, idx, { y: metersToPixels(parseFloat(e.target.value) || 0, canvasSettings.scale) })}
+                                    />
+                                  </div>
+                                </div>
+                             </div>
+                          ))}
+                       </div>
                     </div>
                   )}
 
@@ -365,82 +416,9 @@ export function DesignerPropertiesPanel({
             </div>
           )}
 
-          {activeTab === 'vertices' && selectedItem?.points && (
-             <div className="stack gap-sm">
-                <p className="eyebrow">Resumo de Geometria</p>
-                <div className="vertex-summary-list custom-scrollbar">
-                  {selectedItem.points.map((p, idx) => (
-                    <div key={idx} className="vertex-mini-row row spread">
-                      <span>V{idx+1}</span>
-                      <span>{pixelsToMeters(p.x, canvasSettings.scale)}m, {pixelsToMeters(p.y, canvasSettings.scale)}m</span>
-                    </div>
-                  ))}
-                </div>
-                <button className="blender-btn primary" onClick={() => setIsVertexModalOpen(true)}>
-                  EDITOR DE MALHA
-                </button>
-             </div>
-          )}
         </div>
       </div>
 
-      {/* Vertex Editor Modal (Overlay) */}
-      {isVertexModalOpen && selectedItem && selectedItem.points && (
-        <div className="vertex-modal-overlay" onClick={() => setIsVertexModalOpen(false)}>
-          <div className="vertex-modal-content blender-style" onClick={e => e.stopPropagation()}>
-            <header className="row spread middle">
-              <div className="row gap-sm middle">
-                <span className="icon">📐</span>
-                <h3>Vértices do Terreno</h3>
-              </div>
-              <button className="close-btn" onClick={() => setIsVertexModalOpen(false)}>×</button>
-            </header>
-            <div className="vertex-list custom-scrollbar">
-              {selectedItem.points.map((p, idx) => {
-                const points = selectedItem.points || [];
-                const next = points[(idx + 1) % points.length];
-                return (
-                  <div key={idx} className="vertex-edit-item stack gap-xs">
-                    <div className="row spread middle">
-                      <strong>PONTO V{idx + 1}</strong>
-                      {next && (
-                        <button className="mini-plus" title="Dividir aresta" onClick={() => {
-                          onAddVertex?.(selectedItem.id, idx, selectedItem.x + (p.x + next.x)/2, selectedItem.y + (p.y + next.y)/2);
-                        }}>+</button>
-                      )}
-                    </div>
-                    <div className="row gap-sm">
-                      <div className="prop-field mini flex-1">
-                        <span>Coordenada X (m)</span>
-                        <input 
-                          className="blender-input mini"
-                          type="number" 
-                          step={0.01}
-                          value={pixelsToMeters(p.x, canvasSettings.scale)}
-                          onChange={e => onUpdateSitePoint?.(selectedItem.id, idx, { x: metersToPixels(parseFloat(e.target.value) || 0, canvasSettings.scale) })}
-                        />
-                      </div>
-                      <div className="prop-field mini flex-1">
-                        <span>Coordenada Y (m)</span>
-                        <input 
-                          className="blender-input mini"
-                          type="number"
-                          step={0.01}
-                          value={pixelsToMeters(p.y, canvasSettings.scale)}
-                          onChange={e => onUpdateSitePoint?.(selectedItem.id, idx, { y: metersToPixels(parseFloat(e.target.value) || 0, canvasSettings.scale) })}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <footer className="row end">
-              <button className="blender-btn primary" onClick={() => setIsVertexModalOpen(false)}>SALVAR E FECHAR</button>
-            </footer>
-          </div>
-        </div>
-      )}
     </aside>
   );
 }

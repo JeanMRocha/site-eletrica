@@ -955,3 +955,10 @@
 .outliner-row.muted { opacity: 0.6; }
 .tiny-label { font-size: 0.6rem; color: #666; width: 24px; text-align: center; }
 .vertex-summary-list { max-height: 120px; overflow-y: auto; border: 1px solid #111; border-radius: 4px; background: #1a1a1a; }
+
+/* Integrated Vertex List */
+.vertex-list-integrated { padding: 4px; }
+.vertex-row { padding: 8px; background: #2a2a2a; border-radius: 4px; border: 1px solid #333; transition: border-color 0.2s; }
+.vertex-row:hover { border-color: #7fe2ff; }
+.tiny-badge { background: #7fe2ff; color: #06101d; font-size: 0.6rem; font-weight: bold; padding: 1px 4px; border-radius: 2px; }
+.divider-h-blender { font-size: 0.65rem; color: #666; font-weight: bold; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 4px; margin-top: 8px; }
