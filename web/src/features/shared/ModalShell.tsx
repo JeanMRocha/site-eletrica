@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import '../../styles/modal.css';
+import '../../lib/styles/modal.css';
 
 type ModalShellProps = {
   open: boolean;

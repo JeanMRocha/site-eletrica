@@ -1,4 +1,4 @@
-@import './styles/base.css';
-@import './styles/layout.css';
-@import './styles/components.css';
-@import './styles/responsive.css';
+@import './lib/styles/base.css';
+@import './lib/styles/layout.css';
+@import './lib/styles/components.css';
+@import './lib/styles/responsive.css';

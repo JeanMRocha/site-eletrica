@@ -1,6 +1,6 @@
-param(
   [switch]$Stop,
-  [switch]$Status
+  [switch]$Status,
+  [switch]$Desktop
 )
 
 $ErrorActionPreference = 'Stop'
@@ -97,6 +97,12 @@ New-Item -ItemType Directory -Force (Join-Path $root 'data') | Out-Null
 
 Stop-PortProcess -Port $webPort
 Stop-PortProcess -Port $apiPort
+
+if ($Desktop) {
+  Write-Host 'Iniciando modo Desktop (Wails)...'
+  wails dev
+  exit 0
+}
 
 $env:HTTP_ADDR = ":$apiPort"
 Start-HiddenProcess -FilePath 'go' -Arguments 'run ./cmd/api' -WorkingDirectory $root -StdOut $apiLog -StdErr $apiErr
