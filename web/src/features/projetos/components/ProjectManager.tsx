@@ -108,7 +108,7 @@ export function ProjectManager({
       </div>
 
       <article className={`projects-panel-wizard glass-panel ${isDesigner ? 'designer-tab-active' : ''}`}>
-        {!isDesigner && (
+        {!(isDesigner || step === 3) && (
           <header className="panel-head-wizard">
             <p className="eyebrow">{isCreate ? 'Novo Projeto' : isEdit ? 'Edição Técnica' : 'Consolidação'}</p>
             <h1>{step === 1 ? 'Engenharia e Cliente' : 'Endereço da Instalação'}</h1>
@@ -116,7 +116,11 @@ export function ProjectManager({
         )}
 
         <div className="manager-content">
-          {(isCreate || isEdit) ? (
+          {step === 3 ? (
+            <div className="designer-embedded animate-fade-in">
+               <ProjetadorFeature hideHeader />
+            </div>
+          ) : (isCreate || isEdit) ? (
             <ProjectForm 
               step={step} 
               form={form} 
@@ -128,10 +132,6 @@ export function ProjectManager({
               onAddEnv={onAddEnv}
               project={project}
             />
-          ) : isDesigner ? (
-            <div className="designer-embedded animate-fade-in">
-               <ProjetadorFeature hideHeader />
-            </div>
           ) : (
             <ProjectDisplay 
               step={step} 

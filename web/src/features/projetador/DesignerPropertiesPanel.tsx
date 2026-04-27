@@ -12,6 +12,8 @@ type Props = {
   validation: any[];
   calculation: any;
   onUpdateItem: (id: string, patch: Partial<CanvasItem>) => void;
+  onUpdateNode: (id: string, patch: Partial<CanvasNode>) => void;
+  onUpdateLink: (id: string, patch: Partial<CanvasLink>) => void;
   onUpdateSettings: (patch: Partial<CanvasSettings>) => void;
   onDelete: (selection: Exclude<CanvasSelection, null>) => void;
   onToggleCollapse: () => void;
@@ -31,6 +33,8 @@ export function DesignerPropertiesPanel({
   validation,
   calculation,
   onUpdateItem,
+  onUpdateNode,
+  onUpdateLink,
   onUpdateSettings,
   onDelete,
   onToggleCollapse,
@@ -42,6 +46,7 @@ export function DesignerPropertiesPanel({
 }: Props) {
   const [activeTab, setActiveTab] = useState<'object' | 'settings' | 'vertices' | 'technical'>('object');
   const [isVertexModalOpen, setIsVertexModalOpen] = useState(false);
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set(['TERRENO', 'ALVENARIA', 'ELÉTRICA']));
 
   const selectedItem = items.find(i => selection?.kind === 'item' && i.id === selection.id);
 
@@ -53,13 +58,47 @@ export function DesignerPropertiesPanel({
     );
   }
 
-  const renderOutlinerRow = (kind: 'item' | 'node' | 'link', id: string, label: string, icon: string) => {
+  const toggleGroup = (group: string) => {
+    const next = new Set(expandedGroups);
+    if (next.has(group)) next.delete(group);
+    else next.add(group);
+    setExpandedGroups(next);
+  };
+
+  const renderOutlinerRow = (kind: 'item' | 'node' | 'link', id: string, label: string, icon: string, visible?: boolean, locked?: boolean, noPrint?: boolean) => {
     const isSelected = selection?.kind === kind && selection.id === id;
+    const isVisible = visible !== false;
+    const isLocked = locked === true;
+    const isPrintable = noPrint !== true;
+
+    const toggleVisible = (e: React.MouseEvent) => {
+      e.stopPropagation();
+      const patch = { visible: !isVisible };
+      if (kind === 'item') onUpdateItem(id, patch);
+      else if (kind === 'node') onUpdateNode(id, patch);
+      else if (kind === 'link') onUpdateLink(id, patch);
+    };
+
+    const toggleLocked = (e: React.MouseEvent) => {
+      e.stopPropagation();
+      const patch = { locked: !isLocked };
+      if (kind === 'item') onUpdateItem(id, patch);
+      else if (kind === 'node') onUpdateNode(id, patch);
+      else if (kind === 'link') onUpdateLink(id, patch);
+    };
+
+    const togglePrint = (e: React.MouseEvent) => {
+      e.stopPropagation();
+      const patch = { noPrint: !noPrint };
+      if (kind === 'item') onUpdateItem(id, patch);
+      else if (kind === 'node') onUpdateNode(id, patch);
+      else if (kind === 'link') onUpdateLink(id, patch);
+    };
     
     return (
       <div 
         key={id} 
-        className={`outliner-row ${isSelected ? 'selected' : ''}`}
+        className={`outliner-row ${isSelected ? 'selected' : ''} ${!isVisible ? 'muted' : ''}`}
         onClick={() => onSelect({ kind, id })}
       >
         <div className="outliner-item-main">
@@ -67,9 +106,15 @@ export function DesignerPropertiesPanel({
           <span className="label">{label}</span>
         </div>
         <div className="outliner-controls">
-          <button className="outliner-btn" title="Visibilidade">👁️</button>
-          <button className="outliner-btn" title="Bloquear">🔒</button>
-          <button className="outliner-btn" title="Impressão">🖨️</button>
+          <button className={`outliner-btn ${!isVisible ? 'active' : ''}`} onClick={toggleVisible} title="Visibilidade">
+            {isVisible ? '👁️' : '🙈'}
+          </button>
+          <button className={`outliner-btn ${isLocked ? 'active' : ''}`} onClick={toggleLocked} title="Bloquear">
+            {isLocked ? '🔒' : '🔓'}
+          </button>
+          <button className={`outliner-btn ${!isPrintable ? 'active' : ''}`} onClick={togglePrint} title="Impressão">
+            {isPrintable ? '🖨️' : '🚫'}
+          </button>
           <button 
             className="outliner-btn" 
             title="Excluir"
@@ -85,22 +130,64 @@ export function DesignerPropertiesPanel({
     );
   };
 
+  const terrainItems = items.filter(i => i.tool === 'site-area');
+  const electricalItems = items.filter(i => i.tool !== 'site-area');
+
   return (
     <aside className="designer-props-modern">
       {/* Outliner Section */}
       <div className="outliner-panel">
         <div className="panel-title-strip row spread middle">
-          <span>Outliner</span>
+          <span>Cena do Projeto</span>
           <div className="row gap-xs">
-            <span className="tiny-icon">👁️</span>
-            <span className="tiny-icon">🔒</span>
-            <span className="tiny-icon">🖨️</span>
+            <span className="tiny-label">V</span>
+            <span className="tiny-label">L</span>
+            <span className="tiny-label">P</span>
           </div>
         </div>
         <div className="outliner-content custom-scrollbar">
-          {items.map(item => renderOutlinerRow('item', item.id, item.label || item.tool, item.tool === 'site-area' ? '📐' : '⚡'))}
-          {nodes.map(node => renderOutlinerRow('node', node.id, 'Junção', '📍'))}
-          {links.map(link => renderOutlinerRow('link', link.id, 'Parede', '🧱'))}
+          {/* TERRENO GROUP */}
+          <div className={`outliner-group ${expandedGroups.has('TERRENO') ? 'expanded' : ''}`}>
+             <div className="group-header row middle" onClick={() => toggleGroup('TERRENO')}>
+                <span className="arrow">{expandedGroups.has('TERRENO') ? '▼' : '▶'}</span>
+                <span className="folder-icon">📁</span>
+                <span className="label">TERRENO</span>
+             </div>
+             {expandedGroups.has('TERRENO') && (
+                <div className="group-items">
+                   {terrainItems.map(item => renderOutlinerRow('item', item.id, item.label || 'Terreno', '📐', item.visible, item.locked, item.noPrint))}
+                </div>
+             )}
+          </div>
+
+          {/* ALVENARIA GROUP */}
+          <div className={`outliner-group ${expandedGroups.has('ALVENARIA') ? 'expanded' : ''}`}>
+             <div className="group-header row middle" onClick={() => toggleGroup('ALVENARIA')}>
+                <span className="arrow">{expandedGroups.has('ALVENARIA') ? '▼' : '▶'}</span>
+                <span className="folder-icon">📁</span>
+                <span className="label">ALVENARIA</span>
+             </div>
+             {expandedGroups.has('ALVENARIA') && (
+                <div className="group-items">
+                   {links.map(link => renderOutlinerRow('link', link.id, link.type === 'opening' ? 'Abertura' : 'Parede', '🧱', link.visible, link.locked, link.noPrint))}
+                   {nodes.map(node => renderOutlinerRow('node', node.id, 'Junção', '📍', node.visible, node.locked, node.noPrint))}
+                </div>
+             )}
+          </div>
+
+          {/* ELÉTRICA GROUP */}
+          <div className={`outliner-group ${expandedGroups.has('ELÉTRICA') ? 'expanded' : ''}`}>
+             <div className="group-header row middle" onClick={() => toggleGroup('ELÉTRICA')}>
+                <span className="arrow">{expandedGroups.has('ELÉTRICA') ? '▼' : '▶'}</span>
+                <span className="folder-icon">📁</span>
+                <span className="label">ELÉTRICA</span>
+             </div>
+             {expandedGroups.has('ELÉTRICA') && (
+                <div className="group-items">
+                   {electricalItems.map(item => renderOutlinerRow('item', item.id, item.label || item.tool, '⚡', item.visible, item.locked, item.noPrint))}
+                </div>
+             )}
+          </div>
         </div>
       </div>
 

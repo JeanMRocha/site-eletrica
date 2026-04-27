@@ -274,7 +274,7 @@ function applyFabricItem(object: FabricObject, item: CanvasItem) {
     left: item.x,
     top: item.y,
     angle: item.rotation ?? 0,
-    visible: !item.hidden,
+    visible: item.visible !== false,
     selectable: !item.locked,
     evented: !item.locked,
     opacity: item.locked ? 0.6 : 1,
@@ -293,7 +293,14 @@ function applyFabricItem(object: FabricObject, item: CanvasItem) {
 }
 
 function applyFabricNode(object: FabricObject, node: CanvasNode) {
-  object.set({ left: node.x, top: node.y });
+  object.set({ 
+    left: node.x, 
+    top: node.y,
+    visible: node.visible !== false,
+    selectable: !node.locked,
+    evented: !node.locked,
+    opacity: node.locked ? 0.4 : 1,
+  });
   object.setCoords();
 }
 
@@ -317,7 +324,14 @@ function applyFabricLink(group: Group, link: CanvasLink, n1: CanvasNode, n2: Can
     left: n1.x + dx / 2,
     top: n1.y + dy / 2,
     angle: Math.abs(angle) > 90 ? angle + 180 : angle,
-    visible: settings?.showDimensions !== false
+    visible: (settings?.showDimensions !== false) && (link.visible !== false)
+  });
+
+  group.set({
+    visible: link.visible !== false,
+    selectable: !link.locked,
+    evented: !link.locked,
+    opacity: link.locked ? 0.6 : 1,
   });
 
   group.setCoords();

@@ -99,10 +99,11 @@ export function useProjetos() {
         }
         
         // Tab routing logic
+        // Tab routing logic: Ensure detail mode doesn't squat on Step 3
         if (mode === 'designer') {
            setStep(3);
-        } else if (mode === 'detail' && step !== 3) {
-          setStep(3);
+        } else if (mode === 'detail') {
+           if (step === 3) setStep(1); // Default to Identification if in detail mode
         }
       } else if (mode === 'create') {
         setForm(defaultForm);
@@ -151,23 +152,37 @@ export function useProjetos() {
     [clients, form.clientId, form.clientName]
   );
 
-  const handleFormSubmit = async (e?: FormEvent) => {
+  const handleFormSubmit = async (e?: FormEvent, silent: boolean = false) => {
     if (e) e.preventDefault();
+    if (saving) return; // Prevent multiple concurrent saves and notification spam
     setSaving(true);
     try {
       const payload = { ...form, clientName: selectedClientName };
-      if (mode === 'edit' && projectId) {
+      if (projectId && (mode === 'edit' || mode === 'designer')) {
         await projectsRepo.update(projectId, payload);
-        notify({ type: 'success', title: 'Projeto Atualizado', message: 'As alterações foram salvas.' });
-        if (projectId) navigate(`/projetos/${projectId}`);
+        if (!silent) {
+          notify({ type: 'success', title: 'Projeto Atualizado', message: 'As alterações foram salvas.' });
+        }
+        // Stay in the same mode/step after saving
+        if (mode === 'edit') {
+           navigate(`/projetos/${projectId}/editar`);
+        } else if (mode === 'designer') {
+           navigate(`/projetos/${projectId}/projetador`);
+        } else {
+           navigate(`/projetos/${projectId}`);
+        }
       } else {
         const created = await projectsRepo.create(payload);
-        notify({ type: 'success', title: 'Projeto Criado', message: 'Novo projeto residencial registrado.' });
-        navigate(`/projetos/${created.id}`);
+        if (!silent) {
+          notify({ type: 'success', title: 'Projeto Criado', message: 'Novo projeto residencial registrado.' });
+        }
+        navigate(`/projetos/${created.id}/projetador`); // Go straight to designer on create
       }
       await refreshList();
     } catch (err) {
-      notify({ type: 'error', title: 'Erro ao Salvar', message: 'Verifique os dados e tente novamente.' });
+      if (!silent) {
+        notify({ type: 'error', title: 'Erro ao Salvar', message: 'Verifique os dados e tente novamente.' });
+      }
     } finally {
       setSaving(false);
     }
@@ -205,7 +220,12 @@ export function useProjetos() {
     }
   };
 
-  const handleTabChange = (nextStep: ProjectStep) => {
+  const handleTabChange = async (nextStep: ProjectStep) => {
+    // Auto-save current form state SILENTLY
+    if (projectId && (mode === 'edit' || mode === 'designer')) {
+       await handleFormSubmit(undefined, true);
+    }
+
     if (!projectId) {
       setStep(nextStep);
       return;
@@ -214,7 +234,6 @@ export function useProjetos() {
     if (nextStep === 3) {
       navigate(`/projetos/${projectId}/projetador`);
     } else if (nextStep === 1 || nextStep === 2) {
-      // If we are in designer or detail, go to edit to see the form
       navigate(`/projetos/${projectId}/editar`);
       setStep(nextStep);
     } else {

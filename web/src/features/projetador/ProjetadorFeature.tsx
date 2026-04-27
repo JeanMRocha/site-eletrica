@@ -206,6 +206,8 @@ export function ProjetadorFeature({ hideHeader: _hideHeader = false }: { hideHea
             nodes={project.canvas.nodes}
             links={project.canvas.links}
             onUpdateItem={controller.updateItem}
+            onUpdateNode={controller.updateNode}
+            onUpdateLink={controller.updateLink}
             onUpdateSettings={controller.updateSettings}
             onDelete={controller.deleteCanvasObject}
             onToggleCollapse={() => setRightCollapsed(!rightCollapsed)}

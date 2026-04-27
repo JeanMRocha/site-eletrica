@@ -36,8 +36,8 @@ export type CanvasItem = {
   width?: number;
   height?: number;
   rotation?: number;
+  visible?: boolean;
   locked?: boolean;
-  hidden?: boolean;
   noPrint?: boolean;
   points?: { x: number; y: number; curvature?: number }[];
 };
@@ -47,6 +47,9 @@ export type CanvasNode = {
   id: string;
   x: number;
   y: number;
+  visible?: boolean;
+  locked?: boolean;
+  noPrint?: boolean;
 };
 
 export type CanvasLink = {
@@ -55,6 +58,9 @@ export type CanvasLink = {
   targetNodeId: string;
   thickness: number;
   type: 'wall' | 'opening';
+  visible?: boolean;
+  locked?: boolean;
+  noPrint?: boolean;
 };
 
 export type CanvasSettings = {

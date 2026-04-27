@@ -1,5 +1,4 @@
 import type { ResidentialProject } from '../../../domain/residential-projects';
-import { EnvironmentTab } from './EnvironmentTab';
 
 type ProjectDisplayProps = {
   step: number;
@@ -38,7 +37,12 @@ export function ProjectDisplay({ step, project }: ProjectDisplayProps) {
     );
   }
 
-  return <EnvironmentTab project={project} />;
+  return (
+    <div className="glass-panel animate-fade-in stack middle center" style={{ padding: '64px', borderStyle: 'dashed', opacity: 0.5 }}>
+       <span className="icon" style={{ fontSize: '2rem', marginBottom: '16px' }}>📐</span>
+       <p>O Projeto Técnico deve ser visualizado no Projetador.</p>
+    </div>
+  );
 }
 
 function houseTypeLabel(value: string) {

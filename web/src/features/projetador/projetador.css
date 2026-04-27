@@ -944,3 +944,14 @@
   background: #252525;
   border-radius: 4px;
 }
+
+/* Outliner Groups */
+.outliner-group { margin-bottom: 2px; }
+.group-header { height: 24px; padding: 0 8px; background: #333; cursor: pointer; font-size: 0.7rem; font-weight: bold; color: #bbb; gap: 6px; user-select: none; border-bottom: 1px solid #222; }
+.group-header:hover { background: #3d3d3d; color: #fff; }
+.group-header .arrow { width: 12px; font-size: 0.6rem; color: #666; }
+.group-header .folder-icon { font-size: 0.8rem; color: #ffab00; }
+.group-items { border-left: 1px solid #333; margin-left: 12px; }
+.outliner-row.muted { opacity: 0.6; }
+.tiny-label { font-size: 0.6rem; color: #666; width: 24px; text-align: center; }
+.vertex-summary-list { max-height: 120px; overflow-y: auto; border: 1px solid #111; border-radius: 4px; background: #1a1a1a; }
