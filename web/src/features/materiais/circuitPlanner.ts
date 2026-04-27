@@ -35,7 +35,7 @@ export type PlannedCircuit = {
   type: CircuitType;
   roomName: string;
   requiresDR: boolean;
-  voltage: 127 | 220;
+  voltage: 127 | 220 | 380;
   phase: '1F' | '2F' | '3F';
   installedVA: number;
   demandA: number;
@@ -182,7 +182,9 @@ export function planCircuits(tree: LoadTree): CircuitPlan {
     const length = load.circuitLengthM ?? room?.distanceToParentM ?? 5;
     const cond = conductorWithDropCheck(currentA, length, v);
     const breaker = selectBreaker(currentA);
-    const requiresDR = room?.roomType === 'wet' || room?.roomType === 'outdoor';
+    const requiresDR = room?.moistureClass === 'wet' || room?.moistureClass === 'jetwater'
+      || room?.locationClass === 'external_covered' || room?.locationClass === 'external_uncovered'
+      || room?.roomType === 'wet' || room?.roomType === 'outdoor';
 
     const circuit: PlannedCircuit = {
       id: uid('C'),
@@ -190,7 +192,7 @@ export function planCircuits(tree: LoadTree): CircuitPlan {
       type: 'dedicated',
       roomName: room?.name ?? 'Geral',
       requiresDR,
-      voltage: v,
+      voltage: (v <= 127 ? 127 : v <= 220 ? 220 : 380) as 127 | 220 | 380,
       phase: ph,
       installedVA: va,
       demandA: Math.round(currentA * 10) / 10,
@@ -212,7 +214,9 @@ export function planCircuits(tree: LoadTree): CircuitPlan {
   for (const roomId of rooms) {
     const room = nodes.find(n => n.id === roomId) ?? null;
     const roomLoads = generalLoads.filter(l => (findAncestorRoom(l.id, nodes)?.id ?? '__global') === roomId);
-    const requiresDR = room?.roomType === 'wet' || room?.roomType === 'outdoor' || false;
+    const requiresDR = room?.moistureClass === 'wet' || room?.moistureClass === 'jetwater'
+      || room?.locationClass === 'external_covered' || room?.locationClass === 'external_uncovered'
+      || room?.roomType === 'wet' || room?.roomType === 'outdoor' || false;
 
     // Split into lighting vs outlets
     const lightingLoads = roomLoads.filter(l => l.loadType === 'lighting');
@@ -244,7 +248,7 @@ export function planCircuits(tree: LoadTree): CircuitPlan {
           type,
           roomName: room?.name ?? 'Geral',
           requiresDR,
-          voltage: v,
+          voltage: ((group[0]?.voltage ?? baseVoltage) <= 127 ? 127 : 220) as 127 | 220 | 380,
           phase: group[0]?.phase ?? defaultPhase,
           installedVA: va,
           demandA: Math.round(currentA * 10) / 10,
@@ -272,8 +276,9 @@ export function planCircuits(tree: LoadTree): CircuitPlan {
       flush(bucket);
     };
 
-    makeCircuits(lightingLoads, 'lighting', MAX_LIGHTING_VA, defaultVoltage);
-    makeCircuits(outletLoads,   'outlet',   MAX_OUTLET_VA,   defaultVoltage);
+    const baseV = (defaultVoltage <= 127 ? 127 : 220) as 127 | 220;
+    makeCircuits(lightingLoads, 'lighting', MAX_LIGHTING_VA, baseV);
+    makeCircuits(outletLoads,   'outlet',   MAX_OUTLET_VA,   baseV);
   }
 
   // ── 3. Validate minimum circuits (NBR 5410 §9.1.5) ────────────────────────

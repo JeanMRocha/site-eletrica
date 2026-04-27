@@ -1,13 +1,15 @@
 /**
  * loadTreeModel.ts
- * 
+ *
  * Data model for the hierarchical electrical load tree.
- * 
- * Design rationale (NBR 5410):
- *   - Tree is stored flat (parentId reference) for easy serialization
- *   - Computed properties are derived bottom-up (leaves → root)
- *   - Each node type carries sensible defaults for demand factors
+ * Normative reference: NBR 5410:2004 / Emenda 1:2008 / NBR 14136 / NBR 5418.
  */
+
+import type {
+  RoomFunction, MoistureClass, TempClass, LocationClass,
+  FireRiskClass, InstallationMethod, GroundingSystem, SupplyType,
+  DPSClass, LoadUsageClass,
+} from './nbrCatalog';
 
 export type LoadNodeType =
   | 'terrain'    // Root: the lot / property
@@ -16,7 +18,7 @@ export type LoadNodeType =
   | 'circuit'    // A circuit (lighting, outlets, etc.)
   | 'load';      // Individual load (appliance or fixture group)
 
-export type VoltageLevel = 127 | 220;
+export type VoltageLevel = 127 | 220 | 380;
 export type PhaseConfig = '1F' | '2F' | '3F';
 export type ConductorMaterial = 'Cu' | 'Al';
 
@@ -25,6 +27,11 @@ export type RoomType = 'dry' | 'wet' | 'outdoor';
 
 /** Determines circuit grouping rules per NBR 5410 item 9.1 */
 export type LoadType = 'lighting' | 'outlet' | 'dedicated';
+
+// Re-export catalog types so consumers only import from loadTreeModel
+export type { RoomFunction, MoistureClass, TempClass, LocationClass,
+  FireRiskClass, InstallationMethod, GroundingSystem, SupplyType,
+  DPSClass, LoadUsageClass };
 
 // ── Computed properties derived from the engine ──────────────────────────────
 export type ComputedElectrical = {
@@ -47,25 +54,41 @@ export type LoadNode = {
   expanded: boolean;
   order: number;
 
-  // Terrain / Entry infrastructure (only meaningful at terrain/building nodes)
-  distancePoleToMeterM?: number;   // Distance from utility pole to energy meter
-  distanceMeterToQDCM?: number;    // Distance from meter to main QDC
-  distanceToParentM?: number;      // Sub-circuit distance (room / circuit level)
+  // ── Terrain / building infrastructure ────────────────────────────────────
+  distancePoleToMeterM?: number;   // Pole → meter
+  distanceMeterToQDCM?: number;    // Meter → QDC
+  distanceToParentM?: number;      // Sub-circuit / room to QDC
 
-  // ── Load classification (critical for circuit planning) ─────────────────
-  roomType?: RoomType;     // 'wet' → mandatory DR 30mA (NBR 5410 §9.4.2.3)
-  loadType?: LoadType;     // 'lighting' | 'outlet' | 'dedicated'
-  circuitLengthM?: number; // Physical wire run length for this circuit/load
-  areaM2?: number;         // Room area — used for minimum outlet count check
+  // ── Supply & protection configuration (terrain/building) ─────────────────
+  supplyType?: SupplyType;           // Entry supply
+  groundingSystem?: GroundingSystem; // TN-S, TT, etc.
+  dpsClass?: DPSClass;               // Surge protection
 
-  // Load inputs (leaf nodes)
-  powerW?: number;            // Rated power of one unit (W)
+  // ── Room classification (NBR 5410 §3.3 / IEC 60364-3) ───────────────────
+  roomFunction?: RoomFunction;       // bedroom, kitchen, bathroom…
+  moistureClass?: MoistureClass;     // dry, humid, wet, jetwater
+  locationClass?: LocationClass;     // internal, external_covered, external_uncovered
+  fireRisk?: FireRiskClass;          // normal, flammable, explosive
+  tempClass?: TempClass;             // normal, hot, cold
+  perimeterM?: number;               // Room perimeter for outlet count
+  areaM2?: number;                   // Room / installation area (m²)
+
+  // ── Load classification (NBR 5410 circuit grouping rules) ────────────────
+  roomType?: RoomType;               // Legacy compat — prefer moistureClass
+  loadType?: LoadType;               // lighting | outlet | dedicated
+  usageClass?: LoadUsageClass;       // continuous, intermittent, short_time
+  installationMethod?: InstallationMethod; // A1, B1, C, E, F
+  conductorGrouping?: number;        // Circuits sharing same conduit (derating)
+  circuitLengthM?: number;           // Wire run length (m)
+
+  // ── Load inputs (leaf nodes) ──────────────────────────────────────────────
+  powerW?: number;            // Rated power per unit (W)
   quantity?: number;          // Number of identical units
-  demandFactor?: number;      // 0–1. Default depends on type/room
-  powerFactor?: number;       // Default 0.92 (resistive/mixed)
-  voltage?: VoltageLevel;     // 127 or 220V
+  demandFactor?: number;      // 0–1
+  powerFactor?: number;       // Default 0.92
+  voltage?: VoltageLevel;     // 127, 220 or 380V
   phase?: PhaseConfig;        // '1F', '2F', '3F'
-  isCritical?: boolean;       // Flags dedicated circuit requirement
+  isCritical?: boolean;       // Requires dedicated breaker
 
   // Infrastructure flags
   hasQDC?: boolean;           // Node has its own sub-panel
@@ -145,30 +168,38 @@ export function buildStarterTree(projectName: string): LoadTree {
         name: projectName, expanded: true, order: 0,
         distancePoleToMeterM: 5,
         distanceMeterToQDCM: 3,
+        supplyType: 'bi_127_220',
+        groundingSystem: 'TT',
+        dpsClass: 'CT2',
         hasEnergyMeter: true, hasQDC: true,
       },
       {
         id: buildingId, parentId: terrainId, type: 'building',
         name: 'Edificação Principal', expanded: true, order: 0,
-        hasQDC: false,
-        distanceToParentM: 0,
+        hasQDC: false, distanceToParentM: 0,
       },
       {
         id: salaId, parentId: buildingId, type: 'room',
         name: 'Sala / Estar', expanded: true, order: 0,
         demandFactor: 0.8,
+        roomFunction: 'living', moistureClass: 'dry', locationClass: 'internal',
+        fireRisk: 'normal', tempClass: 'normal',
+        areaM2: 20, perimeterM: 18,
       },
-      makeNode({ parentId: salaId, type: 'load', name: 'Tomadas Gerais (sala)', powerW: 1200, quantity: 3, voltage: 127 }),
-      makeNode({ parentId: salaId, type: 'load', name: 'Iluminação LED', powerW: 60, quantity: 4, voltage: 127 }),
-      makeNode({ parentId: salaId, type: 'load', name: 'TV / Home Theater', powerW: 300, quantity: 1, voltage: 127 }),
+      makeNode({ parentId: salaId, type: 'load', name: 'Tomadas Gerais (sala)', powerW: 1200, quantity: 3, voltage: 127, loadType: 'outlet' }),
+      makeNode({ parentId: salaId, type: 'load', name: 'Iluminação LED', powerW: 60, quantity: 4, voltage: 127, loadType: 'lighting' }),
+      makeNode({ parentId: salaId, type: 'load', name: 'TV / Home Theater', powerW: 300, quantity: 1, voltage: 127, loadType: 'outlet' }),
       {
         id: cozinhaId, parentId: buildingId, type: 'room',
         name: 'Cozinha', expanded: true, order: 1,
         demandFactor: 0.75,
+        roomFunction: 'kitchen', moistureClass: 'wet', locationClass: 'internal',
+        fireRisk: 'normal', tempClass: 'hot',
+        areaM2: 10, perimeterM: 13,
       },
-      makeNode({ parentId: cozinhaId, type: 'load', name: 'Micro-ondas', powerW: 1200, quantity: 1, voltage: 127, isCritical: true }),
-      makeNode({ parentId: cozinhaId, type: 'load', name: 'Geladeira', powerW: 150, quantity: 1, voltage: 127 }),
-      makeNode({ parentId: cozinhaId, type: 'load', name: 'Forno Elétrico', powerW: 2000, quantity: 1, voltage: 220, isCritical: true }),
+      makeNode({ parentId: cozinhaId, type: 'load', name: 'Micro-ondas', powerW: 1200, quantity: 1, voltage: 127, loadType: 'dedicated', isCritical: true }),
+      makeNode({ parentId: cozinhaId, type: 'load', name: 'Geladeira', powerW: 150, quantity: 1, voltage: 127, loadType: 'outlet' }),
+      makeNode({ parentId: cozinhaId, type: 'load', name: 'Forno Elétrico', powerW: 2000, quantity: 1, voltage: 220, loadType: 'dedicated', isCritical: true }),
     ],
   };
 }
