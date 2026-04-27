@@ -1,42 +1,40 @@
-import type { CanvasTool } from '../../domain/residential-projects';
-import { groupTools, type ToolDefinition } from './canvasModel';
+import type { CanvasTool, DesignerStage } from './canvasModel';
+import { getAvailableToolsForStage } from './canvasModel';
 
 type Props = {
-  stage: string;
-  tools: ToolDefinition[];
+  activeStage: DesignerStage;
   selectedTool: CanvasTool;
   onChooseTool: (tool: CanvasTool) => void;
+  isReady?: boolean;
+  readinessMessage?: string;
 };
 
-export function DesignerToolbar({ stage, tools, selectedTool, onChooseTool }: Props) {
+export function DesignerToolbar({ activeStage, selectedTool, onChooseTool, isReady = true, readinessMessage }: Props) {
+  const tools = getAvailableToolsForStage(activeStage);
+  
   return (
-    <aside className="designer-tools-modern glass-panel">
-      <header className="toolbar-header">
-        <p className="eyebrow">Etapa Atual</p>
-        <strong>{stage}</strong>
-      </header>
-      
-      <div className="tool-groups-container scroll-thin">
-        {groupTools(tools).map((group) => (
-          <div className="tool-group-modern" key={group.name}>
-            <span className="group-label">{group.name}</span>
-            <div className="tool-grid-modern">
-              {group.items.map((tool) => (
-                <button 
-                  key={tool.key} 
-                  className={`tool-button ${selectedTool === tool.key ? 'active' : ''}`} 
-                  type="button" 
-                  onClick={() => onChooseTool(tool.key)}
-                  title={tool.label}
-                >
-                  <span className="tool-icon">{tool.icon}</span>
-                  <span className="tool-label-text">{tool.label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
+    <aside className="designer-tools-modern-container">
+      <div className={`designer-tools-modern ${!isReady ? 'locked' : ''}`}>
+        {tools.map((tool) => (
+          <button
+            key={tool.key}
+            type="button"
+            className={`tool-strip-button ${selectedTool === tool.key ? 'active' : ''}`}
+            onClick={() => isReady && onChooseTool(tool.key)}
+            title={!isReady ? readinessMessage : `${tool.label} (${tool.group})`}
+            disabled={!isReady}
+          >
+            <span className="icon">{tool.icon}</span>
+          </button>
         ))}
       </div>
+
+      {!isReady && (
+        <div className="toolbar-lock-message">
+           <span className="icon">⚠️</span>
+           {readinessMessage}
+        </div>
+      )}
     </aside>
   );
 }

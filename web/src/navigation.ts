@@ -1,4 +1,4 @@
-export type TabKey = 'dashboard' | 'clientes' | 'projetos' | 'catalogo' | 'normas' | 'relatorios';
+export type TabKey = 'dashboard' | 'clientes' | 'projetos' | 'catalogo' | 'normas' | 'relatorios' | 'intelligence';
 
 export type ProjectSectionKey = 'client' | 'drawing' | 'area' | 'modeling' | 'calculation' | 'conformity';
 
@@ -23,6 +23,7 @@ export const tabs: TabDefinition[] = [
   { key: 'catalogo', label: 'Catálogo', icon: '📦', path: '/catalogo/materiais' },
   { key: 'normas', label: 'Normas', icon: '📚', path: '/normas' },
   { key: 'relatorios', label: 'Relatórios', icon: '📊', path: '/relatorios' },
+  { key: 'intelligence', label: 'Inteligência', icon: '🧠', path: '/inteligencia' },
 ];
 
 export const projectSections: ProjectSectionDefinition[] = [

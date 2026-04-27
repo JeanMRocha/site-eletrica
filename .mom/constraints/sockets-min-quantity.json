@@ -1,0 +1,9 @@
+{
+  "id": "constraint-nbr5410-min-sockets",
+  "title": "Quantidade Mínima de Tomadas (NBR 5410)",
+  "status": "curated",
+  "tags": ["norma", "tomadas", "nbr5410"],
+  "content": "Para salas e dormitórios, deve ser previsto pelo menos um ponto de tomada para cada 5m, ou fração, de perímetro, devendo esses pontos ser espaçados tão uniformemente quanto possível. Para cozinhas, copas e áreas de serviço, deve ser previsto pelo menos um ponto de tomada para cada 3,5m, ou fração, de perímetro.",
+  "severity": "high",
+  "createdAt": "2026-04-26T20:11:00Z"
+}

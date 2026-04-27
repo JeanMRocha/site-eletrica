@@ -9,6 +9,7 @@ import (
 	"github.com/JeanMRocha/site-eletrica/internal/conformidade"
 	"github.com/JeanMRocha/site-eletrica/internal/standards"
 	"github.com/JeanMRocha/site-eletrica/internal/studies"
+	"github.com/JeanMRocha/site-eletrica/internal/knowledge"
 )
 
 func main() {
@@ -24,6 +25,7 @@ func main() {
 		},
 	})
 	standardsService := standards.NewInMemoryService(standards.DefaultCatalog())
+	knowledgeService := knowledge.NewService("./.mom")
 	conformidadeService := conformidade.NewService(standardsService)
 	sqliteStore, err := studies.NewSQLiteStore(getenv("DATABASE_PATH", "./data/eletrica.db"))
 	if err != nil {
@@ -53,6 +55,7 @@ func main() {
 	standardsHandler := standards.NewHandler(standardsService)
 	conformidadeHandler := conformidade.NewHandler(conformidadeService)
 	studiesHandler := studies.NewHandler(studiesService)
+	knowledgeHandler := knowledge.NewHandler(knowledgeService)
 
 	root := http.NewServeMux()
 	root.Handle("/v1/auth", handler.Routes())
@@ -63,6 +66,8 @@ func main() {
 	root.Handle("/v1/conformidade/", conformidadeHandler.Routes())
 	root.Handle("/v1/studies", studiesHandler.Routes())
 	root.Handle("/v1/studies/", studiesHandler.Routes())
+	root.Handle("/v1/knowledge", knowledgeHandler.Routes())
+	root.Handle("/v1/knowledge/", knowledgeHandler.Routes())
 	root.HandleFunc("/healthz", func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		_, _ = w.Write([]byte("ok"))

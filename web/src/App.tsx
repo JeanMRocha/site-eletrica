@@ -15,6 +15,7 @@ import { CatalogoMateriaisFeature } from './features/catalogo/CatalogoMateriaisF
 import { NotificationSystem } from './features/shared/NotificationSystem';
 import { StandardsFeature } from './features/standards/StandardsFeature';
 import { ReportsTab } from './features/reports/ReportsFeature';
+import { KnowledgeFeature } from './features/intelligence/KnowledgeFeature';
 import { eventBus } from './lib/events';
 import './styles.css';
 
@@ -183,6 +184,7 @@ export function App() {
         <Route path="/catalogo/materiais" element={<CatalogoMateriaisFeature />} />
         <Route path="/normas" element={<StandardsFeature />} />
         <Route path="/relatorios" element={<ReportsTab projects={projects} standards={standards} latestAssessment={latestAssessment} />} />
+        <Route path="/inteligencia" element={<KnowledgeFeature />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Route>
     </Routes>
@@ -195,6 +197,7 @@ function tabFromPath(pathname: string): TabKey {
   if (pathname.startsWith('/catalogo')) return 'catalogo';
   if (pathname.startsWith('/normas')) return 'normas';
   if (pathname.startsWith('/relatorios')) return 'relatorios';
+  if (pathname.startsWith('/inteligencia')) return 'intelligence';
   return 'dashboard';
 }
 

@@ -1,147 +1,359 @@
-import type { CanvasItem, CanvasTool, CanvasWall } from '../../domain/residential-projects';
-import { canvasLabels, formatMeters, metersToPixels, minimumEnvironmentSize, pixelsToMeters, type CanvasSelection } from './canvasModel';
+import { useState } from 'react';
+import { pixelsToMeters, metersToPixels, type CanvasSelection } from './canvasModel';
+import type { CanvasItem, CanvasSettings, CanvasTool, CanvasNode, CanvasLink } from '../../domain/residential-projects';
 
 type Props = {
   selectedTool: CanvasTool;
-  selectedItem: CanvasItem | null;
-  selectedWall: CanvasWall | null;
-  selection: CanvasSelection;
-  validation: Array<{ type: string; message: string; suggestion?: string; level: string }>;
-  calculation: { totalPowerW: number; circuitCount: number; breakerSuggestion: string; cableSuggestion: string } | null;
+  items: CanvasItem[];
+  nodes: CanvasNode[];
+  links: CanvasLink[];
+  selection: CanvasSelection | null;
+  isCollapsed: boolean;
+  validation: any[];
+  calculation: any;
   onUpdateItem: (id: string, patch: Partial<CanvasItem>) => void;
-  onUpdateWall: (id: string, patch: Partial<CanvasWall>) => void;
+  onUpdateSettings: (patch: Partial<CanvasSettings>) => void;
   onDelete: (selection: Exclude<CanvasSelection, null>) => void;
+  onToggleCollapse: () => void;
+  onSelect: (selection: CanvasSelection) => void;
+  onConvertToPolygon?: (id: string) => void;
+  onUpdateSitePoint?: (id: string, index: number, patch: { x?: number, y?: number, curvature?: number }) => void;
+  onAddVertex?: (id: string, index: number, x: number, y: number) => void;
+  canvasSettings: CanvasSettings;
 };
 
 export function DesignerPropertiesPanel({
-  selectedTool,
-  selectedItem,
-  selectedWall,
+  items,
+  nodes,
+  links,
   selection,
+  isCollapsed,
   validation,
   calculation,
   onUpdateItem,
-  onUpdateWall,
+  onUpdateSettings,
   onDelete,
+  onToggleCollapse,
+  onSelect,
+  onConvertToPolygon,
+  onUpdateSitePoint,
+  onAddVertex,
+  canvasSettings,
 }: Props) {
-  return (
-    <aside className="designer-props-modern glass-panel">
-      <header className="props-header">
-        <p className="eyebrow">Propriedades</p>
-        <div className="row spread">
-           <strong>{selectedItem ? selectedItem.label : selectedWall ? 'Parede' : canvasLabels[selectedTool]}</strong>
-           {selection && (
-             <button className="text-btn danger size-xs" onClick={() => onDelete(selection)}>Remover</button>
-           )}
+  const [activeTab, setActiveTab] = useState<'object' | 'settings' | 'vertices' | 'technical'>('object');
+  const [isVertexModalOpen, setIsVertexModalOpen] = useState(false);
+
+  const selectedItem = items.find(i => selection?.kind === 'item' && i.id === selection.id);
+
+  if (isCollapsed) {
+    return (
+      <aside className="designer-props-modern collapsed-width">
+         <button className="blender-btn mini" onClick={onToggleCollapse}>«</button>
+      </aside>
+    );
+  }
+
+  const renderOutlinerRow = (kind: 'item' | 'node' | 'link', id: string, label: string, icon: string) => {
+    const isSelected = selection?.kind === kind && selection.id === id;
+    
+    return (
+      <div 
+        key={id} 
+        className={`outliner-row ${isSelected ? 'selected' : ''}`}
+        onClick={() => onSelect({ kind, id })}
+      >
+        <div className="outliner-item-main">
+          <span className="icon">{icon}</span>
+          <span className="label">{label}</span>
         </div>
-      </header>
+        <div className="outliner-controls">
+          <button className="outliner-btn" title="Visibilidade">👁️</button>
+          <button className="outliner-btn" title="Bloquear">🔒</button>
+          <button className="outliner-btn" title="Impressão">🖨️</button>
+          <button 
+            className="outliner-btn" 
+            title="Excluir"
+            onClick={(e) => { 
+              e.stopPropagation(); 
+              onDelete({ kind, id } as any); 
+            }}
+          >
+            🗑️
+          </button>
+        </div>
+      </div>
+    );
+  };
 
-      <div className="props-body scroll-thin">
-        {selectedItem && (
-          <section className="prop-group">
-            <span className="group-label">Atributos</span>
-            <div className="stack tight">
-              <label className="prop-field">
-                <span>Rótulo / Nome</span>
-                <input 
-                  value={selectedItem.label} 
-                  onChange={(e) => onUpdateItem(selectedItem.id, { label: e.target.value })} 
-                />
-              </label>
-              
-              <div className="form-grid two compact">
-                <label className="prop-field">
-                  <span>Posição X</span>
-                  <input type="number" value={selectedItem.x} onChange={(e) => onUpdateItem(selectedItem.id, { x: Number(e.target.value) })} />
-                </label>
-                <label className="prop-field">
-                  <span>Posição Y</span>
-                  <input type="number" value={selectedItem.y} onChange={(e) => onUpdateItem(selectedItem.id, { y: Number(e.target.value) })} />
-                </label>
-              </div>
+  return (
+    <aside className="designer-props-modern">
+      {/* Outliner Section */}
+      <div className="outliner-panel">
+        <div className="panel-title-strip row spread middle">
+          <span>Outliner</span>
+          <div className="row gap-xs">
+            <span className="tiny-icon">👁️</span>
+            <span className="tiny-icon">🔒</span>
+            <span className="tiny-icon">🖨️</span>
+          </div>
+        </div>
+        <div className="outliner-content custom-scrollbar">
+          {items.map(item => renderOutlinerRow('item', item.id, item.label || item.tool, item.tool === 'site-area' ? '📐' : '⚡'))}
+          {nodes.map(node => renderOutlinerRow('node', node.id, 'Junção', '📍'))}
+          {links.map(link => renderOutlinerRow('link', link.id, 'Parede', '🧱'))}
+        </div>
+      </div>
 
-              {selectedItem.tool === 'environment' && (
-                <div className="form-grid two compact">
-                  <label className="prop-field">
-                    <span>Largura (m)</span>
-                    <input
-                      type="number"
-                      min={pixelsToMeters(minimumEnvironmentSize.width)}
-                      step="0.01"
-                      value={formatMeters(selectedItem.width ?? 192)}
-                      onChange={(e) => onUpdateItem(selectedItem.id, { width: metersToPixels(e.target.value, minimumEnvironmentSize.width) })}
+      {/* Properties Section */}
+      <div className="properties-panel">
+        <div className="properties-tabs-v">
+          <div 
+            className={`v-tab-btn ${activeTab === 'object' ? 'active' : ''}`}
+            onClick={() => setActiveTab('object')}
+            title="Atributos"
+          >
+            📦
+          </div>
+          {selectedItem?.tool === 'site-area' && selectedItem.points && (
+            <div 
+              className={`v-tab-btn ${activeTab === 'vertices' ? 'active' : ''}`}
+              onClick={() => setActiveTab('vertices')}
+              title="Vértices"
+            >
+              📐
+            </div>
+          )}
+          <div 
+            className={`v-tab-btn ${activeTab === 'technical' ? 'active' : ''}`}
+            onClick={() => setActiveTab('technical')}
+            title="Cálculos"
+          >
+            📊
+          </div>
+          <div 
+            className={`v-tab-btn ${activeTab === 'settings' ? 'active' : ''}`}
+            onClick={() => setActiveTab('settings')}
+            title="Configurações"
+          >
+            ⚙️
+          </div>
+        </div>
+
+        <div className="properties-content custom-scrollbar">
+          <div className="stack gap-sm" style={{ marginBottom: '12px' }}>
+             <button className="collapse-btn-mini" onClick={onToggleCollapse}>Esconder Painel »</button>
+          </div>
+
+          {activeTab === 'object' && (
+            <div className="stack gap-md">
+              {!selectedItem ? (
+                <div className="empty-selection-msg">Selecione um objeto no Outliner</div>
+              ) : (
+                <>
+                  <div className="prop-field">
+                    <span>Nome</span>
+                    <input 
+                      className="blender-input"
+                      value={selectedItem.label || ''} 
+                      onChange={(e) => onUpdateItem(selectedItem.id, { label: e.target.value })}
                     />
-                  </label>
-                  <label className="prop-field">
-                    <span>Altura (m)</span>
-                    <input
+                  </div>
+
+                  <div className="row gap-sm">
+                    <div className="prop-field flex-1">
+                      <span>Posição X</span>
+                      <input 
+                        className="blender-input"
+                        type="number"
+                        value={pixelsToMeters(selectedItem.x, canvasSettings.scale)}
+                        onChange={(e) => onUpdateItem(selectedItem.id, { x: metersToPixels(parseFloat(e.target.value) || 0, canvasSettings.scale) })}
+                      />
+                    </div>
+                    <div className="prop-field flex-1">
+                      <span>Posição Y</span>
+                      <input 
+                        className="blender-input"
+                        type="number"
+                        value={pixelsToMeters(selectedItem.y, canvasSettings.scale)}
+                        onChange={(e) => onUpdateItem(selectedItem.id, { y: metersToPixels(parseFloat(e.target.value) || 0, canvasSettings.scale) })}
+                      />
+                    </div>
+                  </div>
+
+                  {selectedItem.tool === 'site-area' && !selectedItem.points && (
+                    <>
+                      <div className="row gap-sm">
+                        <div className="prop-field flex-1">
+                          <span>Largura</span>
+                          <input 
+                            className="blender-input"
+                            type="number"
+                            value={pixelsToMeters(selectedItem.width || 0, canvasSettings.scale)}
+                            onChange={(e) => onUpdateItem(selectedItem.id, { width: metersToPixels(parseFloat(e.target.value) || 0, canvasSettings.scale) })}
+                          />
+                        </div>
+                        <div className="prop-field flex-1">
+                          <span>Altura</span>
+                          <input 
+                            className="blender-input"
+                            type="number"
+                            value={pixelsToMeters(selectedItem.height || 0, canvasSettings.scale)}
+                            onChange={(e) => onUpdateItem(selectedItem.id, { height: metersToPixels(parseFloat(e.target.value) || 0, canvasSettings.scale) })}
+                          />
+                        </div>
+                      </div>
+                      <button className="blender-btn primary" onClick={() => onConvertToPolygon?.(selectedItem.id)}>
+                        📐 EDITAR FORMATO (POLÍGONO)
+                      </button>
+                    </>
+                  )}
+
+                  {selectedItem.tool === 'site-area' && selectedItem.points && (
+                    <div className="stack gap-sm">
+                       <p className="hint-text">Terreno em modo Polígono</p>
+                       <button className="blender-btn accent" onClick={() => setIsVertexModalOpen(true)}>
+                         📝 ABRIR LISTA DE VÉRTICES
+                       </button>
+                    </div>
+                  )}
+
+                  <div className="prop-field">
+                    <span>Rotação</span>
+                    <input 
+                      className="blender-input"
                       type="number"
-                      min={pixelsToMeters(minimumEnvironmentSize.height)}
-                      step="0.01"
-                      value={formatMeters(selectedItem.height ?? 120)}
-                      onChange={(e) => onUpdateItem(selectedItem.id, { height: metersToPixels(e.target.value, minimumEnvironmentSize.height) })}
+                      value={selectedItem.rotation || 0}
+                      onChange={(e) => onUpdateItem(selectedItem.id, { rotation: parseFloat(e.target.value) || 0 })}
                     />
-                  </label>
-                </div>
+                  </div>
+                </>
               )}
             </div>
-          </section>
-        )}
-
-        {selectedWall && (
-          <section className="prop-group">
-            <span className="group-label">Geometria da Parede</span>
-            <div className="stack tight">
-               <div className="form-grid two compact">
-                 <label className="prop-field"><span>Início X</span><input type="number" value={selectedWall.x} onChange={(e) => onUpdateWall(selectedWall.id, { x: Number(e.target.value) })} /></label>
-                 <label className="prop-field"><span>Início Y</span><input type="number" value={selectedWall.y} onChange={(e) => onUpdateWall(selectedWall.id, { y: Number(e.target.value) })} /></label>
-               </div>
-               <div className="form-grid two compact">
-                 <label className="prop-field"><span>Comprimento</span><input type="number" value={selectedWall.length} onChange={(e) => onUpdateWall(selectedWall.id, { length: Number(e.target.value) })} /></label>
-                 <label className="prop-field"><span>Rotação</span><input type="number" value={selectedWall.rotation} onChange={(e) => onUpdateWall(selectedWall.id, { rotation: Number(e.target.value) })} /></label>
-               </div>
-            </div>
-          </section>
-        )}
-
-        <section className="prop-group">
-          <span className="group-label">Dimensionamento</span>
-          {calculation ? (
-            <div className="calc-card glass-panel">
-               <div className="calc-value">
-                 <strong>{calculation.totalPowerW}</strong>
-                 <span>Watts (Potência)</span>
-               </div>
-               <div className="calc-meta size-xs muted">
-                 <span>{calculation.circuitCount} Circuitos</span>
-                 <span>Disp. {calculation.breakerSuggestion}</span>
-                 <span>Cond. {calculation.cableSuggestion}</span>
-               </div>
-            </div>
-          ) : (
-            <p className="muted size-xs center">Selecione um ponto para calcular.</p>
           )}
-        </section>
 
-        <section className="prop-group">
-          <span className="group-label">Audit / Conformidade</span>
-          <div className="validation-list stack tight">
-            {validation.length === 0 ? (
-              <p className="muted size-xs center">Audit limpo. Nenhuma inconformidade.</p>
-            ) : (
-              validation.map((finding, i) => (
-                <article key={i} className={`finding-card ${finding.level}`}>
-                  <header>
-                    <span className="dot"></span>
-                    <strong>{finding.message}</strong>
-                  </header>
-                  {finding.suggestion && <p className="size-xs">{finding.suggestion}</p>}
-                </article>
-              ))
-            )}
-          </div>
-        </section>
+          {activeTab === 'technical' && (
+            <div className="stack gap-md">
+               <div className="calc-card">
+                  <span className="eyebrow">Demanda Estimada</span>
+                  <strong className="accent">{calculation?.demand || 0} kVA</strong>
+               </div>
+               <div className="divider-h-blender mini">Alertas Técnicos</div>
+               {validation.map((v, i) => (
+                 <div key={i} className={`finding-card ${v.severity}`}>
+                    <header className="row middle gap-xs">
+                      <span className="dot"></span>
+                      <strong>{v.severity.toUpperCase()}</strong>
+                    </header>
+                    <p>{v.message}</p>
+                 </div>
+               ))}
+               {validation.length === 0 && <p className="hint-text">Nenhuma inconsistência detectada.</p>}
+            </div>
+          )}
+
+          {activeTab === 'settings' && (
+            <div className="stack gap-md">
+              <div className="prop-field">
+                <span>Precisão Decimal</span>
+                <select 
+                  className="blender-input"
+                  value={canvasSettings.precision}
+                  onChange={(e) => onUpdateSettings({ precision: parseInt(e.target.value) })}
+                >
+                  <option value={0}>0 (m)</option>
+                  <option value={1}>0.1 (m)</option>
+                  <option value={2}>0.01 (m)</option>
+                  <option value={3}>0.001 (m)</option>
+                </select>
+              </div>
+              <div className="prop-field">
+                <span>Escala do Projeto</span>
+                <input 
+                  className="blender-input"
+                  type="number"
+                  value={canvasSettings.scale}
+                  onChange={(e) => onUpdateSettings({ scale: parseFloat(e.target.value) || 1 })}
+                />
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'vertices' && selectedItem?.points && (
+             <div className="stack gap-sm">
+                <p className="eyebrow">Resumo de Geometria</p>
+                <div className="vertex-summary-list custom-scrollbar">
+                  {selectedItem.points.map((p, idx) => (
+                    <div key={idx} className="vertex-mini-row row spread">
+                      <span>V{idx+1}</span>
+                      <span>{pixelsToMeters(p.x, canvasSettings.scale)}m, {pixelsToMeters(p.y, canvasSettings.scale)}m</span>
+                    </div>
+                  ))}
+                </div>
+                <button className="blender-btn primary" onClick={() => setIsVertexModalOpen(true)}>
+                  EDITOR DE MALHA
+                </button>
+             </div>
+          )}
+        </div>
       </div>
+
+      {/* Vertex Editor Modal (Overlay) */}
+      {isVertexModalOpen && selectedItem && selectedItem.points && (
+        <div className="vertex-modal-overlay" onClick={() => setIsVertexModalOpen(false)}>
+          <div className="vertex-modal-content blender-style" onClick={e => e.stopPropagation()}>
+            <header className="row spread middle">
+              <div className="row gap-sm middle">
+                <span className="icon">📐</span>
+                <h3>Vértices do Terreno</h3>
+              </div>
+              <button className="close-btn" onClick={() => setIsVertexModalOpen(false)}>×</button>
+            </header>
+            <div className="vertex-list custom-scrollbar">
+              {selectedItem.points.map((p, idx) => {
+                const points = selectedItem.points || [];
+                const next = points[(idx + 1) % points.length];
+                return (
+                  <div key={idx} className="vertex-edit-item stack gap-xs">
+                    <div className="row spread middle">
+                      <strong>PONTO V{idx + 1}</strong>
+                      {next && (
+                        <button className="mini-plus" title="Dividir aresta" onClick={() => {
+                          onAddVertex?.(selectedItem.id, idx, selectedItem.x + (p.x + next.x)/2, selectedItem.y + (p.y + next.y)/2);
+                        }}>+</button>
+                      )}
+                    </div>
+                    <div className="row gap-sm">
+                      <div className="prop-field mini flex-1">
+                        <span>Coordenada X (m)</span>
+                        <input 
+                          className="blender-input mini"
+                          type="number" 
+                          step={0.01}
+                          value={pixelsToMeters(p.x, canvasSettings.scale)}
+                          onChange={e => onUpdateSitePoint?.(selectedItem.id, idx, { x: metersToPixels(parseFloat(e.target.value) || 0, canvasSettings.scale) })}
+                        />
+                      </div>
+                      <div className="prop-field mini flex-1">
+                        <span>Coordenada Y (m)</span>
+                        <input 
+                          className="blender-input mini"
+                          type="number"
+                          step={0.01}
+                          value={pixelsToMeters(p.y, canvasSettings.scale)}
+                          onChange={e => onUpdateSitePoint?.(selectedItem.id, idx, { y: metersToPixels(parseFloat(e.target.value) || 0, canvasSettings.scale) })}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <footer className="row end">
+              <button className="blender-btn primary" onClick={() => setIsVertexModalOpen(false)}>SALVAR E FECHAR</button>
+            </footer>
+          </div>
+        </div>
+      )}
     </aside>
   );
 }

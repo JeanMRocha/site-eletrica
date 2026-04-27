@@ -3,9 +3,13 @@ export type HouseType = 'padrao' | 'terrea' | 'sobrado' | 'geminada';
 export type NetworkSource = 'rede' | 'solar' | 'gerador';
 
 export type CanvasTool =
+  | 'select'
+  | 'pan'
   | 'wall'
-  | 'environment'
-  | 'network-source'
+  | 'site-area'
+  | 'source-post'
+  | 'source-solar'
+  | 'source-generator'
   | 'qdc'
   | 'socket'
   | 'switch'
@@ -20,6 +24,7 @@ export type ResidentialEnvironment = {
   name: string;
   areaM2: number;
   usage: string;
+  isPendingSync?: boolean;
 };
 
 export type CanvasItem = {
@@ -31,21 +36,48 @@ export type CanvasItem = {
   width?: number;
   height?: number;
   rotation?: number;
+  locked?: boolean;
+  hidden?: boolean;
+  noPrint?: boolean;
+  points?: { x: number; y: number; curvature?: number }[];
 };
 
-export type CanvasWall = {
+// Graph-based Wall System (Arcada Inspired)
+export type CanvasNode = {
   id: string;
-  tool: 'wall';
   x: number;
   y: number;
-  length: number;
-  rotation: number;
+};
+
+export type CanvasLink = {
+  id: string;
+  sourceNodeId: string;
+  targetNodeId: string;
+  thickness: number;
+  type: 'wall' | 'opening';
+};
+
+export type CanvasSettings = {
+  visualGrid: boolean;
+  snapToGrid: boolean;
+  showDimensions?: boolean;
+  unit: 'm' | 'cm' | 'mm';
+  scale: number;
+  precision: number; // Decimal places
+  angleFormat: 'DD' | 'DMS';
+  layers?: {
+    terrain: boolean;
+    walls: boolean;
+    electrical: boolean;
+  };
 };
 
 export type ProjectCanvas = {
-  walls: CanvasWall[];
   items: CanvasItem[];
+  nodes: CanvasNode[];
+  links: CanvasLink[];
   selectedTool: CanvasTool;
+  settings?: CanvasSettings;
 };
 
 export type ResidentialProject = {
@@ -59,10 +91,20 @@ export type ResidentialProject = {
   status: ResidentialProjectStatus;
   environments: ResidentialEnvironment[];
   canvas: ProjectCanvas;
-  address?: string;
+  
   zipCode?: string;
+  street?: string;
+  number?: string;
+  district?: string;
+  city?: string;
+  state?: string;
+  complement?: string;
+  address?: string;
+
   createdAt: string;
   updatedAt: string;
+  lastSyncedAt?: string;
+  isPendingSync?: boolean;
 };
 
 export type ResidentialProjectInput = {
@@ -72,8 +114,14 @@ export type ResidentialProjectInput = {
   voltage: string;
   houseType: HouseType;
   source: NetworkSource[];
-  address?: string;
+  
   zipCode?: string;
+  street?: string;
+  number?: string;
+  district?: string;
+  city?: string;
+  state?: string;
+  complement?: string;
 };
 
 export type ResidentialProjectEnvironmentInput = {
@@ -101,7 +149,18 @@ const STORAGE_KEY = 'electrica.residential-projects';
 export class LocalProjectRepository implements ProjectRepository {
   private read(): ResidentialProject[] {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
+    if (!raw) return [];
+    
+    const data = JSON.parse(raw);
+    return data.map((p: any) => {
+      if (p.canvas && p.canvas.items) {
+        p.canvas.items = p.canvas.items.map((item: any) => ({
+          ...item,
+          tool: item.tool === 'environment' ? 'site-area' : item.tool
+        }));
+      }
+      return p;
+    });
   }
 
   private persist(projects: ResidentialProject[]) {
@@ -125,13 +184,35 @@ export class LocalProjectRepository implements ProjectRepository {
       voltage: input.voltage,
       houseType: input.houseType,
       source: input.source,
-      address: input.address,
       zipCode: input.zipCode,
+      street: input.street,
+      number: input.number,
+      district: input.district,
+      city: input.city,
+      state: input.state,
+      complement: input.complement,
+      address: `${input.street || ''}, ${input.number || ''} - ${input.city || ''}`,
       status: 'draft',
       environments: [],
-      canvas: { walls: [], items: [], selectedTool: 'environment' },
+      canvas: { 
+        nodes: [], 
+        links: [], 
+        items: [], 
+        selectedTool: 'select',
+        settings: { 
+          visualGrid: true, 
+          snapToGrid: true,
+          showDimensions: true,
+          unit: 'm',
+          scale: 1,
+          precision: 2,
+          angleFormat: 'DD',
+          layers: { terrain: true, walls: true, electrical: true }
+        }
+      },
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+      isPendingSync: true,
     };
     this.persist([next, ...this.read()]);
     return next;
@@ -150,9 +231,16 @@ export class LocalProjectRepository implements ProjectRepository {
       voltage: input.voltage,
       houseType: input.houseType,
       source: input.source,
-      address: input.address,
       zipCode: input.zipCode,
-      updatedAt: new Date().toISOString() 
+      street: input.street,
+      number: input.number,
+      district: input.district,
+      city: input.city,
+      state: input.state,
+      complement: input.complement,
+      address: `${input.street || ''}, ${input.number || ''} - ${input.city || ''}`,
+      updatedAt: new Date().toISOString(),
+      isPendingSync: true,
     };
     
     const nextList = all.map(p => p.id === id ? updated : p);
@@ -169,11 +257,12 @@ export class LocalProjectRepository implements ProjectRepository {
     const project = all.find(p => p.id === id);
     if (!project) throw new Error('Not found');
 
-    const env: ResidentialEnvironment = { id: crypto.randomUUID(), ...input };
+    const env: ResidentialEnvironment = { id: crypto.randomUUID(), ...input, isPendingSync: true };
     const updated: ResidentialProject = {
       ...project,
       environments: [env, ...project.environments],
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
+      isPendingSync: true
     };
     
     const nextList = all.map(p => p.id === id ? updated : p);
@@ -189,7 +278,8 @@ export class LocalProjectRepository implements ProjectRepository {
     const updated: ResidentialProject = {
       ...project,
       canvas: updater(project.canvas),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
+      isPendingSync: true
     };
     
     const nextList = all.map(p => p.id === id ? updated : p);

@@ -8,10 +8,11 @@ import {
   type ResidentialProjectInput,
   type ResidentialProjectEnvironmentInput,
 } from '../../domain/residential-projects';
+import { fetchAddressByCep } from '../../lib/geo';
 import { notify } from '../../lib/events';
 
 type Mode = 'list' | 'create' | 'detail' | 'edit' | 'designer';
-export type ProjectStep = 1 | 2 | 3 | 4;
+export type ProjectStep = 1 | 2 | 3;
 
 const defaultForm: ResidentialProjectInput = {
   clientId: '',
@@ -20,8 +21,13 @@ const defaultForm: ResidentialProjectInput = {
   voltage: '127/220V',
   houseType: 'padrao',
   source: ['rede'],
-  address: '',
   zipCode: '',
+  street: '',
+  number: '',
+  district: '',
+  city: '',
+  state: '',
+  complement: '',
 };
 
 export function useProjetos() {
@@ -82,15 +88,20 @@ export function useProjetos() {
             voltage: next.voltage,
             houseType: next.houseType,
             source: next.source,
-            address: next.address || '',
             zipCode: next.zipCode || '',
+            street: next.street || '',
+            number: next.number || '',
+            district: next.district || '',
+            city: next.city || '',
+            state: next.state || '',
+            complement: next.complement || '',
           });
         }
         
         // Tab routing logic
         if (mode === 'designer') {
-           setStep(4);
-        } else if (mode === 'detail' && step !== 3 && step !== 4) {
+           setStep(3);
+        } else if (mode === 'detail' && step !== 3) {
           setStep(3);
         }
       } else if (mode === 'create') {
@@ -102,13 +113,36 @@ export function useProjetos() {
     sync();
   }, [mode, projectId]);
 
+  // CEP Auto-fill
+  useEffect(() => {
+    const cleanCep = form.zipCode?.replace(/\D/g, '') || '';
+    if (cleanCep.length === 8) {
+      const loadCep = async () => {
+        const data = await fetchAddressByCep(cleanCep);
+        if (data) {
+          setForm(prev => ({
+            ...prev,
+            street: data.logradouro,
+            district: data.bairro,
+            city: data.localidade,
+            state: data.uf,
+          }));
+          notify({ type: 'success', title: 'Endereço Localizado', message: `${data.logradouro}, ${data.localidade} - ${data.uf}` });
+        }
+      };
+      loadCep();
+    }
+  }, [form.zipCode]);
+
   const visibleProjects = useMemo(() => {
     const query = search.toLowerCase().trim();
     if (!query) return projects;
     return projects.filter(p => 
       p.name.toLowerCase().includes(query) || 
       p.clientName.toLowerCase().includes(query) ||
-      (p.address?.toLowerCase().includes(query))
+      (p.address?.toLowerCase().includes(query)) ||
+      (p.city?.toLowerCase().includes(query)) ||
+      (p.zipCode?.toLowerCase().includes(query))
     );
   }, [projects, search]);
 
@@ -177,14 +211,13 @@ export function useProjetos() {
       return;
     }
 
-    if (nextStep === 4) {
+    if (nextStep === 3) {
       navigate(`/projetos/${projectId}/projetador`);
-    } else if (nextStep === 3) {
-      navigate(`/projetos/${projectId}`);
-    } else if (mode === 'edit') {
-       setStep(nextStep);
+    } else if (nextStep === 1 || nextStep === 2) {
+      // If we are in designer or detail, go to edit to see the form
+      navigate(`/projetos/${projectId}/editar`);
+      setStep(nextStep);
     } else {
-       // if in detail mode but clicked step 1 or 2, we stay in detail mode but change tab
        setStep(nextStep);
     }
   };

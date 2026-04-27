@@ -1,0 +1,8 @@
+{
+  "id": "landmark-cad-engine-graph",
+  "title": "Motor CAD Baseado em Grafos",
+  "status": "curated",
+  "tags": ["arquitetura", "cad", "fabricjs"],
+  "content": "Decidimos utilizar um modelo de Grafo (Nós e Links) para representar as paredes e a estrutura do projeto. Isso permite que junções de paredes sejam manipuladas como entidades únicas, garantindo que ao mover um canto, todos os segmentos conectados se ajustem automaticamente. Utilizamos Fabric.js como adaptador de renderização devido à sua robustez em manipulação de objetos e suporte a eventos complexos.",
+  "createdAt": "2026-04-26T20:10:00Z"
+}

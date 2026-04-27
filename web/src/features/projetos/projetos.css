@@ -237,6 +237,8 @@
 .designer-embedded {
   height: calc(100vh - 250px);
   min-height: 600px;
+  display: flex;
+  flex-direction: column;
 }
 
 .animate-fade-in {
